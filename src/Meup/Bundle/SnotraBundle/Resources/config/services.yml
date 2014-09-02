@@ -1,0 +1,47 @@
+parameters:
+
+    meup_snotra.elastica_client.class:                      Elastica\Client
+    meup_snotra.elastica_index.class:                       Elastica\Index
+    meup_snotra.elastica_index.dictionary_factory.class:    Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryFactory
+    meup_snotra.elastica_index.dictionary_loader.class:     Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryLoader
+    meup_snotra.elastica_index.dictionary.interface:        Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface
+    meup_snotra.elastica_index.dictionary.class:            Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionary
+    meup_snotra.elasticsearch_consumer.class:               Meup\Bundle\SnotraBundle\AMPQ\ElasticSearchConsumer
+    meup_snotra.elastica_document.factory.class:            Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory
+    meup_snotra.elastica_document.class:                    Meup\Bundle\SnotraBundle\ElasticSearch\Document
+
+services:
+
+    meup_snotra.elastica_client:
+        class: %meup_snotra.elastica_client.class%
+        arguments:
+            - {host: %elasticsearch_host%, port: %elasticsearch_port%}
+
+    meup_snotra.elastica_index.dictionary_factory:
+        class: %meup_snotra.elastica_index.dictionary_factory.class%
+        arguments:
+            - %meup_snotra.elastica_index.dictionary.class%
+            - %meup_snotra.elastica_index.class%
+
+    meup_snotra.elastica_index.dictionary_loader:
+        class: %meup_snotra.elastica_index.dictionary_loader.class%
+        arguments:
+            - @meup_snotra.elastica_client
+            - @meup_snotra.elastica_index.dictionary_factory
+
+    meup_snotra.elastica_index.dictionary:
+        class:              %meup_snotra.elastica_index.dictionary.interface%
+        factory_service:    meup_snotra.elastica_index.dictionary_loader
+        factory_method:     load
+        arguments:          [%elasticsearch_indexes%]
+
+    meup_snotra.elastica_document.factory:
+        class:      %meup_snotra.elastica_document.factory.class%
+        arguments:  [%meup_snotra.elastica_document.class%]
+
+    meup_snotra.elasticsearch_consumer:
+        class: %meup_snotra.elasticsearch_consumer.class%
+        arguments:
+            - @meup_snotra.elastica_document.factory
+            - @meup_snotra.elastica_index.dictionary
+            - @jms_serializer

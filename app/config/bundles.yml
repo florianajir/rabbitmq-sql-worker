@@ -1,0 +1,21 @@
+# AMPQ
+old_sound_rabbit_mq:
+
+    connections:
+        default:
+            host:     %rabbitmq_host%
+            port:     %rabbitmq_port%
+            user:     %rabbitmq_user%
+            password: %rabbitmq_password%
+            vhost:    %rabbitmq_vhost%
+            lazy:     %rabbitmq_lazy%
+
+    consumers:
+        elasticsearch:
+            connection:         default
+            exchange_options:   
+                name:           %rabbitmq_exchange%
+                type:           direct
+            queue_options:
+                name:           %rabbitmq_exchange%
+            callback:           meup_snotra.elasticsearch_consumer
