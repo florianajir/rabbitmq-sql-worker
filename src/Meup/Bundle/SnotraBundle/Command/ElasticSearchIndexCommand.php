@@ -2,27 +2,40 @@
 
 namespace Meup\Bundle\SnotraBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Elastica\Index;
 
+/**
+ *
+ */
 class ElasticSearchIndexCommand extends ContainerAwareCommand
 {
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this
             ->setName('elasticsearch:index')
             ->setDescription('')
-            ->addArgument('action', InputArgument::OPTIONAL, '', 'show')
             ->addArgument('index', InputArgument::OPTIONAL, '')
+            ->addArgument('action', InputArgument::OPTIONAL, '', 'show')
             //->addOption('force', null, InputOption::VALUE_NONE, '')
             //->addOption('yell', null, InputOption::VALUE_NONE, 'Si définie, la tâche criera en majuscules')
         ;
     }
 
+    /**
+     * @param Index $index
+     * @param OutputInterface $output
+     * @param boolean $force
+     * 
+     * @return void
+     */
     private function create(Index $index, OutputInterface $output, $force = false)
     {
         if (!$index->exists() || $force) {
@@ -73,10 +86,14 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         ;
         $index_name = $input->getArgument('index');
         $action     = $input->getArgument('action');
-
-        if ($indices->offsetExists($index_name)) {
-            $index = $indices->offsetGet($index_name);
-        }
+        $index      = $indices->offsetExists($index_name) 
+                    ? $indices
+                        ->offsetGet($index_name)
+                    : $this
+                        ->getContainer()
+                        ->get('meup_snotra.elastica_client')
+                        ->getIndex($index_name)
+        ;
 
         switch ($action) {
             case 'create':

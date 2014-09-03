@@ -2,11 +2,12 @@
 
 namespace Meup\Bundle\SnotraBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Elastica\Type\Mapping;
 use Elastica\Type;
 
 class ElasticSearchTypeCommand extends ContainerAwareCommand
@@ -16,6 +17,8 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
         $this
             ->setName('elasticsearch:type')
             ->setDescription('')
+            ->addArgument('index', InputArgument::REQUIRED, '')
+            ->addArgument('type', InputArgument::REQUIRED, '')
             ->addArgument('action', InputArgument::OPTIONAL, '', 'show')
             //->addOption('yell', null, InputOption::VALUE_NONE, 'Si définie, la tâche criera en majuscules')
         ;
@@ -25,40 +28,41 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
     {
     }
 
-    private function create(Type $type, InputInterface $input, OutputInterface $output)
+    private function create(Type $type, InputInterface $input, OutputInterface $output, $force = true)
     {
-        // Define mapping
-        $mapping = new \Elastica\Type\Mapping();
-        $mapping->setType($type);
-        $mapping->setParam('index_analyzer', 'indexAnalyzer');
-        $mapping->setParam('search_analyzer', 'searchAnalyzer');
+        if (!$type->exists() || $force) {
+            $types = $this
+                ->getContainer()
+                ->getParameter(
+                    sprintf(
+                        'elasticsearch_%s_types',
+                        $type->getIndex()->getName()
+                    )
+                )
+            ;
+            $config = $types['default'];
 
-        // Define boost field
-        $mapping->setParam('_boost', array('name' => '_boost', 'null_value' => 1.0));
-
-        // Set mapping
-        $mapping->setProperties(array(
-            'id'      => array('type' => 'integer', 'include_in_all' => FALSE),
-            'user'    => array(
-                'type' => 'object',
-                'properties' => array(
-                    'name'      => array('type' => 'string', 'include_in_all' => TRUE),
-                    'fullName'  => array('type' => 'string', 'include_in_all' => TRUE)
-                ),
-            ),
-            'msg'     => array('type' => 'string', 'include_in_all' => TRUE),
-            'tstamp'  => array('type' => 'date', 'include_in_all' => FALSE),
-            'location'=> array('type' => 'geo_point', 'include_in_all' => FALSE),
-            '_boost'  => array('type' => 'float', 'include_in_all' => FALSE)
-        ));
-
-        // Send mapping to type
-        $mapping->send();
+            // Define mapping
+            $mapping = new Mapping();
+            foreach($config['params'] as $name => $value) {
+                $mapping->setParam($name, $value);
+            }
+            $mapping
+                ->setType($type)
+                ->setProperties($config['properties'])
+                ->send()
+            ;
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $type = $this->getContainer()->get('elasticsearch.kotetou.lifeboat');
+        $type = $this
+            ->getContainer()
+            ->get('meup_snotra.elastica_client')
+            ->getIndex($input->getArgument('index'))
+            ->getType($input->getArgument('type'))
+        ;
 
         switch ($input->getArgument('action')) {
             case 'create':
