@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "706daf6161544247fb405fb94f03a94e",
+    "hash": "960cb236c57513a68b73591f3de50e99",
     "packages": [
         {
             "name": "1001pharmacies/dictionary",
@@ -45,7 +45,7 @@
         },
         {
             "name": "1001pharmacies/gnaa",
-            "version": "v0.4",
+            "version": "v0.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:1001Pharmacies/gnaa.git",

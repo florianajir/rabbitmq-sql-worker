@@ -5,33 +5,50 @@ namespace Meup\Bundle\SnotraBundle\AMPQ;
 use JMS\Serializer\Serializer;
 use PhpAmqpLib\Message\AMQPMessage;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
+use Meup\Bundle\SnotraBundle\ElasticSearch\IndexerInterface;
 use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactoryInterface;
 use Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface;
 
+/**
+ *
+ */
 class ElasticSearchConsumer implements ConsumerInterface
 {
+    const DEFAULT_MESSAGE_CLASS = 'Meup\DataStructure\Message\AMPQMessage';
+    const JSON_FORMAT = 'json';
+    const XML_FORMAT  = 'xml';
+
     /**
      * @var IndexDictionaryInterface
      */
-    private $indexes;
+    private $indices;
 
     /**
-     * @var DocumentFactoryInterface
+     * @var IndexerInterface
      */
-    private $documents;
+    private $indexer;
 
     /**
-     * @param DocumentFactoryInterface $documents
-     * @param IndexDictionaryInterface $indexes
+     * @var Serializer
+     */
+    private $serializer;
+
+    /**
+     * @param IndexDictionaryInterface $indices
+     * @param IndexerInterface $indexer
      * @param Serializer $serializer
      *
      * @return void
      */
-    public function __construct(DocumentFactoryInterface $documents, IndexDictionaryInterface $indexes, Serializer $serializer)
+    public function __construct(IndexDictionaryInterface $indices, IndexerInterface $indexer, Serializer $serializer, $msgClass = self::DEFAULT_MESSAGE_CLASS, $format = self::JSON_FORMAT)
     {
-        $this->indexes    = $indexes;
-        $this->documents  = $documents;
+        $this->indices    = $indices;
+        $this->indexer    = $indexer;
         $this->serializer = $serializer;
+        $this->msgClass   = $msgClass;
+        $this->format     = $format;
+
+        /* @toDo check if $this->msgClass implements AMPQMessageInterface */
     }
 
     /**
@@ -41,32 +58,24 @@ class ElasticSearchConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $message)
     {
-        $object = $this
+        /* deserialize the message body */
+        $message = $this
             ->serializer
             ->deserialize(
                 $message->body,
-                'stdClass',
-                'json'
+                $this->msgClass,
+                $this->format
             )
         ;
 
-
-
-        $id = $object->id;
+        /* index the object in each defined ElasticSearch indinces */
         $result = false;
-        foreach ($this->indexes as $index) {
-            $response = $index
-                ->getType($type)
-                ->addDocument(
-                    $documents->create($id, $object)
-                )
+        foreach ($this->indices as $index) {
+            $result |= $this
+                ->indexer
+                ->execute($index, $message)
             ;
-            $ok = $response->isOk();
-            if ($ok) {
-                $index->refresh();
-            }
-            $result |= $ok;
         }
-        return $result;
+        return (bool) $result;
     }
 }
