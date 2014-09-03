@@ -11,7 +11,7 @@ class IndexDictionaryLoader
 {
     /**
      * @var ElasticaClient
-     */ 
+     */
     private $elasticaClient;
 
     /**

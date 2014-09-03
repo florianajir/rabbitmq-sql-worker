@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<project name="Meup Gnaa" basedir="./" default="help">
+
+    <target name="help">
+        <echo>
+        help     Shows this help
+        test     Run tests
+        phpcs    Detects standard violations on the code.
+        phpcpd   Detects duplicate code portions.
+        phpunit  Executes phpunit tests
+        </echo>
+    </target>
+
+    <target name="test" depends="phpcs,phpcpd,phpunit"></target>
+
+    <target name="phpcs">
+        <phpcodesniffer standard="PSR1">
+            <fileset dir="./src">
+                <include name="**/*.php"/>
+            </fileset>
+        </phpcodesniffer>
+        <phpcodesniffer standard="PSR2">
+            <fileset dir="./src">
+                <include name="**/*.php"/>
+            </fileset>
+        </phpcodesniffer>
+    </target>
+
+    <target name="phpcpd">
+        <exec logoutput="true" dir="./" command="./bin/phpcpd ./src" />
+    </target>
+
+    <target name="phpunit">
+        <exec logoutput="true" dir="./" command="./bin/phpunit" />
+    </target>
+
+</project>

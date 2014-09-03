@@ -35,8 +35,7 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
                                 'elasticsearch_%s_index',
                                 $index->getName()
                             )
-                        )
-                    ,
+                        ),
                     true
                 )
             ;
@@ -113,5 +112,4 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
             );
         }
     }
-
 }

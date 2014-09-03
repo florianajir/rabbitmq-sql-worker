@@ -40,8 +40,13 @@ class ElasticSearchConsumer implements ConsumerInterface
      *
      * @return void
      */
-    public function __construct(IndexDictionaryInterface $indices, IndexerInterface $indexer, Serializer $serializer, $msgClass = self::DEFAULT_MESSAGE_CLASS, $format = self::JSON_FORMAT)
-    {
+    public function __construct(
+        IndexDictionaryInterface $indices,
+        IndexerInterface $indexer,
+        Serializer $serializer,
+        $msgClass = self::DEFAULT_MESSAGE_CLASS,
+        $format = self::JSON_FORMAT
+    ) {
         $this->indices    = $indices;
         $this->indexer    = $indexer;
         $this->serializer = $serializer;

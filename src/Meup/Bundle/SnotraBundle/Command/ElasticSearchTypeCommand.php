@@ -22,7 +22,8 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
     }
 
     private function show(Type $type, InputInterface $input, OutputInterface $output)
-    {}
+    {
+    }
 
     private function create(Type $type, InputInterface $input, OutputInterface $output)
     {

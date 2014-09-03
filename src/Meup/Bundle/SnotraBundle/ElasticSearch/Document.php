@@ -8,4 +8,5 @@ use Elastica\Document as BaseDocument;
  *
  */
 class Document extends BaseDocument
-{}
+{
+}
