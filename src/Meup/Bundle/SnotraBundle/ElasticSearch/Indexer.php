@@ -3,6 +3,7 @@
 namespace Meup\Bundle\SnotraBundle\ElasticSearch;
 
 use Elastica\Index;
+use Elastica\Exception\NotFoundException;
 use Meup\DataStructure\Message\AMPQMessageInterface;
 use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactoryInterface;
 
@@ -49,10 +50,9 @@ class Indexer implements IndexerInterface
                     )
             )
         ;
-        $ok = $response->isOk();
-        if ($ok) {
-            $index->refresh();
-        }
-        return $ok;
+
+        $index->refresh();
+
+        return $response;
     }
 }

@@ -9,6 +9,7 @@ parameters:
     meup_snotra.elasticsearch_consumer.class:               Meup\Bundle\SnotraBundle\AMPQ\ElasticSearchConsumer
     meup_snotra.elastica_document.factory.class:            Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory
     meup_snotra.elastica_document.class:                    Meup\Bundle\SnotraBundle\ElasticSearch\Document
+    meup_snotra.elastica_indexer.class:                     Meup\Bundle\SnotraBundle\ElasticSearch\Indexer
 
 services:
 
@@ -39,9 +40,14 @@ services:
         class:      %meup_snotra.elastica_document.factory.class%
         arguments:  [%meup_snotra.elastica_document.class%]
 
+    meup_snotra.elastica_indexer:
+        class: %meup_snotra.elastica_indexer.class%
+        arguments: 
+            - @meup_snotra.elastica_document.factory
+
     meup_snotra.elasticsearch_consumer:
         class: %meup_snotra.elasticsearch_consumer.class%
         arguments:
-            - @meup_snotra.elastica_document.factory
             - @meup_snotra.elastica_index.dictionary
+            - @meup_snotra.elastica_indexer
             - @jms_serializer
