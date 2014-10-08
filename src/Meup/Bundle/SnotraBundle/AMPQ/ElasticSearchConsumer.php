@@ -59,7 +59,7 @@ class ElasticSearchConsumer implements ConsumerInterface
     /**
      * @param AMQPMessage $message
      *
-     * @return boolean
+     * @return void
      */
     public function execute(AMQPMessage $message)
     {
@@ -74,13 +74,11 @@ class ElasticSearchConsumer implements ConsumerInterface
         ;
 
         /* index the object in each defined ElasticSearch indinces */
-        $result = false;
         foreach ($this->indices as $index) {
-            $result |= $this
+            $this
                 ->indexer
                 ->execute($index, $message)
             ;
         }
-        return (bool) $result;
     }
 }

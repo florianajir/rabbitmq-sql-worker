@@ -24,8 +24,6 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
             ->setDescription('')
             ->addArgument('index', InputArgument::OPTIONAL, '')
             ->addArgument('action', InputArgument::OPTIONAL, '', 'show')
-            //->addOption('force', null, InputOption::VALUE_NONE, '')
-            //->addOption('yell', null, InputOption::VALUE_NONE, 'Si définie, la tâche criera en majuscules')
         ;
     }
 
@@ -55,6 +53,13 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * @param Index $index
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * 
+     * @return void
+     */
     private function show(Index $index, InputInterface $input, OutputInterface $output)
     {
         foreach ($index->getStats()->getData()['indices'][$index->getName()] as $name => $stats) {
@@ -78,6 +83,9 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indices = $this
@@ -100,6 +108,7 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
                 if ($index) {
                     $this->create($index, $output, true);
                 } else {
+                    // do nothing, throw an exception
                     // specify an index
                 }
                 break;
@@ -116,6 +125,9 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $action = $input->getArgument('action');
