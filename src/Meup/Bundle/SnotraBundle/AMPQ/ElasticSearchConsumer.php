@@ -72,13 +72,25 @@ class ElasticSearchConsumer implements ConsumerInterface
                 $this->format
             )
         ;
-
+        if(strtolower($message->getType()) == "locale") {//for no search index Locale
+            return true;
+        } else {
+            $index = strtolower($message->getIndex());
+            if($this->indices[$index]) {
+                $this
+                    ->indexer
+                    ->execute($this->indices[$index], $message);
+            } else {
+                print_r($this->indices);
+            }
+        }
         /* index the object in each defined ElasticSearch indinces */
-        foreach ($this->indices as $index) {
+        /*foreach ($this->indices as $index) {
             $this
                 ->indexer
                 ->execute($index, $message)
             ;
         }
+        */
     }
 }
