@@ -17,5 +17,5 @@ old_sound_rabbit_mq:
                 name:           %rabbitmq_exchange%
                 type:           direct
             queue_options:
-                name:           %rabbitmq_exchange%
+                name:           %rabbitmq_queue%
             callback:           meup_snotra.elasticsearch_consumer
