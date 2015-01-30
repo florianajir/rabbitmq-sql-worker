@@ -39,19 +39,19 @@ class Indexer implements IndexerInterface
      */
     public function execute(Index $index, AMPQMessageInterface $message)
     {
+        $newDoc = $this
+            ->documentFactory
+            ->create(
+                $message->getId(),
+                $message->getData()
+            );
         $response = $index
             ->getType($message->getType())
             ->addDocument(
-                $this
-                    ->documentFactory
-                    ->create(
-                        $message->getId(),
-                        $message->getData()
-                    )
+                $newDoc
             )
         ;
-
-        $index->refresh();
+        //$index->refresh();
 
         return $response;
     }
