@@ -18,61 +18,89 @@ parameters:
 
     elasticsearch_host:     localhost
     elasticsearch_port:     9200
-    elasticsearch_indexes:  [products]
+    elasticsearch_indexes:  [fr, en]
 
-    elasticsearch_products_index:
-        number_of_shards:       4
-        number_of_replicas:     1
+    elasticsearch_indexes:
+        - fr
+        - en
+    elasticsearch_fr_index:
+        number_of_shards: 5
+        number_of_replicas: 1
         analysis:
             analyzer:
-                indexAnalyzer:
-                    type:       custom
-                    tokenizer:  standard
-                    filter:     [lowercase, mySnowball]
-                searchAnalyzer:
-                    type:       custom
-                    tokenizer:  standard
-                    filter:     [standard, lowercase, mySnowball]
+                default_analyzer :
+                    type     :    custom
+                    tokenizer:    nGram
+                    filter   :    [ asciifolding ,lowercase, elision, worddelimiter]
+                default_search_analyzer :
+                    type     :    custom
+                    tokenizer:    standard
+                    filter   :    [ asciifolding ,lowercase, elision, worddelimiter]
+                fr_analyzer :
+                    type     :    custom
+                    tokenizer:    nGram
+                    filter   :    [stopwords_fr, asciifolding ,lowercase, snowball_fr, elision, worddelimiter]
+                fr_search_analyzer :
+                    type     :    custom
+                    tokenizer:    standard
+                    filter   :    [stopwords_fr, asciifolding ,lowercase, snowball_fr, elision, worddelimiter]
+            tokenizer:
+                nGram:
+                    type:     nGram
+                    min_gram: 2
+                    max_gram: 30
             filter:
-                mySnowball:
-                    type:       snowball
-                    language:   German
-    elasticsearch_products_types:
-        default:
-            params:
-                index_analyzer:             indexAnalyzer
-                search_analyzer:            searchAnalyzer
-                _boost:
-                    name:                   _boost
-                    null_value:             1.0
-            properties:
-                id:
-                    type:                   integer
-                    include_in_all:         true
-                user:
-                    type:                   object
-                    properties:
-                        name:
-                            type:           string
-                            include_in_all: true
-                        fullName:
-                            type:           string
-                            include_in_all: true
-                msg:
-                    type:                   string
-                    include_in_all:         true
-                tstamp:
-                    type:                   date
-                    include_in_all:         false
-                location:
-                    type:                   geo_point
-                    include_in_all:         false
-                _boost:
-                    type:                   float
-                    include_in_all:         false
-
-
-
+                snowball:
+                    type:     snowball
+                    language: French
+                elision:
+                    type:     elision
+                    articles: [l, m, t, qu, n, s, j, d]
+                stopwords:
+                    type:      stop
+                    stopwords: [_french_]
+                    ignore_case : true
+                worddelimiter :
+                    type:      word_delimiter
+    elasticsearch_en_index:
+        number_of_shards: 5
+        number_of_replicas: 1
+        analysis:
+            analyzer:
+                default_analyzer :
+                    type     :    custom
+                    tokenizer:    nGram
+                    filter   :    [ asciifolding ,lowercase, elision, worddelimiter]
+                default_search_analyzer :
+                    type     :    custom
+                    tokenizer:    standard
+                    filter   :    [ asciifolding ,lowercase, elision, worddelimiter]
+                en_analyzer :
+                    type     :    custom
+                    tokenizer:    nGram
+                    filter   :    [stopwords_en, asciifolding ,lowercase, snowball_en, elision, worddelimiter]
+                en_search_analyzer :
+                    type     :    custom
+                    tokenizer:    standard
+                    filter   :    [stopwords_en, asciifolding ,lowercase, snowball_en, elision, worddelimiter]
+                tokenizer:
+                  nGram:
+                    type:     nGram
+                    min_gram: 2
+                    max_gram: 30
+            filter:
+                snowball_en:
+                    type:     snowball
+                    language: English
+                elision:
+                    type:     elision
+                    articles: [l, m, t, qu, n, s, j, d]
+                stopwords_en:
+                    type:      stop
+                    stopwords: [_english_]
+                    ignore_case : true
+                worddelimiter :
+                    type:      word_delimiter
 
 
 
