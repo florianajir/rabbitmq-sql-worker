@@ -1,13 +1,13 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\AMPQ;
+namespace Meup\Bundle\SnotraEsBundle\AMPQ;
 
 use JMS\Serializer\Serializer;
 use PhpAmqpLib\Message\AMQPMessage;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\IndexerInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactoryInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexerInterface;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\DocumentFactoryInterface;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexDictionaryInterface;
 
 /**
  *

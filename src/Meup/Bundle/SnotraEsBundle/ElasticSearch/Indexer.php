@@ -1,11 +1,11 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\ElasticSearch;
 
 use Elastica\Index;
 use Elastica\Exception\NotFoundException;
 use Meup\DataStructure\Message\AMPQMessageInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactoryInterface;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\DocumentFactoryInterface;
 
 /**
  *

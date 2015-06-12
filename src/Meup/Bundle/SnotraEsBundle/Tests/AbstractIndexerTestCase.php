@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests;
+namespace Meup\Bundle\SnotraEsBundle\Tests;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
 

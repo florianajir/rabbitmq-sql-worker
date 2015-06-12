@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\ElasticSearch;
 
 /**
  *
@@ -8,7 +8,7 @@ namespace Meup\Bundle\SnotraBundle\ElasticSearch;
 class DocumentFactory implements DocumentFactoryInterface
 {
 
-    const BASE_CLASS = 'Meup\Bundle\SnotraBundle\ElasticSearch\Document';
+    const BASE_CLASS = 'Meup\Bundle\SnotraEsBundle\ElasticSearch\Document';
 
     /**
      * @var ReflectionClass

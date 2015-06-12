@@ -1,15 +1,15 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests\AMPQ;
+namespace Meup\Bundle\SnotraEsBundle\Tests\AMPQ;
 
-use Meup\Bundle\SnotraBundle\Tests\AbstractIndexerTestCase;
+use Meup\Bundle\SnotraEsBundle\Tests\AbstractIndexerTestCase;
 use JMS\Serializer\SerializerBuilder;
 use PhpAmqpLib\Message\AMQPMessage;
 use Meup\DataStructure\Message\AMPQMessage as GnaaMessage;
-use Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionary;
-use Meup\Bundle\SnotraBundle\ElasticSearch\Indexer;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory;
-use Meup\Bundle\SnotraBundle\AMPQ\ElasticSearchConsumer;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexDictionary;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\Indexer;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\DocumentFactory;
+use Meup\Bundle\SnotraEsBundle\AMPQ\ElasticSearchConsumer;
 
 /**
  *

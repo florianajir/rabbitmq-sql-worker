@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\ElasticSearch;
 
 use Elastica\Index;
 use Meup\DataStructure\Message\AMPQMessageInterface;

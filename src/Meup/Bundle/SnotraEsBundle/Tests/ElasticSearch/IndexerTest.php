@@ -1,12 +1,12 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\Tests\ElasticSearch;
 
-use Meup\Bundle\SnotraBundle\Tests\AbstractIndexerTestCase;
+use Meup\Bundle\SnotraEsBundle\Tests\AbstractIndexerTestCase;
 use Elastica\Index;
 use Meup\DataStructure\Message\AMPQMessage;
-use Meup\Bundle\SnotraBundle\ElasticSearch\Indexer;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\Indexer;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\DocumentFactory;
 
 /**
  *

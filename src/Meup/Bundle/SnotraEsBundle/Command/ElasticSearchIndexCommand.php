@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Command;
+namespace Meup\Bundle\SnotraEsBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

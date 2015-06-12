@@ -1,13 +1,13 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\ElasticSearch;
 
 /**
  * 
  */
 class IndexDictionaryFactory implements IndexDictionaryFactoryInterface
 {
-    const DEFAULT_CLASS = 'Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionary';
+    const DEFAULT_CLASS = 'Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexDictionary';
 
     /**
      * @var ReflectionClass
@@ -28,7 +28,7 @@ class IndexDictionaryFactory implements IndexDictionaryFactoryInterface
      */
     public function __construct($class = self::DEFAULT_CLASS, $indexClassName)
     {
-        $interface   = 'Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface';
+        $interface   = 'Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexDictionaryInterface';
         $this->class = new \ReflectionClass($class);
         $this->index = $indexClassName;
 

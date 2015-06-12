@@ -1,9 +1,9 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\Tests\ElasticSearch;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\DocumentFactory;
 
 /**
  *

@@ -1,10 +1,10 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests\ElasticSearch;
+namespace Meup\Bundle\SnotraEsBundle\Tests\ElasticSearch;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
-use Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryLoader;
-use Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryFactory;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexDictionaryLoader;
+use Meup\Bundle\SnotraEsBundle\ElasticSearch\IndexDictionaryFactory;
 
 /**
  *
