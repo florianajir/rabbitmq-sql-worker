@@ -8,7 +8,7 @@ use Doctrine\DBAL\Connection;
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-class SqlProvider
+class SqlProvider implements SqlProviderInterface
 {
     /**
      * @var Connection

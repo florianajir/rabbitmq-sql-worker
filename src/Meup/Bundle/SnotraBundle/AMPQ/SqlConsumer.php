@@ -6,6 +6,7 @@ use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
 use Meup\Bundle\SnotraBundle\Provider\SqlProviderInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SqlConsumer
@@ -16,18 +17,18 @@ class SqlConsumer implements ConsumerInterface
 {
     const DEFAULT_MESSAGE_CLASS = 'Meup\DataStructure\Message\AMPQMessage';
     const JSON_FORMAT = 'json';
-    const XML_FORMAT = 'xml';
-
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
     /**
      * @var SqlProviderInterface
      */
     private $provider;
-
     /**
      * @var DataTransformerInterface
      */
     private $transformer;
-
     /**
      * @var Serializer
      */
@@ -37,6 +38,7 @@ class SqlConsumer implements ConsumerInterface
      * @param SqlProviderInterface     $provider
      * @param DataTransformerInterface $transformer
      * @param Serializer               $serializer
+     * @param LoggerInterface          $logger
      * @param string                   $msgClass
      * @param string                   $format
      */
@@ -44,6 +46,7 @@ class SqlConsumer implements ConsumerInterface
         SqlProviderInterface $provider,
         DataTransformerInterface $transformer,
         Serializer $serializer,
+        LoggerInterface $logger,
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
     )
@@ -51,6 +54,7 @@ class SqlConsumer implements ConsumerInterface
         $this->provider = $provider;
         $this->transformer = $transformer;
         $this->serializer = $serializer;
+        $this->logger = $logger;
         $this->msgClass = $msgClass;
         $this->format = $format;
     }
@@ -62,6 +66,17 @@ class SqlConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $message)
     {
+        $this
+            ->logger
+            ->debug(
+                'SQL Consumer data incoming',
+                array(
+                    'object class' => get_class($message),
+                    'data'         => $message->body
+                )
+            )
+        ;
+
         /* deserialize the message body */
         $message = $this
             ->serializer
@@ -69,7 +84,26 @@ class SqlConsumer implements ConsumerInterface
                 $message->body,
                 $this->msgClass,
                 $this->format
-            );
+            )
+        ;
+
+        $data = $this->transformer->prepare(
+            json_decode(
+                $message->getData(),
+                true
+            ),
+            $message->getType()
+        );
+
+        var_dump($data);
+
+
+//        $this
+//            ->logger
+//            ->debug(
+//                'SQL Consumer data persisting',
+//                $data
+//            );
 
         if (strtolower($message->getType()) === "locale") { //for no search index Locale
             return true;

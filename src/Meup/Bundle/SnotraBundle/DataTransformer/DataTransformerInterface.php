@@ -9,9 +9,10 @@ namespace Meup\Bundle\SnotraBundle\DataTransformer;
 interface DataTransformerInterface
 {
     /**
-     * @param array $data
+     * @param array  $data
+     * @param string $type
      *
      * @return array
      */
-    public function transform(array $data);
+    public function prepare(array $data, $type);
 }

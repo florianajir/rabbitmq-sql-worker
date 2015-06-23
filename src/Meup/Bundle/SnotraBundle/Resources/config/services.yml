@@ -61,6 +61,7 @@ services:
             - @meup_snotra.sql_provider
             - @meup_snotra.sql_data_transformer
             - @jms_serializer
+            - @logger
 
     meup_snotra.sql_provider:
         class: %meup_snotra.sql_provider.class%
