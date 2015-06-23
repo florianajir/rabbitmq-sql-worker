@@ -11,7 +11,7 @@ parameters:
     meup_snotra.elastica_document.class:                    Meup\Bundle\SnotraBundle\ElasticSearch\Document
     meup_snotra.elastica_indexer.class:                     Meup\Bundle\SnotraBundle\ElasticSearch\Indexer
     meup_snotra.sql_consumer.class:                         Meup\Bundle\SnotraBundle\AMPQ\SqlConsumer
-    meup_snotra.sql_mapper.class:                           Meup\Bundle\SnotraBundle\Mapper\SqlMapper
+    meup_snotra.sql_data_transformer.class:                 Meup\Bundle\SnotraBundle\DataTransformer\SqlDataTransformer
     meup_snotra.sql_provider.class:                         Meup\Bundle\SnotraBundle\Provider\SqlProvider
 
 services:
@@ -59,7 +59,7 @@ services:
         class: %meup_snotra.sql_consumer.class%
         arguments:
             - @meup_snotra.sql_provider
-            - @meup_snotra.sql_mapper
+            - @meup_snotra.sql_data_transformer
             - @jms_serializer
 
     meup_snotra.sql_provider:
@@ -67,7 +67,7 @@ services:
         arguments:
             - @database_connection
 
-    meup_snotra.sql_mapper:
-        class: %meup_snotra.sql_mapper.class%
+    meup_snotra.sql_data_transformer:
+        class: %meup_snotra.sql_data_transformer.class%
         arguments:
             - %mapping%
