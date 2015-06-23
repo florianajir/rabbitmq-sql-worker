@@ -1,5 +1,5 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Bundle\AMPQ;
+namespace Meup\Bundle\SnotraBundle\AMPQ;
 
 use JMS\Serializer\Serializer;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
