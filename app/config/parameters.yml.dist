@@ -1,5 +1,6 @@
 parameters:
 
+    persistance_driver:     sql #set to es to use elasticsearch
     database_driver:        pdo_mysql
     database_host:          127.0.0.1
     database_port:          ~
@@ -101,8 +102,6 @@ parameters:
                     ignore_case : true
                 worddelimiter :
                     type:      word_delimiter
-
-
 
     mailer_transport:       smtp
     mailer_host:            127.0.0.1

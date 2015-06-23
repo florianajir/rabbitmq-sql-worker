@@ -19,3 +19,11 @@ old_sound_rabbit_mq:
             queue_options:
                 name:           %rabbitmq_queue%
             callback:           meup_snotra.elasticsearch_consumer
+        sql:
+            connection:         default
+            exchange_options:
+                name:           %rabbitmq_exchange%
+                type:           direct
+            queue_options:
+                name:           %rabbitmq_queue%
+            callback:           meup_snotra.sql_consumer

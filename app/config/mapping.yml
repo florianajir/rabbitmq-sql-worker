@@ -1,0 +1,31 @@
+parameters:
+
+    mapping:
+
+        Example:
+            table: address
+            fields:
+                postal_code:
+                    column: zip_code
+                    type: int
+                    length: 5
+                    nullable: true
+                city:
+                    column: city
+                    type: string
+                    length: 255
+                    nullable: false
+
+        User:
+            table: user
+            fields:
+                login:
+                    column: username
+                    type: string
+                    length: 255
+                    nullable: false
+                mail:
+                    column: email
+                    type: string
+                    length: 255
+                    nullable: false
