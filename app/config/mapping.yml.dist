@@ -1,0 +1,23 @@
+parameters:
+    mapping:
+        message_type:
+            table: sql_table
+            fields:
+                identifier:
+                    column: id
+                    type: int
+                    nullable: false
+                label:
+                    column: label
+                    type: string
+                    length: 255
+                    nullable: false
+                amount:
+                    column: amount
+                    type: decimal
+                created_at:
+                    column: created_at
+                    type: datetime
+                birthdate:
+                    column: birthdate
+                    type: date
