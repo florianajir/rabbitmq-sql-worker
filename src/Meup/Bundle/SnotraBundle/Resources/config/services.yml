@@ -67,6 +67,7 @@ services:
         class: %meup_snotra.sql_provider.class%
         arguments:
             - @database_connection
+            - %kernel.environment%
 
     meup_snotra.sql_data_transformer:
         class: %meup_snotra.sql_data_transformer.class%

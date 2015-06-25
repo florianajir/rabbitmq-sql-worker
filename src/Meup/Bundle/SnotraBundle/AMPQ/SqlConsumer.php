@@ -1,6 +1,7 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\AMPQ;
 
+use InvalidArgumentException;
 use JMS\Serializer\Serializer;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
 use Meup\Bundle\SnotraBundle\Provider\SqlProviderInterface;
@@ -17,18 +18,22 @@ class SqlConsumer implements ConsumerInterface
 {
     const DEFAULT_MESSAGE_CLASS = 'Meup\DataStructure\Message\AMPQMessage';
     const JSON_FORMAT = 'json';
+
     /**
      * @var LoggerInterface
      */
     protected $logger;
+
     /**
      * @var SqlProviderInterface
      */
     private $provider;
+
     /**
      * @var DataTransformerInterface
      */
     private $transformer;
+
     /**
      * @var Serializer
      */
@@ -49,8 +54,7 @@ class SqlConsumer implements ConsumerInterface
         LoggerInterface $logger,
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
-    )
-    {
+    ) {
         $this->provider = $provider;
         $this->transformer = $transformer;
         $this->serializer = $serializer;
@@ -66,17 +70,6 @@ class SqlConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $message)
     {
-        $this
-            ->logger
-            ->debug(
-                'SQL Consumer data incoming',
-                array(
-                    'object class' => get_class($message),
-                    'data'         => $message->body
-                )
-            )
-        ;
-
         /* deserialize the message body */
         $message = $this
             ->serializer
@@ -84,31 +77,47 @@ class SqlConsumer implements ConsumerInterface
                 $message->body,
                 $this->msgClass,
                 $this->format
-            )
-        ;
+            );
 
-        $data = $this->transformer->prepare(
-            json_decode(
-                $message->getData(),
-                true
-            ),
-            $message->getType()
-        );
+        $this
+            ->logger
+            ->info(
+                'Message received from SQL Consumer',
+                array(
+                    'type' => $message->getType(),
+                    'data' => $message->getData()
+                )
+            );
 
-        var_dump($data);
-
-
-//        $this
-//            ->logger
-//            ->debug(
-//                'SQL Consumer data persisting',
-//                $data
-//            );
-
-        if (strtolower($message->getType()) === "locale") { //for no search index Locale
+        //TODO check if this can happen like in es consumer and utility (return true consume message)
+        if (strtolower($message->getType()) === "locale") {
             return true;
         }
 
+        try {
+            $data = $this->transformer->prepare(
+                json_decode(
+                    $message->getData(),
+                    true
+                ),
+                $message->getType()
+            );
+            foreach ($data as $table => $fields) {
+                $identifier = isset($fields['sku']) ? array('sku' => $fields['sku']) : array();
+                $this->provider->insertOrUpdateIfExists($table, $fields, $identifier);
+            }
+        } catch (InvalidArgumentException $e) {
+            $this
+                ->logger
+                ->warning(
+                    'Message not valid',
+                    array(
+                        'type'      => $message->getType(),
+                        'data'      => $message->getData(),
+                        'exception' => $e
+                    )
+                );
+        }
 
         return true;
     }

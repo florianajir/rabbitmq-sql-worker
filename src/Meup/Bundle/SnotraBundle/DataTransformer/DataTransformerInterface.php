@@ -9,6 +9,8 @@ namespace Meup\Bundle\SnotraBundle\DataTransformer;
 interface DataTransformerInterface
 {
     /**
+     * Prepare data from RabbitMQMessage to fit with mapping configuration.
+     *
      * @param array  $data
      * @param string $type
      *
