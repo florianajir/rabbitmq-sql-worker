@@ -1,15 +1,17 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Tests\DataTransformer;
 
-use Meup\Bundle\SnotraBundle\DataTransformer\SqlDataTransformer;
+use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
+use Meup\Bundle\SnotraBundle\DataValidator\DataValidator;
+use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Class SqlDataTransformerTest
+ * Class DataTransformerTest
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
+class DataTransformerTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -38,7 +40,8 @@ class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
-        $sqlDataTransformer = new SqlDataTransformer($this->mapping);
+        $Mapper = new DataMapper($this->mapping);
+        $DataTransformer = new DataTransformer($Mapper);
         $data = array(
             'identifier' => '1',
             'label' => 'label_de_test',
@@ -55,7 +58,7 @@ class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
                 'created_at' => '2015-01-02T09:00:00+0200'
             )
         );
-        $this->assertEquals($expected, $sqlDataTransformer->prepare($data, 'user'));
+        $this->assertEquals($expected, $DataTransformer->prepare('user', $data));
     }
 
     /**
@@ -63,15 +66,17 @@ class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareMissingNotNullableProperty()
     {
-        $sqlDataTransformer = new SqlDataTransformer($this->mapping);
+        $Mapper = new DataMapper($this->mapping);
+        $Validator = new DataValidator();
+        $DataTransformer = new DataTransformer($Mapper, $Validator);
         $data = array(
             'label' => 'label_de_test',
             'amount' => '10.01',
             'birthday' => '1989-11-10',
             'subscribe' => '2015-01-02T09:00:00+0200'
         );
-        $this->setExpectedException('InvalidArgumentException', 'user.id is not nullable.');
-        $sqlDataTransformer->prepare($data, 'user');
+        $this->setExpectedException('InvalidArgumentException', 'user.identifier is not nullable.');
+        $DataTransformer->prepare('user', $data);
     }
 
     /**
@@ -79,25 +84,28 @@ class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareWrongType()
     {
-        $sqlDataTransformer = new SqlDataTransformer($this->mapping);
+        $Mapper = new DataMapper($this->mapping);
+        $Validator = new DataValidator();
+        $DataTransformer = new DataTransformer($Mapper, $Validator);
+
         $data = array(
             'identifier' => '1',
             'amount' => '10,01'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.amount type not valid.');
-        $sqlDataTransformer->prepare($data, 'user');
+        $DataTransformer->prepare('user', $data);
         $data = array(
             'identifier' => '1',
             'birthday' => '11/10/1989'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.birthday type not valid.');
-        $sqlDataTransformer->prepare($data, 'user');
+        $DataTransformer->prepare('user', $data);
         $data = array(
             'identifier' => '1',
             'subscribe' => '2015-01-02'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.subscribe type not valid.');
-        $sqlDataTransformer->prepare($data, 'user');
+        $DataTransformer->prepare('user', $data);
     }
 
     /**
@@ -105,7 +113,8 @@ class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareRelationnal()
     {
-//        $sqlDataTransformer = new SqlDataTransformer($this->relationnalMapping);
+//        $Mapper = new DataMapper($this->mapping);
+//        $DataTransformer = new DataTransformer($Mapper);
     }
 
     /**
@@ -148,5 +157,4 @@ class SqlDataTransformerTest extends PHPUnit_Framework_TestCase
             )
         );
     }
-
 }
