@@ -11,10 +11,10 @@ interface DataTransformerInterface
     /**
      * Prepare data from RabbitMQMessage to fit with mapping configuration.
      *
-     * @param array  $data
      * @param string $type
+     * @param array  $data
      *
      * @return array
      */
-    public function prepare(array $data, $type);
+    public function prepare($type, array $data);
 }

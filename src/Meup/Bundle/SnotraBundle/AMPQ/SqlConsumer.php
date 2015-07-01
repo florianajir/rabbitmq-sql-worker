@@ -89,19 +89,21 @@ class SqlConsumer implements ConsumerInterface
                 )
             );
 
-        //TODO check if this can happen like in es consumer and utility (return true consume message)
+        //TODO check if this can happen like in es consumer and if it's useful (return true consume message)
         if (strtolower($message->getType()) === "locale") {
             return true;
         }
 
         try {
             $data = $this->transformer->prepare(
+                $message->getType(),
                 json_decode(
                     $message->getData(),
                     true
-                ),
-                $message->getType()
+                )
             );
+//            print_r($data);
+//            return true; //TODO REMOVE
             foreach ($data as $table => $fields) {
                 $identifier = isset($fields['sku']) ? array('sku' => $fields['sku']) : array();
                 $this->provider->insertOrUpdateIfExists($table, $fields, $identifier);

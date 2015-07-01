@@ -11,8 +11,10 @@ parameters:
     meup_snotra.elastica_document.class:                    Meup\Bundle\SnotraBundle\ElasticSearch\Document
     meup_snotra.elastica_indexer.class:                     Meup\Bundle\SnotraBundle\ElasticSearch\Indexer
     meup_snotra.sql_consumer.class:                         Meup\Bundle\SnotraBundle\AMPQ\SqlConsumer
-    meup_snotra.sql_data_transformer.class:                 Meup\Bundle\SnotraBundle\DataTransformer\SqlDataTransformer
     meup_snotra.sql_provider.class:                         Meup\Bundle\SnotraBundle\Provider\SqlProvider
+    meup_snotra.data_transformer.class:                     Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer
+    meup_snotra.data_validator.class:                       Meup\Bundle\SnotraBundle\DataValidator\DataValidator
+    meup_snotra.data_mapper.class:                          Meup\Bundle\SnotraBundle\DataMapper\DataMapper
 
 services:
 
@@ -59,7 +61,7 @@ services:
         class: %meup_snotra.sql_consumer.class%
         arguments:
             - @meup_snotra.sql_provider
-            - @meup_snotra.sql_data_transformer
+            - @meup_snotra.data_transformer
             - @jms_serializer
             - @logger
 
@@ -69,7 +71,16 @@ services:
             - @database_connection
             - %kernel.environment%
 
-    meup_snotra.sql_data_transformer:
-        class: %meup_snotra.sql_data_transformer.class%
+    meup_snotra.data_transformer:
+        class: %meup_snotra.data_transformer.class%
+        arguments:
+            - @meup_snotra.data_mapper
+            - @meup_snotra.data_validator
+
+    meup_snotra.data_validator:
+        class: %meup_snotra.data_validator.class%
+
+    meup_snotra.data_mapper:
+        class: %meup_snotra.data_mapper.class%
         arguments:
             - %mapping%
