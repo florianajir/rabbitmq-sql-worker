@@ -56,6 +56,13 @@ interface DataMapperInterface
     public function getFieldType($entity, $field);
 
     /**
+     * @param string $entity
+     *
+     * @return string|null
+     */
+    public function getIdentifier($entity);
+
+    /**
      * @param string $container
      * @param string $entity
      * @param string $relation

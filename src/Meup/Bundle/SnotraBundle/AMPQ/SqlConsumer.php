@@ -4,7 +4,7 @@ namespace Meup\Bundle\SnotraBundle\AMPQ;
 use InvalidArgumentException;
 use JMS\Serializer\Serializer;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
-use Meup\Bundle\SnotraBundle\Provider\SqlProviderInterface;
+use Meup\Bundle\SnotraBundle\Manager\ManagerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -25,9 +25,9 @@ class SqlConsumer implements ConsumerInterface
     protected $logger;
 
     /**
-     * @var SqlProviderInterface
+     * @var ManagerInterface
      */
-    private $provider;
+    private $manager;
 
     /**
      * @var DataTransformerInterface
@@ -40,23 +40,23 @@ class SqlConsumer implements ConsumerInterface
     private $serializer;
 
     /**
-     * @param SqlProviderInterface     $provider
      * @param DataTransformerInterface $transformer
+     * @param ManagerInterface         $manager
      * @param Serializer               $serializer
      * @param LoggerInterface          $logger
      * @param string                   $msgClass
      * @param string                   $format
      */
     public function __construct(
-        SqlProviderInterface $provider,
         DataTransformerInterface $transformer,
+        ManagerInterface $manager,
         Serializer $serializer,
         LoggerInterface $logger,
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
     ) {
-        $this->provider = $provider;
         $this->transformer = $transformer;
+        $this->manager = $manager;
         $this->serializer = $serializer;
         $this->logger = $logger;
         $this->msgClass = $msgClass;
@@ -102,12 +102,7 @@ class SqlConsumer implements ConsumerInterface
                     true
                 )
             );
-//            print_r($data);
-//            return true; //TODO REMOVE
-            foreach ($data as $table => $fields) {
-                $identifier = isset($fields['sku']) ? array('sku' => $fields['sku']) : array();
-                $this->provider->insertOrUpdateIfExists($table, $fields, $identifier);
-            }
+            $this->manager->persist($data);
         } catch (InvalidArgumentException $e) {
             $this
                 ->logger

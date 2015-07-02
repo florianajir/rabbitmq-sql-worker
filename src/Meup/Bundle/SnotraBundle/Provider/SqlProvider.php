@@ -2,13 +2,15 @@
 namespace Meup\Bundle\SnotraBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Logging\EchoSQLLogger;
 
 /**
  * Class SqlProvider
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-class SqlProvider implements SqlProviderInterface
+class SqlProvider implements ProviderInterface
 {
     /**
      * @var Connection
@@ -22,9 +24,8 @@ class SqlProvider implements SqlProviderInterface
     public function __construct(Connection $conn, $env)
     {
         $this->conn = $conn;
-        //TODO remove after dev
         if ($env === 'dev') {
-            $this->conn->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
+            $this->conn->getConfiguration()->setSQLLogger(new EchoSQLLogger());
         }
     }
 
@@ -35,7 +36,7 @@ class SqlProvider implements SqlProviderInterface
      *
      * @return integer The number of affected rows.
      */
-    public function insertOrUpdateIfExists($table, array $data, array $identifier = array())
+    public function insertOrUpdateIfExists($table, array $data, array $identifier = null)
     {
         if (!empty($identifier)) {
             $exists = $this->exists($table, key($identifier), current($identifier));
@@ -54,7 +55,7 @@ class SqlProvider implements SqlProviderInterface
      *
      * @return bool
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function exists($table, $identifier, $value)
     {
@@ -73,7 +74,9 @@ class SqlProvider implements SqlProviderInterface
      */
     public function update($table, array $data, array $identifier)
     {
-        return $this->conn->update($table, $data, $identifier);
+        $this->conn->update($table, $data, $identifier);
+
+        return $this->conn->lastInsertId();
     }
 
     /**
@@ -84,6 +87,24 @@ class SqlProvider implements SqlProviderInterface
      */
     public function insert($table, array $data)
     {
-        return $this->conn->insert($table, $data);
+        $this->conn->insert($table, $data);
+
+        return $this->conn->lastInsertId();
+    }
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @param string $where
+     * @param string $value
+     *
+     * @return string
+     * @throws DBALException
+     */
+    public function getColumnValueWhere($table, $column, $where, $value)
+    {
+        $sth = $this->conn->executeQuery("SELECT `{$column}` FROM `{$table}` WHERE `{$where}` = '{$value}'");
+
+        return $sth->fetchColumn();
     }
 }

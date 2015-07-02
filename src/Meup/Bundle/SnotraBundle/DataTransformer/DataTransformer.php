@@ -2,8 +2,8 @@
 namespace Meup\Bundle\SnotraBundle\DataTransformer;
 
 use InvalidArgumentException;
-use Meup\Bundle\SnotraBundle\DataValidator\DataValidatorInterface;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapperInterface;
+use Meup\Bundle\SnotraBundle\DataValidator\DataValidatorInterface;
 
 /**
  * Class DataTransformer
@@ -15,6 +15,7 @@ class DataTransformer implements DataTransformerInterface
     const RELATED_KEY = '_related';
     const RELATED_INFOS_KEY = '_relation';
     const RELATED_DATA_KEY = '_data';
+    const IDENTIFIER_KEY = '_identifier';
 
     /**
      * @var DataMapperInterface
@@ -55,6 +56,7 @@ class DataTransformer implements DataTransformerInterface
             foreach ($data as $field => $value) {
                 $fieldMapping = $this->mapper->getFieldMapping($type, $field);
                 $relation = $this->mapper->getRelation($type, $field);
+                $prepared[$tableName][self::IDENTIFIER_KEY] = $this->mapper->getIdentifier($type);
                 if (!empty($fieldMapping)) {
                     if ($this->validator) {
                         $this->validate($type, $field, $value);
@@ -123,8 +125,7 @@ class DataTransformer implements DataTransformerInterface
     {
         $fields = $this->mapper->getFieldsName($type);
         foreach ($fields as $field) {
-            if (
-                !$this->mapper->getFieldNullable($type, $field)
+            if (!$this->mapper->getFieldNullable($type, $field)
                 && (
                     !isset($data[$this->mapper->getFieldColumn($type, $field)])
                     || is_null($data[$this->mapper->getFieldColumn($type, $field)])

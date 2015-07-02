@@ -2,6 +2,7 @@ parameters:
     mapping:
         message_type:
             table: sql_table
+            identifier: table_id
             fields:
                 identifier:
                     column: id

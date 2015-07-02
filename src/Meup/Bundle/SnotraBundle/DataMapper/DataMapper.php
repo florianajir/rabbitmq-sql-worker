@@ -11,6 +11,7 @@ use InvalidArgumentException;
 class DataMapper implements DataMapperInterface
 {
     const MAPPING_KEY_TABLE = 'table';
+    const MAPPING_KEY_IDENTIFIER = 'identifier';
     const MAPPING_KEY_LENGTH = 'length';
     const MAPPING_KEY_COLUMN = 'column';
     const MAPPING_KEY_FIELDS = 'fields';
@@ -27,7 +28,7 @@ class DataMapper implements DataMapperInterface
     const RELATION_KEY_JOIN_COLUMN_NAME = 'name';
     const RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME = 'referencedColumnName';
     const RELATION_KEY_JOIN_TABLE = 'joinTable';
-    const RELATION_KEY_JOIN_TABLE_JOIN_COLUMNS = 'joinColumns';
+    const RELATION_KEY_INVERSE_JOIN_COLUMN = 'inverseJoinColumn';
 
     /**
      * @var array
@@ -185,6 +186,21 @@ class DataMapper implements DataMapperInterface
         }
 
         return $tableName;
+    }
+
+    /**
+     * @param string $entity
+     *
+     * @return string|null
+     */
+    public function getIdentifier($entity)
+    {
+        $identifier = null;
+        if (isset($this->mapping[$entity][self::MAPPING_KEY_IDENTIFIER])) {
+            $identifier = $this->mapping[$entity][self::MAPPING_KEY_IDENTIFIER];
+        }
+
+        return $identifier;
     }
 
     /**
