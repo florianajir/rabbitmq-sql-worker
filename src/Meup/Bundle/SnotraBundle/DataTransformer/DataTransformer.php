@@ -13,7 +13,7 @@ use Meup\Bundle\SnotraBundle\DataValidator\DataValidatorInterface;
 class DataTransformer implements DataTransformerInterface
 {
     const RELATED_KEY = '_related';
-    const RELATED_INFOS_KEY = '_relation';
+    const RELATED_RELATION_KEY = '_relation';
     const RELATED_DATA_KEY = '_data';
     const IDENTIFIER_KEY = '_identifier';
 
@@ -68,18 +68,14 @@ class DataTransformer implements DataTransformerInterface
                     if ($relationInfos) {
                         $collection = $this->mapper->relationExpectCollection($relation);
                         $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
+                        $linkedTableName = $this->mapper->getTableName($type);
+                        $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
                         if ($collection) {
                             foreach ($value as $element) {
-                                $prepared[$tableName][self::RELATED_KEY][$relation][] = array(
-                                    self::RELATED_INFOS_KEY => $relationInfos,
-                                    self::RELATED_DATA_KEY  => $this->prepare($targetEntity, $element)
-                                );
+                                $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY][] = $this->prepare($targetEntity, $element);
                             }
                         } else {
-                            $prepared[$tableName][self::RELATED_KEY][$relation][] = array(
-                                self::RELATED_INFOS_KEY => $relationInfos,
-                                self::RELATED_DATA_KEY  => $this->prepare($targetEntity, $value)
-                            );
+                            $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $this->prepare($targetEntity, $value);
                         }
                     }
                 }

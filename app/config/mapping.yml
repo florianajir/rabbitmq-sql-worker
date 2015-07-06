@@ -1,31 +1,101 @@
 parameters:
-
     mapping:
-
-        Example:
-            table: address
+        User:
+            table: user
+            identifier: sku
             fields:
-                postal_code:
-                    column: zip_code
+                id:
+                    column: id
                     type: int
-                    length: 5
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
+                    nullable: false
+                name:
+                    column: name
+                    type: string
+                    length: 255
+                parent_id:
+                    column: parent_id
+                    type: int
                     nullable: true
+                created_at:
+                    column: created_at
+                    type: datetime
+                    length: 255
+            manyToOne:
+                Address:
+                    targetEntity: Address
+                    joinColumn:
+                        name: address_id
+                        referencedColumnName: id
+            oneToOne:
+                Customer:
+                    targetEntity: Customer
+                    joinColumn:
+                        name: customer_id
+                        referencedColumnName: id
+            manyToMany:
+                Groups:
+                    targetEntity: Group
+                    joinTable:
+                        name: users_groups
+                        joinColumn:
+                            name: user_id
+                            referencedColumnName: id
+                        inverseJoinColumn:
+                            name: group_id
+                            referencedColumnName: id
+            oneToMany:
+                Children:
+                    targetEntity: User
+                    joinColumn:
+                        name: parent_id
+                        referencedColumnName: id
+        Address:
+            table: address
+            identifier: id
+            fields:
+                id:
+                    column: id
+                    type: int
+                postal_code:
+                    column: postal_code
+                    type: string
+                    length: 5
                 city:
                     column: city
                     type: string
                     length: 255
-                    nullable: false
-
-        User:
-            table: user
+        Customer:
+            table: customer
+            identifier: id
             fields:
-                login:
-                    column: username
-                    type: string
-                    length: 255
-                    nullable: false
-                mail:
+                id:
+                    column: id
+                    type: int
+                email:
                     column: email
                     type: string
                     length: 255
+                last_purchased:
+                    column: last_purchased
+                    type: datetime
+                    length: 255
+        Group:
+            table: groups
+            identifier: sku
+            fields:
+                id:
+                    column: id
+                    type: int
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
                     nullable: false
+                created_at:
+                    column: created_at
+                    type: datetime
+                    length: 255

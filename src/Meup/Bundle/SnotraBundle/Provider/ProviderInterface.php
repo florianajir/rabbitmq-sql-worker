@@ -9,13 +9,12 @@ namespace Meup\Bundle\SnotraBundle\Provider;
 interface ProviderInterface
 {
     /**
-     * Insert or update a record if exists
+     * Delete a record
      *
-     * @param string $table      The expression of the table to update quoted or unquoted.
-     * @param array  $data       An associative array containing column-value pairs.
-     * @param array  $identifier The update criteria. An associative array containing column-value pairs.
+     * @param string $table
+     * @param array  $conditions
      */
-    public function insertOrUpdateIfExists($table, array $data, array $identifier = null);
+    public function delete($table, $conditions);
 
     /**
      * Return true if the record exists
@@ -31,12 +30,31 @@ interface ProviderInterface
     public function exists($table, $identifier, $value);
 
     /**
+     * @param string $table
+     * @param string $column
+     * @param string $where
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getColumnValueWhere($table, $column, $where, $value);
+
+    /**
      * Insert a record in sql database
      *
      * @param string $table The expression of the table to update quoted or unquoted.
      * @param array  $data  An associative array containing column-value pairs.
      */
     public function insert($table, array $data);
+
+    /**
+     * Insert or update a record if exists
+     *
+     * @param string $table      The expression of the table to update quoted or unquoted.
+     * @param array  $data       An associative array containing column-value pairs.
+     * @param array  $identifier The update criteria. An associative array containing column-value pairs.
+     */
+    public function insertOrUpdateIfExists($table, array $data, array $identifier = null);
 
     /**
      * Update a record in sql database
@@ -46,14 +64,4 @@ interface ProviderInterface
      * @param array  $identifier The update criteria. An associative array containing column-value pairs.
      */
     public function update($table, array $data, array $identifier);
-
-    /**
-     * @param string $table
-     * @param string $column
-     * @param string $where
-     * @param string $value
-     *
-     * @return string
-     */
-    public function getColumnValueWhere($table, $column, $where, $value);
 }

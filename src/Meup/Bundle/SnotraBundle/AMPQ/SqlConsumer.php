@@ -102,6 +102,9 @@ class SqlConsumer implements ConsumerInterface
                     true
                 )
             );
+//            print_r($data);
+//            ob_flush();
+//            die;
             $this->manager->persist($data);
         } catch (InvalidArgumentException $e) {
             $this

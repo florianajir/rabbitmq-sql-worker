@@ -3,6 +3,7 @@ namespace Meup\Bundle\SnotraBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Logging\EchoSQLLogger;
 
 /**
@@ -31,6 +32,19 @@ class SqlProvider implements ProviderInterface
 
     /**
      * @param string $table
+     * @param array  $conditions
+     *
+     * @return integer The number of affected rows.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function delete($table, $conditions)
+    {
+        return $this->conn->delete($table, $conditions);
+    }
+
+    /**
+     * @param string $table
      * @param array  $data
      * @param array  $identifier
      *
@@ -53,7 +67,7 @@ class SqlProvider implements ProviderInterface
      * @param string $identifier
      * @param string $value
      *
-     * @return bool
+     * @return boolean
      *
      * @throws DBALException
      */
@@ -99,6 +113,7 @@ class SqlProvider implements ProviderInterface
      * @param string $value
      *
      * @return string
+     *
      * @throws DBALException
      */
     public function getColumnValueWhere($table, $column, $where, $value)
