@@ -127,14 +127,14 @@ class DataTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param string       $type
-     * @param string       $field
-     * @param string|array $value
-     * @param string       $relation
+     * @param string $type
+     * @param string $field
+     * @param array  $data
+     * @param string $relation
      *
      * @return array
      */
-    protected function prepareRelated($type, $field, $value, $relation)
+    protected function prepareRelated($type, $field, $data, $relation)
     {
         $prepared = array();
         $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
@@ -143,15 +143,15 @@ class DataTransformer implements DataTransformerInterface
             $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
             $linkedTableName = $this->mapper->getTableName($field);
             $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
+            $relatedData = array();
             if ($collection) {
-                foreach ($value as $element) {
-                    $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY][] = $this->prepare($targetEntity,
-                        $element);
+                foreach ($data as $element) {
+                    $relatedData[] = $this->prepare($targetEntity, $element);
                 }
             } else {
-                $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $this->prepare($targetEntity,
-                    $value);
+                $relatedData = $this->prepare($targetEntity, $data);
             }
+            $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $relatedData;
         }
 
         return $prepared;
