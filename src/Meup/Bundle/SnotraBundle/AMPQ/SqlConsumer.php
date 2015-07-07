@@ -2,9 +2,9 @@
 namespace Meup\Bundle\SnotraBundle\AMPQ;
 
 use InvalidArgumentException;
-use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerInterface;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
-use Meup\Bundle\SnotraBundle\Manager\ManagerInterface;
+use Meup\Bundle\SnotraBundle\Persister\PersisterInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -25,9 +25,9 @@ class SqlConsumer implements ConsumerInterface
     protected $logger;
 
     /**
-     * @var ManagerInterface
+     * @var PersisterInterface
      */
-    private $manager;
+    private $persister;
 
     /**
      * @var DataTransformerInterface
@@ -35,7 +35,7 @@ class SqlConsumer implements ConsumerInterface
     private $transformer;
 
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -46,8 +46,8 @@ class SqlConsumer implements ConsumerInterface
 
     /**
      * @param DataTransformerInterface $transformer
-     * @param ManagerInterface         $manager
-     * @param Serializer               $serializer
+     * @param PersisterInterface       $persister
+     * @param SerializerInterface      $serializer
      * @param LoggerInterface          $logger
      * @param array                    $ignoredTypes
      * @param string                   $msgClass
@@ -55,15 +55,15 @@ class SqlConsumer implements ConsumerInterface
      */
     public function __construct(
         DataTransformerInterface $transformer,
-        ManagerInterface $manager,
-        Serializer $serializer,
+        PersisterInterface $persister,
+        SerializerInterface $serializer,
         LoggerInterface $logger,
         array $ignoredTypes = array(),
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
     ) {
         $this->transformer = $transformer;
-        $this->manager = $manager;
+        $this->persister = $persister;
         $this->serializer = $serializer;
         $this->logger = $logger;
         $this->msgClass = $msgClass;
@@ -111,7 +111,7 @@ class SqlConsumer implements ConsumerInterface
                     true
                 )
             );
-            $this->manager->persist($data);
+            $this->persister->persist($data);
         } catch (InvalidArgumentException $e) {
             $this
                 ->logger

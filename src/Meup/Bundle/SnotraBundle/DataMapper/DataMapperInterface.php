@@ -69,15 +69,6 @@ interface DataMapperInterface
      *
      * @return array
      */
-    public function getJoinColumn($container, $entity, $relation);
-
-    /**
-     * @param string $container
-     * @param string $entity
-     * @param string $relation
-     *
-     * @return array
-     */
     public function getJoinTable($container, $entity, $relation);
 
     /**

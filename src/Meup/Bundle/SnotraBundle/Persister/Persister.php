@@ -1,5 +1,5 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Manager;
+namespace Meup\Bundle\SnotraBundle\Persister;
 
 use Exception;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
@@ -7,11 +7,11 @@ use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
 
 /**
- * Class Manager
+ * Class Persister
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-class Manager implements ManagerInterface
+class Persister implements PersisterInterface
 {
     /**
      * @param ProviderInterface $provider

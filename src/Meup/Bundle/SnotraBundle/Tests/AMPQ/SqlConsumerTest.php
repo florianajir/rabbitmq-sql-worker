@@ -18,36 +18,24 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $serializer = SerializerBuilder::create()->build();
-        $provider = $this
-            ->getMockBuilder('Meup\Bundle\SnotraBundle\Provider\SqlProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $transformer = $this
-            ->getMockBuilder('Meup\Bundle\SnotraBundle\DataTransformer\SqlDataTransformer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $transformer = $this->getMock('Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface');
         $transformer
             ->expects($this->once())
             ->method('prepare')
             ->will($this->returnValue(array()));
-        $logger = $this
-            ->getMockBuilder('Monolog\Logger')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $consumer = new SqlConsumer($provider, $transformer, $serializer, $logger);
+        $persister = $this->getMock('Meup\Bundle\SnotraBundle\Persister\PersisterInterface');
+        $serializer = SerializerBuilder::create()->build();
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $consumer = new SqlConsumer($transformer, $persister, $serializer, $logger);
         $msg = new AMQPMessage();
         $msg->body = $serializer
             ->serialize(
                 (new GnaaMessage())
-                    ->setId(uniqid())
                     ->setType(uniqid())
                     ->setData($serializer->serialize(array(), 'json')),
                 'json'
             );
-
         $result = $consumer->execute($msg);
-
         $this->assertTrue($result);
     }
 }

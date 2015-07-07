@@ -15,7 +15,7 @@ parameters:
     meup_snotra.data_transformer.class:                     Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer
     meup_snotra.data_validator.class:                       Meup\Bundle\SnotraBundle\DataValidator\DataValidator
     meup_snotra.data_mapper.class:                          Meup\Bundle\SnotraBundle\DataMapper\DataMapper
-    meup_snotra.manager.class:                              Meup\Bundle\SnotraBundle\Manager\Manager
+    meup_snotra.provider.class:                             Meup\Bundle\SnotraBundle\Provider\Provider
 
 services:
 
@@ -62,7 +62,7 @@ services:
         class: %meup_snotra.sql_consumer.class%
         arguments:
             - @meup_snotra.data_transformer
-            - @meup_snotra.manager
+            - @meup_snotra.provider
             - @jms_serializer
             - @logger
             - %ignored_message_types%
@@ -87,7 +87,7 @@ services:
         arguments:
             - %mapping%
 
-    meup_snotra.manager:
-        class: %meup_snotra.manager.class%
+    meup_snotra.provider:
+        class: %meup_snotra.provider.class%
         arguments:
             - @meup_snotra.sql_provider

@@ -1,12 +1,12 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Manager;
+namespace Meup\Bundle\SnotraBundle\Persister;
 
 /**
- * Interface ManagerInterface
+ * Interface PersisterInterface
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-interface ManagerInterface
+interface PersisterInterface
 {
     /**
      * Persist data

@@ -112,7 +112,7 @@ class DataTransformer implements DataTransformerInterface
         if ($relationInfos) {
             $collection = $this->mapper->relationExpectCollection($relation);
             $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
-            $linkedTableName = $this->mapper->getTableName($type);
+            $linkedTableName = $this->mapper->getTableName($field);
             $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
             if ($collection) {
                 foreach ($value as $element) {

@@ -246,27 +246,6 @@ class DataMapper implements DataMapperInterface
      *
      * @return array|null
      */
-    public function getJoinColumn($container, $entity, $relation)
-    {
-        $joinColumn = null;
-        $infos = $this->getRelationInfos($container, $entity, $relation);
-        if (isset($infos[self::RELATION_KEY_JOIN_COLUMN])) {
-            $joinColumn = $infos[self::RELATION_KEY_JOIN_COLUMN];
-            $joinColumn = array(
-                $joinColumn[self::RELATION_KEY_JOIN_COLUMN_NAME] => $joinColumn[self::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME]
-            );
-        }
-
-        return $joinColumn;
-    }
-
-    /**
-     * @param string $container
-     * @param string $entity
-     * @param string $relation
-     *
-     * @return array|null
-     */
     public function getJoinTable($container, $entity, $relation)
     {
         $joinTable = null;
