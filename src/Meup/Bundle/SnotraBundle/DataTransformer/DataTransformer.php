@@ -64,20 +64,7 @@ class DataTransformer implements DataTransformerInterface
                     $fieldColumn = $this->mapper->getFieldColumn($type, $field);
                     $prepared[$tableName][$fieldColumn] = $value;
                 } elseif ($relation) {
-                    $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
-                    if ($relationInfos) {
-                        $collection = $this->mapper->relationExpectCollection($relation);
-                        $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
-                        $linkedTableName = $this->mapper->getTableName($type);
-                        $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
-                        if ($collection) {
-                            foreach ($value as $element) {
-                                $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY][] = $this->prepare($targetEntity, $element);
-                            }
-                        } else {
-                            $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $this->prepare($targetEntity, $value);
-                        }
-                    }
+                    $this->prepareRelated($prepared, $type, $field, $value, $relation, $tableName);
                 }
             }
             if ($this->validator) {
@@ -95,7 +82,7 @@ class DataTransformer implements DataTransformerInterface
      *
      * @throws InvalidArgumentException
      */
-    public function validate($type, $field, $value)
+    protected function validate($type, $field, $value)
     {
         // validate length if defined
         if ($maxLength = $this->mapper->getFieldMaxLength($type, $field)) {
@@ -112,12 +99,38 @@ class DataTransformer implements DataTransformerInterface
     }
 
     /**
+     * @param array  $prepared
+     * @param string $type
+     * @param string $field
+     * @param string|array $value
+     * @param string $relation
+     * @param string $tableName
+     */
+    protected function prepareRelated(&$prepared, $type, $field, $value, $relation, $tableName)
+    {
+        $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
+        if ($relationInfos) {
+            $collection = $this->mapper->relationExpectCollection($relation);
+            $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
+            $linkedTableName = $this->mapper->getTableName($type);
+            $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
+            if ($collection) {
+                foreach ($value as $element) {
+                    $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY][] = $this->prepare($targetEntity, $element);
+                }
+            } else {
+                $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $this->prepare($targetEntity, $value);
+            }
+        }
+    }
+
+    /**
      * @param string $type
      * @param array  $data
      *
      * @throws InvalidArgumentException
      */
-    public function checkNullable($type, $data)
+    protected function checkNullable($type, $data)
     {
         $fields = $this->mapper->getFieldsName($type);
         foreach ($fields as $field) {

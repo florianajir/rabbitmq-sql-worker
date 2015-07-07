@@ -40,10 +40,16 @@ class SqlConsumer implements ConsumerInterface
     private $serializer;
 
     /**
+     * @var array
+     */
+    private $ignoredTypes;
+
+    /**
      * @param DataTransformerInterface $transformer
      * @param ManagerInterface         $manager
      * @param Serializer               $serializer
      * @param LoggerInterface          $logger
+     * @param array                    $ignoredTypes
      * @param string                   $msgClass
      * @param string                   $format
      */
@@ -52,6 +58,7 @@ class SqlConsumer implements ConsumerInterface
         ManagerInterface $manager,
         Serializer $serializer,
         LoggerInterface $logger,
+        array $ignoredTypes = array(),
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
     ) {
@@ -61,6 +68,7 @@ class SqlConsumer implements ConsumerInterface
         $this->logger = $logger;
         $this->msgClass = $msgClass;
         $this->format = $format;
+        $this->ignoredTypes = $ignoredTypes;
     }
 
     /**
@@ -70,7 +78,7 @@ class SqlConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $message)
     {
-        /* deserialize the message body */
+        // deserialize the message body
         $message = $this
             ->serializer
             ->deserialize(
@@ -79,6 +87,7 @@ class SqlConsumer implements ConsumerInterface
                 $this->format
             );
 
+        // log message
         $this
             ->logger
             ->info(
@@ -89,8 +98,8 @@ class SqlConsumer implements ConsumerInterface
                 )
             );
 
-        //TODO check if this can happen like in es consumer and if it's useful (return true consume message)
-        if (strtolower($message->getType()) === "locale") {
+        // return true consume message
+        if (in_array(strtolower($message->getType()), $this->ignoredTypes)) {
             return true;
         }
 

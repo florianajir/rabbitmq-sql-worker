@@ -65,6 +65,7 @@ services:
             - @meup_snotra.manager
             - @jms_serializer
             - @logger
+            - %ignored_message_types%
 
     meup_snotra.sql_provider:
         class: %meup_snotra.sql_provider.class%

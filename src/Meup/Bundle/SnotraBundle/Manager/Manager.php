@@ -48,10 +48,8 @@ class Manager implements ManagerInterface
      */
     protected function persistRecursive($table, array $data, array $foreignData = array())
     {
-        if (array_key_exists(DataTransformer::RELATED_KEY, $data)) {
-            $related = $data[DataTransformer::RELATED_KEY];
-            unset($data[DataTransformer::RELATED_KEY]);
-        }
+        //get related index if defined
+        $related = $this->popRelated($data);
         //Add foreign data
         $data = array_merge($data, $foreignData);
         //get subject identifier if defined
@@ -90,6 +88,24 @@ class Manager implements ManagerInterface
         }
 
         return $identifier;
+    }
+
+    /**
+     * Get the related index if defined and remove it from data to persist
+     *
+     * @param array $data
+     *
+     * @return array|null
+     */
+    protected function popRelated(array &$data)
+    {
+        $related = null;
+        if (array_key_exists(DataTransformer::RELATED_KEY, $data)) {
+            $related = $data[DataTransformer::RELATED_KEY];
+            unset($data[DataTransformer::RELATED_KEY]);
+        }
+
+        return $related;
     }
 
     /**
@@ -216,7 +232,7 @@ class Manager implements ManagerInterface
                     current($identifier)
                 );
             } else {
-                throw new Exception("Unable to get an identifier. (Table: $table)");
+                throw new Exception("Unable to get an identifier. (Table: $relatedTable)");
             }
             $joinData = array(
                 $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME] => $joinValue
