@@ -52,27 +52,55 @@ class DataTransformer implements DataTransformerInterface
         $prepared = array();
         $tableName = $this->mapper->getTableName($type);
         if ($tableName) {
-            $prepared[$tableName] = array();
-            foreach ($data as $field => $value) {
-                $fieldMapping = $this->mapper->getFieldMapping($type, $field);
-                $relation = $this->mapper->getRelation($type, $field);
-                $prepared[$tableName][self::IDENTIFIER_KEY] = $this->mapper->getIdentifier($type);
-                if (!empty($fieldMapping)) {
-                    if ($this->validator) {
-                        $this->validate($type, $field, $value);
-                    }
-                    $fieldColumn = $this->mapper->getFieldColumn($type, $field);
-                    $prepared[$tableName][$fieldColumn] = $value;
-                } elseif ($relation) {
-                    $this->prepareRelated($prepared, $type, $field, $value, $relation, $tableName);
-                }
-            }
+            $prepared[$tableName] = $this->prepareData($type, $data);
             if ($this->validator) {
                 $this->checkNullable($type, $prepared[$tableName]);
             }
         }
 
         return $prepared;
+    }
+
+    /**
+     * @param string $type
+     * @param array  $data
+     *
+     * @return array
+     */
+    protected function prepareData($type, $data)
+    {
+        $prepared = array();
+        foreach ($data as $field => $value) {
+            $fieldMapping = $this->mapper->getFieldMapping($type, $field);
+            $relation = $this->mapper->getRelation($type, $field);
+            $prepared[self::IDENTIFIER_KEY] = $this->mapper->getIdentifier($type);
+            if (!empty($fieldMapping)) {
+                $prepared = array_merge($prepared, $this->prepareField($type, $field, $value));
+            } elseif ($relation) {
+                $prepared = array_merge($prepared, $this->prepareRelated($type, $field, $value, $relation));
+            }
+        }
+
+        return $prepared;
+    }
+
+    /**
+     * @param string $type
+     * @param string $field
+     * @param string $value
+     *
+     * @return array
+     */
+    protected function prepareField($type, $field, $value)
+    {
+        if ($this->validator) {
+            $this->validate($type, $field, $value);
+        }
+        $fieldColumn = $this->mapper->getFieldColumn($type, $field);
+
+        return array(
+            $fieldColumn => $value
+        );
     }
 
     /**
@@ -99,29 +127,34 @@ class DataTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param array  $prepared
-     * @param string $type
-     * @param string $field
+     * @param string       $type
+     * @param string       $field
      * @param string|array $value
-     * @param string $relation
-     * @param string $tableName
+     * @param string       $relation
+     *
+     * @return array
      */
-    protected function prepareRelated(&$prepared, $type, $field, $value, $relation, $tableName)
+    protected function prepareRelated($type, $field, $value, $relation)
     {
+        $prepared = array();
         $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
         if ($relationInfos) {
             $collection = $this->mapper->relationExpectCollection($relation);
             $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
             $linkedTableName = $this->mapper->getTableName($field);
-            $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
+            $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
             if ($collection) {
                 foreach ($value as $element) {
-                    $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY][] = $this->prepare($targetEntity, $element);
+                    $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY][] = $this->prepare($targetEntity,
+                        $element);
                 }
             } else {
-                $prepared[$tableName][self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $this->prepare($targetEntity, $value);
+                $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $this->prepare($targetEntity,
+                    $value);
             }
         }
+
+        return $prepared;
     }
 
     /**
