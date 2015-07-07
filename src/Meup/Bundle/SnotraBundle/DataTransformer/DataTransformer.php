@@ -67,7 +67,7 @@ class DataTransformer implements DataTransformerInterface
      *
      * @return array
      */
-    protected function prepareData($type, $data)
+    protected function prepareData($type, array $data)
     {
         $prepared = array();
         foreach ($data as $field => $value) {
@@ -134,7 +134,7 @@ class DataTransformer implements DataTransformerInterface
      *
      * @return array
      */
-    protected function prepareRelated($type, $field, $data, $relation)
+    protected function prepareRelated($type, $field, array $data, $relation)
     {
         $prepared = array();
         $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
@@ -163,7 +163,7 @@ class DataTransformer implements DataTransformerInterface
      *
      * @throws InvalidArgumentException
      */
-    protected function checkNullable($type, $data)
+    protected function checkNullable($type, array $data)
     {
         $fields = $this->mapper->getFieldsName($type);
         foreach ($fields as $field) {
