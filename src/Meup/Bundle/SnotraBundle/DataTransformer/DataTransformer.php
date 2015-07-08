@@ -75,9 +75,9 @@ class DataTransformer implements DataTransformerInterface
             $relation = $this->mapper->getRelation($type, $field);
             $prepared[self::IDENTIFIER_KEY] = $this->mapper->getIdentifier($type);
             if (!empty($fieldMapping)) {
-                $prepared = array_merge($prepared, $this->prepareField($type, $field, $value));
+                $this->prepareField($prepared, $type, $field, $value);
             } elseif ($relation) {
-                $prepared = array_merge($prepared, $this->prepareRelated($type, $field, $value, $relation));
+                $this->prepareRelated($prepared, $type, $field, $value, $relation);
             }
         }
 
@@ -85,22 +85,22 @@ class DataTransformer implements DataTransformerInterface
     }
 
     /**
+     * @param array  &$prepared
      * @param string $type
      * @param string $field
      * @param string $value
      *
      * @return array
      */
-    protected function prepareField($type, $field, $value)
+    protected function prepareField(array &$prepared, $type, $field, $value)
     {
         if ($this->validator) {
             $this->validate($type, $field, $value);
         }
         $fieldColumn = $this->mapper->getFieldColumn($type, $field);
+        $prepared[$fieldColumn] = $value;
 
-        return array(
-            $fieldColumn => $value
-        );
+        return $prepared;
     }
 
     /**
@@ -127,6 +127,7 @@ class DataTransformer implements DataTransformerInterface
     }
 
     /**
+     * @param array  &$prepared
      * @param string $type
      * @param string $field
      * @param array  $data
@@ -134,14 +135,13 @@ class DataTransformer implements DataTransformerInterface
      *
      * @return array
      */
-    protected function prepareRelated($type, $field, array $data, $relation)
+    protected function prepareRelated(array &$prepared, $type, $field, array $data, $relation)
     {
-        $prepared = array();
         $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
         if ($relationInfos) {
             $collection = $this->mapper->relationExpectCollection($relation);
             $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
-            $linkedTableName = $this->mapper->getTableName($field);
+            $linkedTableName = $this->mapper->getTableName($targetEntity);
             $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
             $relatedData = array();
             if ($collection) {

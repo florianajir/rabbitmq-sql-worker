@@ -48,7 +48,7 @@ class Persister implements PersisterInterface
      */
     protected function persistRecursive($table, array $data, array $foreignData = array())
     {
-        //get related index if defined
+        //get relations data if defined
         $related = $this->popRelated($data);
         //Add foreign data
         $data = array_merge($data, $foreignData);
