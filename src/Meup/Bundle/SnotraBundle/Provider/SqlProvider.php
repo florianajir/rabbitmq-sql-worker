@@ -48,7 +48,7 @@ class SqlProvider implements ProviderInterface
      * @param array  $data
      * @param array  $identifier
      *
-     * @return integer The number of affected rows.
+     * @return integer last insert id
      */
     public function insertOrUpdateIfExists($table, array $data, array $identifier = null)
     {
@@ -84,7 +84,7 @@ class SqlProvider implements ProviderInterface
      * @param array  $data
      * @param array  $identifier
      *
-     * @return integer The number of affected rows.
+     * @return integer last insert id
      */
     public function update($table, array $data, array $identifier)
     {
@@ -97,7 +97,7 @@ class SqlProvider implements ProviderInterface
      * @param string $table
      * @param array  $data
      *
-     * @return integer The number of affected rows.
+     * @return integer last insert id
      */
     public function insert($table, array $data)
     {

@@ -16,6 +16,13 @@ parameters:
     meup_snotra.data_validator.class:                       Meup\Bundle\SnotraBundle\DataValidator\DataValidator
     meup_snotra.data_mapper.class:                          Meup\Bundle\SnotraBundle\DataMapper\DataMapper
     meup_snotra.persister.class:                            Meup\Bundle\SnotraBundle\Persister\Persister
+    meup_snotra.generic_entity.class:                       Meup\Bundle\SnotraBundle\Model\GenericEntity
+    meup_snotra.generic_entity_factory.class:               Meup\Bundle\SnotraBundle\Factory\GenericEntityFactory
+    meup_snotra.one_to_one_relation.class:                  Meup\Bundle\SnotraBundle\Model\OneToOneRelation
+    meup_snotra.one_to_many_relation.class:                 Meup\Bundle\SnotraBundle\Model\OneToManyRelation
+    meup_snotra.many_to_one_relation.class:                 Meup\Bundle\SnotraBundle\Model\ManyToOneRelation
+    meup_snotra.many_to_many_relation.class:                Meup\Bundle\SnotraBundle\Model\ManyToManyRelation
+    meup_snotra.relation_factory.class:                     Meup\Bundle\SnotraBundle\Factory\RelationFactory
 
 services:
 
@@ -91,3 +98,18 @@ services:
         class: %meup_snotra.persister.class%
         arguments:
             - @meup_snotra.sql_provider
+            - @meup_snotra.generic_entity_factory
+            - @meup_snotra.relation_factory
+
+    meup_snotra.generic_entity_factory:
+        class: %meup_snotra.generic_entity_factory.class%
+        arguments:
+            - %meup_snotra.generic_entity.class%
+
+    meup_snotra.relation_factory:
+        class: %meup_snotra.relation_factory.class%
+        arguments:
+            - %meup_snotra.one_to_one_relation.class%
+            - %meup_snotra.one_to_many_relation.class%
+            - %meup_snotra.many_to_one_relation.class%
+            - %meup_snotra.many_to_many_relation.class%

@@ -1,6 +1,8 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Provider;
 
+use Doctrine\DBAL\DBALException;
+
 /**
  * Interface ProviderInterface
  *
@@ -25,7 +27,7 @@ interface ProviderInterface
      *
      * @return bool
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function exists($table, $identifier, $value);
 
@@ -44,6 +46,8 @@ interface ProviderInterface
      *
      * @param string $table The expression of the table to update quoted or unquoted.
      * @param array  $data  An associative array containing column-value pairs.
+     *
+     * @return integer last insert id
      */
     public function insert($table, array $data);
 
@@ -53,6 +57,8 @@ interface ProviderInterface
      * @param string $table      The expression of the table to update quoted or unquoted.
      * @param array  $data       An associative array containing column-value pairs.
      * @param array  $identifier The update criteria. An associative array containing column-value pairs.
+     *
+     * @return integer last insert id
      */
     public function insertOrUpdateIfExists($table, array $data, array $identifier = null);
 
@@ -62,6 +68,8 @@ interface ProviderInterface
      * @param string $table      The expression of the table to update quoted or unquoted.
      * @param array  $data       An associative array containing column-value pairs.
      * @param array  $identifier The update criteria. An associative array containing column-value pairs.
+     *
+     * @return integer last insert id
      */
     public function update($table, array $data, array $identifier);
 }

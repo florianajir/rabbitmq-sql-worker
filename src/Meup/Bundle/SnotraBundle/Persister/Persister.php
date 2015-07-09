@@ -3,7 +3,9 @@ namespace Meup\Bundle\SnotraBundle\Persister;
 
 use Exception;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
+use Meup\Bundle\SnotraBundle\Factory\GenericEntityFactoryInterface;
+use Meup\Bundle\SnotraBundle\Factory\RelationFactoryInterface;
+use Meup\Bundle\SnotraBundle\Model\GenericEntityInterface;
 use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
 
 /**
@@ -14,11 +16,33 @@ use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
 class Persister implements PersisterInterface
 {
     /**
-     * @param ProviderInterface $provider
+     * @var ProviderInterface
      */
-    public function __construct(ProviderInterface $provider)
-    {
+    protected $provider;
+
+    /**
+     * @var GenericEntityFactoryInterface
+     */
+    protected $genericEntityFactory;
+
+    /**
+     * @var RelationFactoryInterface
+     */
+    protected $relationFactory;
+
+    /**
+     * @param ProviderInterface             $provider
+     * @param GenericEntityFactoryInterface $genericEntityFactory
+     * @param RelationFactoryInterface      $relationFactory
+     */
+    public function __construct(
+        ProviderInterface $provider,
+        GenericEntityFactoryInterface $genericEntityFactory,
+        RelationFactoryInterface $relationFactory
+    ) {
         $this->provider = $provider;
+        $this->genericEntityFactory = $genericEntityFactory;
+        $this->relationFactory = $relationFactory;
     }
 
     /**
@@ -31,133 +55,63 @@ class Persister implements PersisterInterface
     public function persist(array $data)
     {
         foreach ($data as $table => $infos) {
-            $this->persistRecursive($table, $infos);
+            $entity = $this->genericEntityFactory->create($table, $infos);
+            $this->persistRecursive($entity);
         }
     }
 
     /**
      * Persist data recursively
      *
-     * @param string $table
-     * @param array  $data        An associative array containing column-value pairs.
-     * @param array  $foreignData to merge (for recursive calls)
+     * @param GenericEntityInterface $entity
      *
      * @return array
      *
      * @throws Exception
      */
-    protected function persistRecursive($table, array $data, array $foreignData = array())
+    protected function persistRecursive(GenericEntityInterface $entity)
     {
-        //get relations data if defined
-        $related = $this->popRelated($data);
-        //Add foreign data
-        $data = array_merge($data, $foreignData);
-        //get subject identifier if defined
-        $identifier = $this->popIdentifier($data);
         //Persist oneToOne relations
-        if (!empty($related[DataMapper::RELATION_ONE_TO_ONE])) {
-            $data = array_merge(
-                $data,
-                $this->persistToOneRelations($related[DataMapper::RELATION_ONE_TO_ONE])
-            );
-        }
+        $entity->addDataSet($this->persistOneToOneRelations($entity));
         //persist manyToOne relations
-        if (!empty($related[DataMapper::RELATION_MANY_TO_ONE])) {
-            $data = array_merge(
-                $data,
-                $this->persistToOneRelations($related[DataMapper::RELATION_MANY_TO_ONE])
-            );
-        }
+        $entity->addDataSet($this->persistManyToOneRelations($entity));
         //insert the main subject
-        $id = $this->provider->insertOrUpdateIfExists(
-            $table,
-            $data,
-            $identifier
-        );
+        $id = $this->insertOrUpdateIfExists($entity);
+        //return id if no identifier
+        if ($entity->getIdentifier() === null) {
+            $entity->setIdentifier(array('id' => $id));
+        }
         //persist oneToMany relations
-        if (!empty($related[DataMapper::RELATION_ONE_TO_MANY])) {
-            $this->persistOneToManyRelations($related[DataMapper::RELATION_ONE_TO_MANY], $table, $identifier);
-        }
+        $this->persistOneToManyRelations($entity);
         //persist manyToMany relations (with joins)
-        if (!empty($related[DataMapper::RELATION_MANY_TO_MANY])) {
-            $this->persistManyToManyRelations($related[DataMapper::RELATION_MANY_TO_MANY], $table, $identifier);
-        }
-        //prepare return
-        if (empty($identifier)) {
-            $identifier = array('id' => $id);
-        }
+        $this->persistManyToManyRelations($entity);
 
-        return $identifier;
+        return $entity->getIdentifier();
     }
 
     /**
-     * Get the related index if defined and remove it from data to persist
+     * Persist oneToOne relations
      *
-     * @param array $data
-     *
-     * @return array|null
-     */
-    protected function popRelated(array &$data)
-    {
-        $related = null;
-        if (array_key_exists(DataTransformer::RELATED_KEY, $data)) {
-            $related = $data[DataTransformer::RELATED_KEY];
-            unset($data[DataTransformer::RELATED_KEY]);
-        }
-
-        return $related;
-    }
-
-    /**
-     * Get the subject identifier if defined and remove it from data to persist
-     *
-     * @param array $infos
-     *
-     * @return array|null
-     */
-    protected function popIdentifier(array &$infos)
-    {
-        //get subject identifier if defined
-        $identifier = null;
-        if (array_key_exists(DataTransformer::IDENTIFIER_KEY, $infos)) {
-            $identifierName = $infos[DataTransformer::IDENTIFIER_KEY];
-            unset($infos[DataTransformer::IDENTIFIER_KEY]);
-            if (!is_null($identifierName) && isset($infos[$identifierName])) {
-                $identifier = array($identifierName => $infos[$identifierName]);
-            }
-        }
-
-        return $identifier;
-    }
-
-    /**
-     * Persist oneToOne & manyToOne relations
-     *
-     * @param array $relations
+     * @param GenericEntityInterface $entity
      *
      * @return array associative array( 'foreign_key' => 'value' )
      *
      * @throws Exception
      */
-    protected function persistToOneRelations(array $relations)
+    protected function persistOneToOneRelations(GenericEntityInterface $entity)
     {
         $joinData = array();
-        foreach ($relations as $toOne) {
-            $relation = $toOne[DataTransformer::RELATED_RELATION_KEY];
-            $tableName = $relation[DataMapper::MAPPING_KEY_TABLE];
-            $data = $toOne[DataTransformer::RELATED_DATA_KEY][$tableName];
-            $joinColumn = $relation[DataMapper::RELATION_KEY_JOIN_COLUMN];
-            $referencedColumnName = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
-            $foreignKey = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
-            $id = $this->persistRecursive(
-                $tableName,
-                $data
-            );
-            $joinData[$foreignKey] = isset($data[$referencedColumnName])
-                ? $data[$referencedColumnName]
+        $relations = $entity->getOneToOneRelations();
+        foreach ($relations as $relation) {
+            $oneToOne = $this->relationFactory->create(DataMapper::RELATION_ONE_TO_ONE, $relation);
+            $entity = $this->genericEntityFactory->create($oneToOne->getTable(), $oneToOne->getEntity());
+            $id = $this->persistRecursive($entity);
+            $joinVal = $entity->getProperty($oneToOne->getJoinColumnReferencedColumnName());
+            $joinData[$oneToOne->getJoinColumnName()] = !is_null($joinVal)
+                ? $joinVal
                 : $this->provider->getColumnValueWhere(
-                    $tableName,
-                    $referencedColumnName,
+                    $oneToOne->getTable(),
+                    $oneToOne->getJoinColumnReferencedColumnName(),
                     key($id),
                     current($id)
                 );
@@ -167,93 +121,123 @@ class Persister implements PersisterInterface
     }
 
     /**
-     * @param array  $relations
-     * @param string $relatedTable
-     * @param array  $identifier
+     * Persist manyToOne relations
+     *
+     * @param GenericEntityInterface $entity
+     *
+     * @return array associative array( 'foreign_key' => 'value' )
      *
      * @throws Exception
      */
-    protected function persistOneToManyRelations(array $relations, $relatedTable, array $identifier)
+    protected function persistManyToOneRelations(GenericEntityInterface $entity)
     {
-        foreach ($relations as $oneToMany) {
-            $relation = $oneToMany[DataTransformer::RELATED_RELATION_KEY];
-            $joinColumn = $relation[DataMapper::RELATION_KEY_JOIN_COLUMN];
-            $referencedColumn = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
-            //set foreign_key on relation data
-            if (isset($infos[$referencedColumn])) {
-                $foreignKeyValue = $infos[$referencedColumn];
-            } elseif (isset($identifier)) {
-                $foreignKeyValue = $this->provider->getColumnValueWhere(
-                    $relatedTable,
-                    $referencedColumn,
-                    key($identifier),
-                    current($identifier)
+        $joinData = array();
+        $relations = $entity->getManyToOneRelations();
+        foreach ($relations as $relation) {
+            $manyToOne = $this->relationFactory->create(DataMapper::RELATION_MANY_TO_ONE, $relation);
+            $entity = $this->genericEntityFactory->create($manyToOne->getTable(), $manyToOne->getEntity());
+            $id = $this->persistRecursive($entity);
+            $joinVal = $entity->getProperty($manyToOne->getJoinColumnReferencedColumnName());
+            $joinData[$manyToOne->getJoinColumnName()] = !is_null($joinVal)
+                ? $joinVal
+                : $this->provider->getColumnValueWhere(
+                    $manyToOne->getTable(),
+                    $manyToOne->getJoinColumnReferencedColumnName(),
+                    key($id),
+                    current($id)
+                );
+        }
+
+        return $joinData;
+    }
+
+    /**
+     * @param GenericEntityInterface $entity
+     *
+     * @return int
+     */
+    protected function insertOrUpdateIfExists(GenericEntityInterface $entity)
+    {
+        return $this->provider->insertOrUpdateIfExists(
+            $entity->getTable(),
+            $entity->getData(),
+            $entity->getIdentifier()
+        );
+    }
+
+    /**
+     * @param GenericEntityInterface $entity
+     *
+     * @throws Exception
+     */
+    protected function persistOneToManyRelations(GenericEntityInterface $entity)
+    {
+        $relations = $entity->getOneToManyRelations();
+        foreach ($relations as $relation) {
+            $oneToMany = $this->relationFactory->create(DataMapper::RELATION_ONE_TO_MANY, $relation);
+            $foreignValue = $entity->getProperty($oneToMany->getJoinColumnReferencedColumnName());
+            $parentIdent = $entity->getIdentifier();
+            if (is_null($foreignValue) && !empty($parentIdent)) {
+                $foreignValue = $this->provider->getColumnValueWhere(
+                    $entity->getTable(),
+                    $oneToMany->getJoinColumnReferencedColumnName(),
+                    key($parentIdent),
+                    current($parentIdent)
                 );
             } else {
-                throw new Exception("Unable to get an identifier. (Table: $relatedTable)");
+                throw new Exception("Unable to get an identifier. (Table: {$entity->getTable()})");
             }
-            foreach ($oneToMany[DataTransformer::RELATED_DATA_KEY] as $element) {
-                $this->persistRecursive(
-                    $relation[DataMapper::MAPPING_KEY_TABLE],
-                    $element[$relation[DataMapper::MAPPING_KEY_TABLE]],
-                    array(
-                        $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME] => $foreignKeyValue
-                    )
-                );
+
+            foreach ($oneToMany->getEntities() as $childData) {
+                $child = $this->genericEntityFactory->create($oneToMany->getTable(), $childData[$oneToMany->getTable()]);
+                $child->addDataSet(array($oneToMany->getJoinColumnName() => $foreignValue));
+                $this->persistRecursive($child);
             }
         }
     }
 
     /**
-     * @param array  $relations
-     * @param string $relatedTable
-     * @param array  $identifier
+     * @param GenericEntityInterface $entity
      *
      * @throws Exception
      */
-    protected function persistManyToManyRelations(array $relations, $relatedTable, array $identifier)
+    protected function persistManyToManyRelations(GenericEntityInterface $entity)
     {
-        foreach ($relations as $manyToMany) {
-            $relation = $manyToMany[DataTransformer::RELATED_RELATION_KEY];
-            $joinTable = $relation[DataMapper::RELATION_KEY_JOIN_TABLE];
-            $joinTableName = $joinTable[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
-            $joinColumn = $joinTable[DataMapper::RELATION_KEY_JOIN_COLUMN];
-            $joinColumnReferenced = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
-            $inverseJoinColumn = $joinTable[DataMapper::RELATION_KEY_INVERSE_JOIN_COLUMN];
-            $inverseJoinColumnName = $inverseJoinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
-            $inverseJoinColumnReferenced = $inverseJoinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
-            if (isset($infos[$joinColumnReferenced])) {
-                $joinValue = $infos[$joinColumnReferenced];
-            } elseif (isset($identifier)) {
-                $joinValue = $this->provider->getColumnValueWhere(
-                    $relatedTable,
-                    $joinColumnReferenced,
-                    key($identifier),
-                    current($identifier)
+        $relations = $entity->getManyToManyRelations();
+        foreach ($relations as $relation) {
+            $manyToMany = $this->relationFactory->create(DataMapper::RELATION_MANY_TO_MANY, $relation);
+            $foreignValue = $entity->getProperty($manyToMany->getJoinColumnReferencedColumnName());
+            $parentIdent = $entity->getIdentifier();
+            if (is_null($foreignValue) && !empty($parentIdent)) {
+                $foreignValue = $this->provider->getColumnValueWhere(
+                    $entity->getTable(),
+                    $manyToMany->getJoinColumnReferencedColumnName(),
+                    key($parentIdent),
+                    current($parentIdent)
                 );
             } else {
-                throw new Exception("Unable to get an identifier. (Table: $relatedTable)");
+                throw new Exception("Unable to get an identifier. (Table: {$entity->getTable()})");
             }
             $joinData = array(
-                $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME] => $joinValue
+                $manyToMany->getJoinColumnName() => $foreignValue
             );
-            $this->provider->delete($joinTableName, $joinData);
-
-            foreach ($manyToMany[DataTransformer::RELATED_DATA_KEY] as $element) {
-                $id = $this->persistRecursive(
-                    $relation[DataMapper::MAPPING_KEY_TABLE],
-                    $element[$relation[DataMapper::MAPPING_KEY_TABLE]]
-                );
-                $joinData[$inverseJoinColumnName] = isset($element[$inverseJoinColumnReferenced])
-                    ? $element[$inverseJoinColumnReferenced]
+            //delete joins before loop
+            $this->provider->delete($manyToMany->getJoinTableName(), $joinData);
+            foreach ($manyToMany->getEntities() as $childData) {
+                $child = $this->genericEntityFactory->create($manyToMany->getTable(), $childData[$manyToMany->getTable()]);
+                $this->persistRecursive($child);
+                $newJoinDataValue = $child->getProperty($manyToMany->getInverseJoinColumnReferencedColumnName());
+                $joinIdent = $child->getIdentifier();
+                $joinData[$manyToMany->getInverseJoinColumnName()] = !is_null($newJoinDataValue)
+                    ? $newJoinDataValue
                     : $this->provider->getColumnValueWhere(
-                        $relation[DataMapper::MAPPING_KEY_TABLE],
-                        $inverseJoinColumnReferenced,
-                        key($id),
-                        current($id)
+                        $child->getTable(),
+                        $manyToMany->getInverseJoinColumnReferencedColumnName(),
+                        key($joinIdent),
+                        current($joinIdent)
                     );
                 //insert in join table
-                $this->provider->insert($joinTableName, $joinData);
+                $this->provider->insert($manyToMany->getJoinTableName(), $joinData);
             }
         }
     }
