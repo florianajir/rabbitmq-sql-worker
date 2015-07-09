@@ -1,24 +1,254 @@
 parameters:
     mapping:
-        message_type:
-            table: sql_table
-            identifier: table_id
+        category:
+            table: category
+            identifier: sku
+            oneToOne:
+                parent:
+                    targetEntity: category
+                    joinColumn:
+                        name: parent_id
+                        referencedColumnName: id
             fields:
-                identifier:
+                id:
                     column: id
                     type: int
+                sku:
+                    column: sku
+                    type: string
+                    nullable: false
+                    length: 23
+                level:
+                    column: level
+                    type: int
+                position:
+                    column: position
+                    type: int
+                max_item_per_order:
+                    column: max_item_per_order
+                    type: int
+                status:
+                    column: status
+                    type: int
+                created_at:
+                    column: created_at
+                    type: datetime
+                updated_at:
+                    column: updated_at
+                    type: datetime
+                label:
+                    column: label
+                    type: string
+                title_page:
+                    column: titre
+                    type: string
+                description_page:
+                    column: description_page
+                    type: string
+                description_short:
+                    column: description_short
+                    type: string
+                description_long:
+                    column: description_long
+                    type: string
+                published:
+                    column: published
+                    type: string
+        product:
+            table: product
+            identifier: sku
+            manyToMany:
+                categories:
+                    targetEntity: category
+                    joinTable:
+                        name: product_category
+                        joinColumn:
+                            name: product_id
+                            referencedColumnName: id
+                        inverseJoinColumn:
+                            name: category_id
+                            referencedColumnName: id
+            fields:
+                id:
+                    column: id
+                    type: int
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
+                    nullable: false
+                reference_cip_acl_7:
+                    column: reference_cip_acl_7
+                    type: string
+                reference_cip_acl_13:
+                    column: reference_cip_acl_7
+                    type: string
+                reference_ean:
+                    column: reference_ean
+                    type: string
+                synonyms:
+                    column: synonyms
+                    type: string
+                contraindication:
+                    column: contraindication
+                    type: string
+                composition:
+                    column: composition
+                    type: string
+                usage:
+                    column: usage
+                    type: string
+                advice:
+                    column: advice
+                    type: string
+                suggested_price:
+                    column: suggested_price
+                    type: string
+                extra_shipping_price:
+                    column: extra_shipping_price
+                    type: string
+                max_per_order:
+                    column: max_per_order
+                    type: string
+                product_class:
+                    column: product_class
+                    type: string
+                product_type:
+                    column: product_type
+                    type: string
+                sellable:
+                    column: sellable
+                    type: int
+                label:
+                    column: label
+                    type: string
+                description_short:
+                    column: description_short
+                    type: string
+                description_long:
+                    column: description_long
+                    type: string
+                title_page:
+                    column: title_page
+                    type: string
+                description_page:
+                    column: description_page
+                    type: string
+                og_type:
+                    column: og_type
+                    type: string
+                og_title:
+                    column: og_title
+                    type: string
+                og_description:
+                    column: og_description
+                    type: string
+        banner:
+            table: banner
+            identifier: sku
+            fields:
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
                     nullable: false
                 label:
                     column: label
                     type: string
-                    length: 255
                     nullable: false
-                amount:
-                    column: amount
-                    type: decimal
+                url:
+                    column: url
+                    type: string
+                    nullable: false
+                start_date:
+                    column: start_date
+                    type: datetime
+                end_date:
+                    column: end_date
+                    type: datetime
+                status:
+                    column: status
+                    type: int
+                target:
+                    column: target
+                    type: string
                 created_at:
                     column: created_at
                     type: datetime
-                birthdate:
-                    column: birthdate
-                    type: date
+        campaign:
+            table: campaign
+            identifier: sku
+            fields:
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
+                    nullable: false
+                label:
+                    column: label
+                    type: string
+                    nullable: false
+                slug:
+                    column: slug
+                    type: string
+                    nullable: false
+                created_at:
+                    column: created_at
+                    type: datetime
+                    nullable: false
+            oneToMany:
+                banners:
+                    targetEntity: banner
+                    joinColumn:
+                        name: campaign_id
+                        referencedColumnName: id
+        galenical:
+            table: galenical
+            identifier: sku
+            fields:
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
+                    nullable: false
+                label:
+                    column: label
+                    type: string
+                    nullable: false
+                created_at:
+                    column: created_at
+                    type: datetime
+                    nullable: false
+        media:
+            table: media
+            identifier: sku
+            fields:
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
+                    nullable: false
+                link:
+                    column: link
+                    type: string
+                mediaType:
+                    column: mediaType
+                    type: string
+                created_at:
+                    column: created_at
+                    type: datetime
+                updated_at:
+                    column: updated_at
+                    type: datetime
+                title:
+                    column: type
+                    type: string
+                description:
+                    column: description
+                    type: string
+                alt:
+                    column: alt
+                    type: string
+                provider:
+                    column: provider
+                    type: string
