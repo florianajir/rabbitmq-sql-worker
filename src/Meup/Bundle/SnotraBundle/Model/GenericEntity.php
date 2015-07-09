@@ -1,4 +1,13 @@
 <?php
+/**
+ * PHP version 5
+ *
+ * @category Testing
+ * @package  Snotra
+ * @author   florianajir <florian@1001pharmacies.com>
+ * @license  BSD Licence
+ * @link     https://github.com/1001Pharmacies/snotra
+ */
 namespace Meup\Bundle\SnotraBundle\Model;
 
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
@@ -6,49 +15,70 @@ use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 
 /**
  * Class GenericEntity
+ * Data container model for any data message type
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @category Testing
+ * @package  Snotra
+ * @author   florianajir <florian@1001pharmacies.com>
+ * @license  BSD Licence
+ * @link     https://github.com/1001Pharmacies/snotra
  */
 class GenericEntity implements GenericEntityInterface
 {
     /**
+     * Table name
+     *
      * @var string
      */
     protected $table;
 
     /**
+     * Data array only
+     *
      * @var array
      */
     protected $data;
 
     /**
+     * Associative array ( field => value )
+     *
      * @var array
      */
     protected $identifier;
 
     /**
+     * Many to many relations array
+     *
      * @var array
      */
     protected $manyToMany;
 
     /**
+     * One to many relations array
+     *
      * @var array
      */
     protected $oneToMany;
 
     /**
+     * Many to one relations array
+     *
      * @var array
      */
     protected $manyToOne;
 
     /**
+     * One to one relations array
+     *
      * @var array
      */
     protected $oneToOne;
 
     /**
-     * @param string $table
-     * @param array  $data
+     * Constructor, set the attributes from array
+     *
+     * @param string $table table name
+     * @param array  $data  entity prepared data from DataTransformer
      */
     public function __construct($table, array $data)
     {
@@ -63,29 +93,32 @@ class GenericEntity implements GenericEntityInterface
             }
             unset($data[DataTransformer::IDENTIFIER_KEY]);
         }
-        $this->oneToOne = array();
-        if (isset($data[DataTransformer::RELATED_KEY][DataMapper::RELATION_ONE_TO_ONE])) {
-            $this->oneToOne = $data[DataTransformer::RELATED_KEY][DataMapper::RELATION_ONE_TO_ONE];
-        }
-        $this->manyToOne = array();
-        if (isset($data[DataTransformer::RELATED_KEY][DataMapper::RELATION_MANY_TO_ONE])) {
-            $this->manyToOne = $data[DataTransformer::RELATED_KEY][DataMapper::RELATION_MANY_TO_ONE];
-        }
-        $this->oneToMany = array();
-        if (isset($data[DataTransformer::RELATED_KEY][DataMapper::RELATION_ONE_TO_MANY])) {
-            $this->oneToMany = $data[DataTransformer::RELATED_KEY][DataMapper::RELATION_ONE_TO_MANY];
-        }
-        $this->manyToMany = array();
-        if (isset($data[DataTransformer::RELATED_KEY][DataMapper::RELATION_MANY_TO_MANY])) {
-            $this->manyToMany = $data[DataTransformer::RELATED_KEY][DataMapper::RELATION_MANY_TO_MANY];
-        }
         if (isset($data[DataTransformer::RELATED_KEY])) {
+            $related = $data[DataTransformer::RELATED_KEY];
+            $this->oneToOne = array();
+            if (isset($related[DataMapper::RELATION_ONE_TO_ONE])) {
+                $this->oneToOne = $related[DataMapper::RELATION_ONE_TO_ONE];
+            }
+            $this->manyToOne = array();
+            if (isset($related[DataMapper::RELATION_MANY_TO_ONE])) {
+                $this->manyToOne = $related[DataMapper::RELATION_MANY_TO_ONE];
+            }
+            $this->oneToMany = array();
+            if (isset($related[DataMapper::RELATION_ONE_TO_MANY])) {
+                $this->oneToMany = $related[DataMapper::RELATION_ONE_TO_MANY];
+            }
+            $this->manyToMany = array();
+            if (isset($related[DataMapper::RELATION_MANY_TO_MANY])) {
+                $this->manyToMany = $related[DataMapper::RELATION_MANY_TO_MANY];
+            }
             unset($data[DataTransformer::RELATED_KEY]);
         }
         $this->data = $data;
     }
 
     /**
+     * Get the table name
+     *
      * @return string
      */
     public function getTable()
@@ -94,6 +127,8 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
+     * Get the entity identifier => value array
+     *
      * @return array
      */
     public function getIdentifier()
@@ -102,7 +137,9 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
-     * @param array $identifier
+     * Set the entity identifier array
+     *
+     * @param array $identifier entity identifier associative array (id => value)
      *
      * @return self
      */
@@ -114,6 +151,8 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
+     * Get the entity data set
+     *
      * @return string
      */
     public function getData()
@@ -122,6 +161,8 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
+     * Get the entity manyToOne relations array
+     *
      * @return array
      */
     public function getManyToOneRelations()
@@ -130,6 +171,8 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
+     * Get the entity manyToMany relations array
+     *
      * @return array
      */
     public function getManyToManyRelations()
@@ -138,6 +181,8 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
+     * Get the entity oneToMany relations array
+     *
      * @return array
      */
     public function getOneToManyRelations()
@@ -146,6 +191,8 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
+     * Get the entity oneToOne relations array
+     *
      * @return array
      */
     public function getOneToOneRelations()
@@ -154,7 +201,9 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
-     * @param array $data
+     * Merge new data on current entity data
+     *
+     * @param array $data data set to merge
      *
      * @return self
      */
@@ -166,7 +215,9 @@ class GenericEntity implements GenericEntityInterface
     }
 
     /**
-     * @param string $property
+     * Get an entity property from data
+     *
+     * @param string $property data index to return
      *
      * @return string
      */
