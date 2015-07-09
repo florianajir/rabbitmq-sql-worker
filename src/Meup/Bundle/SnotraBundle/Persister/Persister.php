@@ -184,7 +184,8 @@ class Persister implements PersisterInterface
                     key($parentIdent),
                     current($parentIdent)
                 );
-            } else {
+            }
+            if (is_null($foreignValue)) {
                 throw new Exception("Unable to get an identifier. (Table: {$entity->getTable()})");
             }
 
@@ -215,7 +216,8 @@ class Persister implements PersisterInterface
                     key($parentIdent),
                     current($parentIdent)
                 );
-            } else {
+            }
+            if (is_null($foreignValue)) {
                 throw new Exception("Unable to get an identifier. (Table: {$entity->getTable()})");
             }
             $joinData = array(

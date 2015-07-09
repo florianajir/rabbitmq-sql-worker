@@ -1,6 +1,8 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Tests\Persister;
 
+use Meup\Bundle\SnotraBundle\Factory\GenericEntityFactory;
+use Meup\Bundle\SnotraBundle\Factory\RelationFactory;
 use Meup\Bundle\SnotraBundle\Persister\Persister;
 use PHPUnit_Framework_TestCase;
 
@@ -45,7 +47,15 @@ class PersisterTest extends PHPUnit_Framework_TestCase
             ->method('delete')
             ->will($this->returnValue('1'))
         ;
-        $persister = new Persister($provider);
+        $entityFactory = new GenericEntityFactory('Meup\Bundle\SnotraBundle\Model\GenericEntity');
+        $relationFactory = new RelationFactory(
+            'Meup\Bundle\SnotraBundle\Model\OneToOneRelation',
+            'Meup\Bundle\SnotraBundle\Model\OneToManyRelation',
+            'Meup\Bundle\SnotraBundle\Model\ManyToOneRelation',
+            'Meup\Bundle\SnotraBundle\Model\ManyToManyRelation'
+        );
+
+        $persister = new Persister($provider, $entityFactory, $relationFactory);
         $persister->persist($this->data);
     }
 
@@ -81,8 +91,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                                                 array (
                                                     'address' =>
                                                         array (
-                                                            '_identifier' => 'id',
-                                                            'id' => '1',
+                                                            '_identifier' => 'sku',
+                                                            'sku' => '1',
                                                             'postal_code' => '34000',
                                                             'city' => 'Montpellier',
                                                         ),
@@ -107,8 +117,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                                                 array (
                                                     'customer' =>
                                                         array (
-                                                            '_identifier' => 'id',
-                                                            'id' => '1',
+                                                            '_identifier' => 'sku',
+                                                            'sku' => '1',
                                                             'email' => 'foo@bar.com',
                                                             'last_purchased' => '2015-06-26T22:22:00+0200',
                                                         ),
@@ -145,7 +155,6 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                                                             'groups' =>
                                                                 array (
                                                                     '_identifier' => 'sku',
-                                                                    'id' => '1',
                                                                     'sku' => '0123456789azerty',
                                                                     'created_at' => '2015-06-01T22:22:00+0200',
                                                                 ),
