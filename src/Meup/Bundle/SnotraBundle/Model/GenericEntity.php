@@ -84,7 +84,7 @@ class GenericEntity implements GenericEntityInterface
     {
         $this->table = $table;
         $this->identifier = null;
-        if (isset($data[DataTransformer::IDENTIFIER_KEY])) {
+        if (array_key_exists(DataTransformer::IDENTIFIER_KEY, $data)) {
             $identifierKey = $data[DataTransformer::IDENTIFIER_KEY];
             if (isset($data[$identifierKey])) {
                 $this->identifier = array(
@@ -93,21 +93,21 @@ class GenericEntity implements GenericEntityInterface
             }
             unset($data[DataTransformer::IDENTIFIER_KEY]);
         }
-        if (isset($data[DataTransformer::RELATED_KEY])) {
+        $this->oneToOne = array();
+        $this->manyToOne = array();
+        $this->oneToMany = array();
+        $this->manyToMany = array();
+        if (array_key_exists(DataTransformer::RELATED_KEY, $data)) {
             $related = $data[DataTransformer::RELATED_KEY];
-            $this->oneToOne = array();
             if (isset($related[DataMapper::RELATION_ONE_TO_ONE])) {
                 $this->oneToOne = $related[DataMapper::RELATION_ONE_TO_ONE];
             }
-            $this->manyToOne = array();
             if (isset($related[DataMapper::RELATION_MANY_TO_ONE])) {
                 $this->manyToOne = $related[DataMapper::RELATION_MANY_TO_ONE];
             }
-            $this->oneToMany = array();
             if (isset($related[DataMapper::RELATION_ONE_TO_MANY])) {
                 $this->oneToMany = $related[DataMapper::RELATION_ONE_TO_MANY];
             }
-            $this->manyToMany = array();
             if (isset($related[DataMapper::RELATION_MANY_TO_MANY])) {
                 $this->manyToMany = $related[DataMapper::RELATION_MANY_TO_MANY];
             }

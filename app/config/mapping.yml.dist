@@ -68,6 +68,19 @@ parameters:
                         inverseJoinColumn:
                             name: category_id
                             referencedColumnName: id
+            oneToMany:
+                fr:
+                    targetEntity: product_lang
+                    joinColumn:
+                        name: product_id
+                        referencedColumnName: id
+                    removeReferenced: true
+                    references:
+                        lang_id:
+                            table: lang
+                            referencedColumnName: id
+                            where:
+                                iso_code: fr
             fields:
                 id:
                     column: id
@@ -219,6 +232,33 @@ parameters:
                     column: created_at
                     type: datetime
                     nullable: false
+        link:
+            table: link
+            identifier: sku
+            fields:
+                sku:
+                    column: sku
+                    type: string
+                    length: 23
+                    nullable: false
+                url:
+                    column: url
+                    type: string
+                    nullable: false
+                label:
+                    column: label
+                    type: string
+                    nullable: false
+                target:
+                    column: target
+                    type: string
+                title:
+                    column: title
+                    type: string
+                created_at:
+                    column: created_at
+                    type: datetime
+
         media:
             table: media
             identifier: sku
@@ -251,4 +291,11 @@ parameters:
                     type: string
                 provider:
                     column: provider
+                    type: string
+
+        product_lang:
+            table: product_lang
+            fields:
+                label:
+                    column: name
                     type: string

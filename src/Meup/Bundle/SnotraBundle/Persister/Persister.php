@@ -190,8 +190,24 @@ class Persister implements PersisterInterface
             }
 
             foreach ($oneToMany->getEntities() as $childData) {
-                $child = $this->genericEntityFactory->create($oneToMany->getTable(), $childData[$oneToMany->getTable()]);
-                $child->addDataSet(array($oneToMany->getJoinColumnName() => $foreignValue));
+                $child = $this->genericEntityFactory->create(
+                    $oneToMany->getTable(),
+                    $childData[$oneToMany->getTable()]
+                );
+                $joinData = array($oneToMany->getJoinColumnName() => $foreignValue);
+                foreach ($oneToMany->getReferences() as $field => $reference) {
+                    $referenceValue = $this->provider->getColumnValueWhere(
+                        $reference[DataMapper::MAPPING_KEY_TABLE],
+                        $reference[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME],
+                        key($reference[DataMapper::WHERE_KEY]),
+                        current($reference[DataMapper::WHERE_KEY])
+                    );
+                    $joinData[$field] = $referenceValue;
+                }
+                $child->addDataSet($joinData);
+                if ($oneToMany->isRemoveReferenced()) {
+                    $this->provider->delete($oneToMany->getTable(), $joinData);
+                }
                 $this->persistRecursive($child);
             }
         }
@@ -226,7 +242,10 @@ class Persister implements PersisterInterface
             //delete joins before loop
             $this->provider->delete($manyToMany->getJoinTableName(), $joinData);
             foreach ($manyToMany->getEntities() as $childData) {
-                $child = $this->genericEntityFactory->create($manyToMany->getTable(), $childData[$manyToMany->getTable()]);
+                $child = $this->genericEntityFactory->create(
+                    $manyToMany->getTable(),
+                    $childData[$manyToMany->getTable()]
+                );
                 $this->persistRecursive($child);
                 $newJoinDataValue = $child->getProperty($manyToMany->getInverseJoinColumnReferencedColumnName());
                 $joinIdent = $child->getIdentifier();

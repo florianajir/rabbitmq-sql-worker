@@ -17,6 +17,16 @@ class OneToManyRelation extends AbstractRelation implements RelationInterface
     protected $entities;
 
     /**
+     * @var array
+     */
+    protected $references;
+
+    /**
+     * @var bool
+     */
+    protected $removeReferenced;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data)
@@ -27,6 +37,9 @@ class OneToManyRelation extends AbstractRelation implements RelationInterface
         $this->joinColumnName = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
         $this->joinColumnReferencedColumnName = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
         $this->entities = $data[DataTransformer::RELATED_DATA_KEY];
+        $this->references = isset($relation[DataMapper::REFERENCES_KEY]) ? $relation[DataMapper::REFERENCES_KEY] : null;
+        $this->removeReferenced = isset($relation[DataMapper::REMOVE_REFERENCED_KEY])
+            && $relation[DataMapper::REMOVE_REFERENCED_KEY] == 'true';
     }
 
     /**
@@ -36,4 +49,22 @@ class OneToManyRelation extends AbstractRelation implements RelationInterface
     {
         return $this->entities;
     }
+
+    /**
+     * @return array
+     */
+    public function getReferences()
+    {
+        return $this->references;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRemoveReferenced()
+    {
+        return $this->removeReferenced;
+    }
+
+
 }

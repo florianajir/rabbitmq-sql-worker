@@ -30,6 +30,10 @@ class DataMapper implements DataMapperInterface
     const RELATION_KEY_JOIN_TABLE = 'joinTable';
     const RELATION_KEY_INVERSE_JOIN_COLUMN = 'inverseJoinColumn';
 
+    const REFERENCES_KEY = 'references';
+    const WHERE_KEY = 'where';
+    const REMOVE_REFERENCED_KEY = 'removeReferenced';
+
     /**
      * @var array
      */
