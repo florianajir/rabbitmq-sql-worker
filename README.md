@@ -12,3 +12,4 @@ Snotra can be configured to use a set of Elastic Search index (NoSQL) as well as
 2) Configuration
 ----------------
 
+[SQL Mapping](src/Meup/Bundle/SnotraBundle/Resources/mapping.md)
