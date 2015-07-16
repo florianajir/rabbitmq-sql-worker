@@ -164,9 +164,6 @@ For many-to-many associations you declare a join table which contain two foreign
 
 You can chose which entity is the owning and which the inverse side.
 
-> Real many-to-many associations are less common than others because frequently you want to associate additional attributes with an association, in which case you introduce an association class.
-Consequently, the direct many-to-many association disappears and is replaced by one-to-many/many-to-one associations between the 3 participating classes.
-
 ```yaml
 manyToMany:
     categories:
@@ -180,3 +177,6 @@ manyToMany:
                 name: category_id
                 referencedColumnName: id
 ```
+
+> Real many-to-many associations are less common than others because frequently you want to associate additional attributes with an association, in which case you introduce an association class.
+Consequently, the direct many-to-many association disappears and is replaced by one-to-many/many-to-one associations between the 3 participating classes.
