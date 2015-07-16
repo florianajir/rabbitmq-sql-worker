@@ -12,10 +12,6 @@ The entities to persist are defined by their input names under the parameters:ma
 
 **Required**. The database table name where will have to save entity.
 
-```yaml
-table: category 
-```
-
 ### identifier
 
 The identifier is the field name which will be used to check an existing record to be able to effectuate update operations.
@@ -23,10 +19,6 @@ The identifier is the field name which will be used to check an existing record 
 In database, the identifier should be attached to a unicity constraint.
 
 > **This property is optionnal but strongly recommanded** to avoid some exceptions (for example if a field like id with unicity constraint in database is present in record to re-send).
-
-```yaml
-identifier: sku
-```
 
 ### fields
 
@@ -99,10 +91,10 @@ You can define a self-referencing one-to-one relationships
 
 ```yaml
 oneToOne:
-    user:
-        targetEntity: user
+    cart:
+        targetEntity: cart
         joinColumn:
-            name: _id
+            name: user_id
             referencedColumnName: id
 ```
 
