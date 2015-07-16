@@ -1,14 +1,16 @@
-# mapping.yml reference (SQL persistence)
+# Mapping reference
 
-The mapping configuration is defined in the `app/config/mapping.yml` file.
+To use an SQL persistence, you have to setup a mapping file.
 
-## Entities
+The mapping configuration is defined in the `app/config/mapping.yml` file. To begin you can copy and rename `mapping.yml.dist` example file.
 
-The entities to persist are declared by their input name under parameters:mapping head lines.
+## Entity
+
+The entities to persist are defined by their input names under the parameters:mapping blocs.
 
 ### table
 
-The table name is required for each entities.
+**Required**. The database table name where will have to save entity.
 
 ```yaml
 table: category 
@@ -16,9 +18,9 @@ table: category
 
 ### identifier
 
-The identifier is the field name which will be used to identify a record existence to allow update operations. 
-
-This property is optionnal but strongly recommanded to avoid some exceptions. This column in database should have a unique constraint.
+The identifier is the field name which will be used to check an existing record to be able to effectuate update operations. 
+In database, the identifier should be attached to a unicity constraint.
+**This property is optionnal but strongly recommanded** to avoid some exceptions (in example if an field like an id with unicity constraint in database is present in records).
 
 ```yaml
 identifier: sku
@@ -26,19 +28,22 @@ identifier: sku
 
 ### fields
 
-Fields are describe by their input name. 
+Field list by input name of entity attributes. Allows to map a field to a column with different name as well as declare validation rules.
 
 ```yaml
 fields:
-    id:
-        ...
+    sku:
+        column: sku
+        type: string
+        length: 23
+        nullable: false
     name:
-        ...
+        column: name
 ```
 
 #### column
 
-Required property. The database column where the field must be persisted.
+**Required**. The database column where the field have to be persisted.
 
 ```yaml
 column: sku
@@ -46,15 +51,19 @@ column: sku
 
 #### type
 
-The field type is used for validation. Possible values: string, int, decimal, date, datetime. (Default: string)
+The field type is used for validation. 
 
-Datetime format ISO8601 example: 2015-07-16T09:47:52+0200
+Possible values: *string*, *int*, *decimal*, *date*, *datetime*. (Default: *string*)
 
-Date format example: 2015-07-16
+Datetime fields have to be under format *ISO8601*, example: 2015-07-16T09:47:52+0200
+
+Date fields have to be under format yyyy-mm-dd, example: 2015-07-16
 
 ```yaml
 type: datetime
 ```
+
+The default string format is the more permissive, it's like no validation, for other formats if value no match to declared format, an exception will be thrown.
 
 #### length
 
@@ -89,7 +98,7 @@ manyToOne:
 
 ### oneToOne
 
-The Many-To-One association is likely the same as the One-To-One.
+The many-to-one association is likely the same as the One-To-One.
 
 You can define a self-referencing one-to-one relationships
 
@@ -104,7 +113,7 @@ oneToOne:
 
 ### oneToMany
 
-The One-To-Many association is a little more complex by allowing referencing foreign_key from an other table.
+The one-to-many association is a little more complex by allowing referencing foreign_key from an other table.
 
 ```yaml
 oneToMany:
@@ -139,7 +148,7 @@ The removeReferenced is a boolean property, if is set to true, all records match
 
 ### manyToMany
 
-For Many-To-Many associations you declare a join table which contain two foreign keys. You can chose which entity is the owning and which the inverse side.
+For many-to-many associations you declare a join table which contain two foreign keys. You can chose which entity is the owning and which the inverse side.
 Real many-to-many associations are less common than others because frequently you want to associate additional attributes with an association, in which case you introduce an association class. 
 Consequently, the direct many-to-many association disappears and is replaced by one-to-many/many-to-one associations between the 3 participating classes.
 
