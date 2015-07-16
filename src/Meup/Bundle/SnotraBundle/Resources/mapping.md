@@ -124,34 +124,47 @@ oneToMany:
         joinColumn:
             name: product_id
             referencedColumnName: id
+        removeReferenced: true
         references:
             lang_id:
                 table: lang
                 referencedColumnName: id
                 where:
                     iso_code: fr
-        removeReferenced: true
 ```
-#### references
-
-List of fields to add to new relation records, fetched from an other table with condition declared in the where clause.
-In below example, records to insert in the table `product_lang` will have a `lang_id` value corresponding to the id of a `lang` record where `iso_code=fr`.
-
-##### where
-
-A condition declared in that way `column: value`. 
-We recommend to set a where clause with unicity result assurance otherwise the first result will be catch.
-
-*To this date, the where property will not accept more than one conditions, feel free to contribute.*
 
 #### removeReferenced
 
 The removeReferenced is a boolean property, if is set to true, all records matching with an `AND` select on references and joinColumn values will be deleted before inserts new data.
 
+#### references
+
+List of fields to add to new relation records, fetched from an other table with condition declared in the where clause.
+In below example, records to insert in the table `product_lang` will have a `lang_id` value corresponding to the id of a `lang` record where `iso_code=fr`.
+
+##### table
+
+The database table where to find the foreign value.
+
+##### referencedColumnName
+
+The database column where to fetch the foreign value.
+
+##### where
+
+A condition declared in that way `column: value`.
+
+We recommend to set a where clause with unicity result assurance otherwise the first result will be catch.
+
+*To this date, the where property will not accept more than one conditions, feel free to contribute.*
+
 ### manyToMany
 
-For many-to-many associations you declare a join table which contain two foreign keys. You can chose which entity is the owning and which the inverse side.
-Real many-to-many associations are less common than others because frequently you want to associate additional attributes with an association, in which case you introduce an association class. 
+For many-to-many associations you declare a join table which contain two foreign keys. 
+
+You can chose which entity is the owning and which the inverse side.
+
+> Real many-to-many associations are less common than others because frequently you want to associate additional attributes with an association, in which case you introduce an association class.
 Consequently, the direct many-to-many association disappears and is replaced by one-to-many/many-to-one associations between the 3 participating classes.
 
 ```yaml
