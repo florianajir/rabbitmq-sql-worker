@@ -22,7 +22,7 @@ The identifier is the field name which will be used to check an existing record 
 
 In database, the identifier should be attached to a unicity constraint.
 
-**This property is optionnal but strongly recommanded** to avoid some exceptions (for example if a field like id with unicity constraint in database is present in record to re-send).
+> **This property is optionnal but strongly recommanded** to avoid some exceptions (for example if a field like id with unicity constraint in database is present in record to re-send).
 
 ```yaml
 identifier: sku
@@ -47,10 +47,6 @@ fields:
 
 **Required**. The database column where the field have to be persisted.
 
-```yaml
-column: sku
-```
-
 #### type
 
 The field type is used for validation. 
@@ -60,10 +56,6 @@ Possible values: *string*, *int*, *decimal*, *date*, *datetime*. (Default: *stri
 Datetime fields have to be under format *ISO8601*, example: 2015-07-16T09:47:52+0200
 
 Date fields have to be under format yyyy-mm-dd, example: 2015-07-16
-
-```yaml
-type: datetime
-```
 
 The default string format is the more permissive, it's like no validation, for other formats if value no match to declared format, an exception will be thrown.
 
@@ -79,7 +71,8 @@ Optional boolean validation to define if a field is required or not. (Default: t
 
 This chapter explains mapping associations between objects.
 The associations can be one of this: oneToOne, oneToMany, manyToOne, manyToMany.
-An entity can be self-referenced.
+
+**An entity can be self-referenced.**
 
 ### manyToOne
 
