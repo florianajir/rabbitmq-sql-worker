@@ -18,9 +18,11 @@ table: category
 
 ### identifier
 
-The identifier is the field name which will be used to check an existing record to be able to effectuate update operations. 
+The identifier is the field name which will be used to check an existing record to be able to effectuate update operations.
+
 In database, the identifier should be attached to a unicity constraint.
-**This property is optionnal but strongly recommanded** to avoid some exceptions (in example if an field like an id with unicity constraint in database is present in records).
+
+**This property is optionnal but strongly recommanded** to avoid some exceptions (for example if a field like id with unicity constraint in database is present in record to re-send).
 
 ```yaml
 identifier: sku
