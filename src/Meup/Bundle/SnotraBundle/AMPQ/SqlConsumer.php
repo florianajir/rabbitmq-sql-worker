@@ -1,6 +1,7 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\AMPQ;
 
+use Exception;
 use InvalidArgumentException;
 use JMS\Serializer\SerializerInterface;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
@@ -123,6 +124,18 @@ class SqlConsumer implements ConsumerInterface
                         'exception' => $e
                     )
                 );
+        } catch (Exception $e) {
+            $this
+                ->logger
+                ->error(
+                    'Exception in SQL Consumer',
+                    array(
+                        'type'      => $message->getType(),
+                        'data'      => $message->getData(),
+                        'exception' => $e
+                    )
+                );
+            die;
         }
 
         return true;
