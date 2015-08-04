@@ -1,4 +1,0 @@
-{
-  "type": "User",
-  "data": "{ \"sku\": \"sku_user\", \"name\": \"user1\", \"Address\": { \"sku\": \"sku_address\", \"postal_code\": \"34000\", \"city\": \"Montpellier\" }, \"Customer\": { \"sku\": \"sku_customer\", \"email\": \"foo@bar.com\", \"last_purchased\": \"2015-06-26T22:22:00+0200\" }, \"Groups\": [ { \"sku\": \"group1\", \"created_at\": \"2015-06-01T22:22:00+0200\" }, { \"sku\": \"group2\", \"created_at\": \"2015-06-01T22:22:00+0200\" } ], \"Children\": [ { \"sku\": \"sku_child1\", \"name\": \"child1\", \"created_at\": \"2015-06-01T22:22:00+0200\" }, { \"sku\": \"sku_child2\", \"name\": \"child2\", \"created_at\": \"2015-06-01T22:22:00+0200\" } ] }"
-}
