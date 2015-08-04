@@ -71,19 +71,13 @@ class Persister implements PersisterInterface
      */
     protected function persistRecursive(EntityInterface $entity)
     {
-        //Persist oneToOne relations
         $entity->addDataSet($this->persistOneToOneRelations($entity));
-        //persist manyToOne relations
         $entity->addDataSet($this->persistManyToOneRelations($entity));
-        //insert the main subject
         $id = $this->insertOrUpdateIfExists($entity);
-        //return id if no identifier
         if ($entity->getIdentifier() === null) {
             $entity->setIdentifier(array('id' => $id));
         }
-        //persist oneToMany relations
         $this->persistOneToManyRelations($entity);
-        //persist manyToMany relations (with joins)
         $this->persistManyToManyRelations($entity);
 
         return $entity->getIdentifier();
