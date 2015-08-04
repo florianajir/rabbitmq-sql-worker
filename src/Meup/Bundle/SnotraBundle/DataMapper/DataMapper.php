@@ -33,6 +33,7 @@ class DataMapper implements DataMapperInterface
     const REFERENCES_KEY = 'references';
     const WHERE_KEY = 'where';
     const REMOVE_REFERENCED_KEY = 'removeReferenced';
+    const FIXED_VALUE = 'value';
 
     /**
      * @var array
@@ -66,6 +67,30 @@ class DataMapper implements DataMapperInterface
      * @param string $entity
      * @param string $field
      *
+     * @return int|null
+     */
+    public function getFieldMaxLength($entity, $field)
+    {
+        $maxLength = null;
+        $mapping = $this->getFieldMapping($entity, $field);
+        if (isset($mapping[self::MAPPING_KEY_LENGTH])) {
+            if (!is_numeric($mapping[self::MAPPING_KEY_LENGTH])) {
+                throw new InvalidArgumentException(
+                    "$entity.$field " .
+                    self::MAPPING_KEY_LENGTH .
+                    " mapping property must be a numeric value."
+                );
+            }
+            $maxLength = intval($mapping[self::MAPPING_KEY_LENGTH]);
+        }
+
+        return $maxLength;
+    }
+
+    /**
+     * @param string $entity
+     * @param string $field
+     *
      * @return array
      */
     public function getFieldMapping($entity, $field)
@@ -76,26 +101,6 @@ class DataMapper implements DataMapperInterface
         }
 
         return $mapping;
-    }
-
-    /**
-     * @param string $entity
-     * @param string $field
-     *
-     * @return int|null
-     */
-    public function getFieldMaxLength($entity, $field)
-    {
-        $maxLength = null;
-        $mapping = $this->getFieldMapping($entity, $field);
-        if (isset($mapping[self::MAPPING_KEY_LENGTH])) {
-            if (!is_numeric($mapping[self::MAPPING_KEY_LENGTH])) {
-                throw new InvalidArgumentException("$entity.$field " . self::MAPPING_KEY_LENGTH . " mapping property must be a numeric value.");
-            }
-            $maxLength = intval($mapping[self::MAPPING_KEY_LENGTH]);
-        }
-
-        return $maxLength;
     }
 
     /**
@@ -113,23 +118,6 @@ class DataMapper implements DataMapperInterface
         }
 
         return $type;
-    }
-
-    /**
-     * @param string $entity
-     * @param string $field
-     *
-     * @return string|null
-     */
-    public function getFieldColumn($entity, $field)
-    {
-        $column = null;
-        $mapping = $this->getFieldMapping($entity, $field);
-        if (isset($mapping[self::MAPPING_KEY_COLUMN])) {
-            $column = $mapping[self::MAPPING_KEY_COLUMN];
-        }
-
-        return $column;
     }
 
     /**
@@ -175,21 +163,6 @@ class DataMapper implements DataMapperInterface
         }
 
         return null;
-    }
-
-    /**
-     * @param string $entity
-     *
-     * @return string|null
-     */
-    public function getTableName($entity)
-    {
-        $tableName = null;
-        if (isset($this->mapping[$entity][self::MAPPING_KEY_TABLE])) {
-            $tableName = $this->mapping[$entity][self::MAPPING_KEY_TABLE];
-        }
-
-        return $tableName;
     }
 
     /**
@@ -244,6 +217,21 @@ class DataMapper implements DataMapperInterface
     }
 
     /**
+     * @param string $entity
+     *
+     * @return string|null
+     */
+    public function getTableName($entity)
+    {
+        $tableName = null;
+        if (isset($this->mapping[$entity][self::MAPPING_KEY_TABLE])) {
+            $tableName = $this->mapping[$entity][self::MAPPING_KEY_TABLE];
+        }
+
+        return $tableName;
+    }
+
+    /**
      * @param string $container
      * @param string $entity
      * @param string $relation
@@ -266,11 +254,66 @@ class DataMapper implements DataMapperInterface
      *
      * @return bool
      */
-    public function relationExpectCollection($relation)
+    public function isCollection($relation)
     {
         $collections = array(self::RELATION_ONE_TO_MANY, self::RELATION_MANY_TO_MANY);
 
         return in_array($relation, $collections);
     }
 
+    /**
+     * Get the mapping column => fixed_value for a field
+     *
+     * @param string $entity
+     * @param string $field
+     *
+     * @return array
+     */
+    public function getFixedFieldMapping($entity, $field)
+    {
+        $mapping = array();
+        $fixed = $this->getFixedValue($entity, $field);
+        if (isset($fixed)) {
+            $mapping = array(
+                $this->getFieldColumn($entity, $field) => $fixed
+            );
+        }
+
+        return $mapping;
+    }
+
+    /**
+     * Get the fixed field value
+     *
+     * @param string $entity
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getFixedValue($entity, $field)
+    {
+        $fixed = null;
+        if (isset($this->mapping[$entity][self::MAPPING_KEY_FIELDS][$field][self::FIXED_VALUE])) {
+            $fixed = $this->mapping[$entity][self::MAPPING_KEY_FIELDS][$field][self::FIXED_VALUE];
+        }
+
+        return $fixed;
+    }
+
+    /**
+     * @param string $entity
+     * @param string $field
+     *
+     * @return string|null
+     */
+    public function getFieldColumn($entity, $field)
+    {
+        $column = $field;
+        $mapping = $this->getFieldMapping($entity, $field);
+        if (isset($mapping[self::MAPPING_KEY_COLUMN])) {
+            $column = $mapping[self::MAPPING_KEY_COLUMN];
+        }
+
+        return $column;
+    }
 }

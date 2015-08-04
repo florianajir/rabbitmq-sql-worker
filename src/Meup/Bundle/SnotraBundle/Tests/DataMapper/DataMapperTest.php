@@ -31,9 +31,9 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTargetEntity()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = 'Group';
-        $this->assertEquals($expected, $Mapper->getTargetEntity('User', 'Groups', 'manyToMany'));
+        $this->assertEquals($expected, $mapper->getTargetEntity('User', 'Groups', 'manyToMany'));
     }
 
     /**
@@ -41,9 +41,9 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldColumn()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = 'identifier';
-        $this->assertEquals($expected, $Mapper->getFieldColumn('Customer', 'sku'));
+        $this->assertEquals($expected, $mapper->getFieldColumn('Customer', 'sku'));
     }
 
     /**
@@ -51,9 +51,9 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldMaxLength()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = 23;
-        $this->assertEquals($expected, $Mapper->getFieldMaxLength('Customer', 'sku'));
+        $this->assertEquals($expected, $mapper->getFieldMaxLength('Customer', 'sku'));
     }
 
     /**
@@ -61,9 +61,9 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldsName()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = array('sku', 'parent_id');
-        $this->assertEquals($expected, $Mapper->getFieldsName('User'));
+        $this->assertEquals($expected, $mapper->getFieldsName('User'));
     }
 
     /**
@@ -71,9 +71,9 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldNullable()
     {
-        $Mapper = new DataMapper($this->mapping);
-        $this->assertFalse($Mapper->isFieldNullable('User', 'sku'));
-        $this->assertTrue($Mapper->isFieldNullable('User', 'parent_id'));
+        $mapper = new DataMapper($this->mapping);
+        $this->assertFalse($mapper->isFieldNullable('User', 'sku'));
+        $this->assertTrue($mapper->isFieldNullable('User', 'parent_id'));
     }
 
     /**
@@ -81,8 +81,8 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldType()
     {
-        $Mapper = new DataMapper($this->mapping);
-        $this->assertEquals('int', $Mapper->getFieldType('User', 'parent_id'));
+        $mapper = new DataMapper($this->mapping);
+        $this->assertEquals('int', $mapper->getFieldType('User', 'parent_id'));
     }
 
     /**
@@ -90,7 +90,7 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldMapping()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = array(
             'column'   => 'sku',
             'length'   => 23,
@@ -99,7 +99,7 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $expected,
-            $Mapper->getFieldMapping('User', 'sku')
+            $mapper->getFieldMapping('User', 'sku')
         );
     }
 
@@ -108,11 +108,11 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRelation()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = 'oneToOne';
         $this->assertEquals(
             $expected,
-            $Mapper->getRelation('User', 'Customer')
+            $mapper->getRelation('User', 'Customer')
         );
     }
 
@@ -121,11 +121,11 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTableName()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = 'customer';
         $this->assertEquals(
             $expected,
-            $Mapper->getTableName('Customer')
+            $mapper->getTableName('Customer')
         );
     }
 
@@ -134,11 +134,11 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIdentifier()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = 'sku';
         $this->assertEquals(
             $expected,
-            $Mapper->getIdentifier('User')
+            $mapper->getIdentifier('User')
         );
     }
 
@@ -147,19 +147,18 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRelationInfos()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = array(
-            'joinColumn'   =>
-                array(
-                    'referencedColumnName' => 'id',
-                    'name'                 => 'customer_id',
-                ),
+            'joinColumn'   => array(
+                'referencedColumnName' => 'id',
+                'name'                 => 'customer_id',
+            ),
             'targetEntity' => 'Customer',
             'table'        => 'customer',
         );
         $this->assertEquals(
             $expected,
-            $Mapper->getRelationInfos('User', 'Customer', 'oneToOne')
+            $mapper->getRelationInfos('User', 'Customer', 'oneToOne')
         );
     }
 
@@ -168,27 +167,23 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetJoinTable()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = array(
-            'joinColumns'        =>
-                array(
-                    'user_id' =>
-                        array(
-                            'referencedColumnName' => 'id',
-                        ),
+            'joinColumns'        => array(
+                'user_id' => array(
+                    'referencedColumnName' => 'id',
                 ),
+            ),
             'name'               => 'users_groups',
-            'inverseJoinColumns' =>
-                array(
-                    'group_id' =>
-                        array(
-                            'referencedColumnName' => 'id',
-                        ),
+            'inverseJoinColumns' => array(
+                'group_id' => array(
+                    'referencedColumnName' => 'id',
                 ),
+            ),
         );
         $this->assertEquals(
             $expected,
-            $Mapper->getJoinTable('User', 'Groups', 'manyToMany')
+            $mapper->getJoinTable('User', 'Groups', 'manyToMany')
         );
     }
 
@@ -197,26 +192,26 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
      */
     public function testRelationExpectCollection()
     {
-        $Mapper = new DataMapper($this->mapping);
+        $mapper = new DataMapper($this->mapping);
         $expected = true;
         $this->assertEquals(
             $expected,
-            $Mapper->relationExpectCollection('manyToMany')
+            $mapper->isCollection('manyToMany')
         );
         $expected = true;
         $this->assertEquals(
             $expected,
-            $Mapper->relationExpectCollection('oneToMany')
+            $mapper->isCollection('oneToMany')
         );
         $expected = false;
         $this->assertEquals(
             $expected,
-            $Mapper->relationExpectCollection('oneToOne')
+            $mapper->isCollection('oneToOne')
         );
         $expected = false;
         $this->assertEquals(
             $expected,
-            $Mapper->relationExpectCollection('manyToOne')
+            $mapper->isCollection('manyToOne')
         );
     }
 
@@ -226,130 +221,102 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mapping = array(
-            'Customer' =>
-                array(
-                    'table'  => 'customer',
-                    'fields' =>
-                        array(
-                            'sku' =>
-                                array(
-                                    'column'   => 'identifier',
-                                    'length'   => 23,
-                                    'type'     => 'string',
-                                    'nullable' => false,
-                                )
-                        ),
+            'Customer' => array(
+                'table'  => 'customer',
+                'fields' =>
+                    array(
+                        'sku' => array(
+                            'column'   => 'identifier',
+                            'length'   => 23,
+                            'type'     => 'string',
+                            'nullable' => false,
+                        )
+                    ),
+            ),
+            'Group'    => array(
+                'table'  => 'group',
+                'fields' => array(
+                    'sku' => array(
+                        'column'   => 'sku',
+                        'length'   => 23,
+                        'type'     => 'string',
+                        'nullable' => false,
+                    ),
                 ),
-            'Group'    =>
-                array(
-                    'table'  => 'group',
-                    'fields' =>
-                        array(
-                            'sku' =>
-                                array(
-                                    'column'   => 'sku',
-                                    'length'   => 23,
-                                    'type'     => 'string',
-                                    'nullable' => false,
-                                ),
+            ),
+            'User'     => array(
+                'oneToOne'   => array(
+                    'Customer' => array(
+                        'joinColumn'   => array(
+                            'referencedColumnName' => 'id',
+                            'name'                 => 'customer_id',
                         ),
+                        'targetEntity' => 'Customer',
+                    ),
                 ),
-            'User'     =>
-                array(
-                    'oneToOne'   =>
-                        array(
-                            'Customer' =>
-                                array(
-                                    'joinColumn'   =>
-                                        array(
-                                            'referencedColumnName' => 'id',
-                                            'name'                 => 'customer_id',
-                                        ),
-                                    'targetEntity' => 'Customer',
-                                ),
+                'oneToMany'  => array(
+                    'Children' => array(
+                        'joinColumn'   => array(
+                            'referencedColumnName' => 'id',
+                            'name'                 => 'parent_id',
                         ),
-                    'oneToMany'  =>
-                        array(
-                            'Children' =>
-                                array(
-                                    'joinColumn'   =>
-                                        array(
-                                            'referencedColumnName' => 'id',
-                                            'name'                 => 'parent_id',
-                                        ),
-                                    'targetEntity' => 'User',
-                                ),
-                        ),
-                    'fields'     =>
-                        array(
-                            'sku'       =>
-                                array(
-                                    'column'   => 'sku',
-                                    'length'   => 23,
-                                    'type'     => 'string',
-                                    'nullable' => false,
-                                ),
-                            'parent_id' =>
-                                array(
-                                    'column'   => 'parent_id',
-                                    'type'     => 'int',
-                                    'nullable' => true,
-                                ),
-                        ),
-                    'manyToOne'  =>
-                        array(
-                            'Address' =>
-                                array(
-                                    'joinColumn'   =>
-                                        array(
-                                            'referencedColumnName' => 'id',
-                                            'name'                 => 'address_id',
-                                        ),
-                                    'targetEntity' => 'Address',
-                                ),
-                        ),
-                    'table'      => 'user',
-                    'identifier' => 'sku',
-                    'manyToMany' =>
-                        array(
-                            'Groups' =>
-                                array(
-                                    'joinTable'    =>
-                                        array(
-                                            'joinColumns'        =>
-                                                array(
-                                                    'user_id' =>
-                                                        array(
-                                                            'referencedColumnName' => 'id',
-                                                        ),
-                                                ),
-                                            'name'               => 'users_groups',
-                                            'inverseJoinColumns' =>
-                                                array(
-                                                    'group_id' =>
-                                                        array(
-                                                            'referencedColumnName' => 'id',
-                                                        ),
-                                                ),
-                                        ),
-                                    'targetEntity' => 'Group',
-                                ),
-                        ),
+                        'targetEntity' => 'User',
+                    ),
                 ),
-            'Address'  =>
-                array(
-                    'table'  => 'address',
-                    'fields' =>
-                        array(
-                            'sku' =>
-                                array(
-                                    'column'   => 'sku',
-                                    'length'   => 255,
-                                    'type'     => 'string',
-                                    'nullable' => false
-                                ),
-                        ),
+                'fields'     => array(
+                    'sku'       => array(
+                        'column'   => 'sku',
+                        'length'   => 23,
+                        'type'     => 'string',
+                        'nullable' => false,
+                    ),
+                    'parent_id' => array(
+                        'column'   => 'parent_id',
+                        'type'     => 'int',
+                        'nullable' => true,
+                    ),
                 ),
+                'manyToOne'  => array(
+                    'Address' => array(
+                        'joinColumn'   => array(
+                            'referencedColumnName' => 'id',
+                            'name'                 => 'address_id',
+                        ),
+                        'targetEntity' => 'Address',
+                    ),
+                ),
+                'table'      => 'user',
+                'identifier' => 'sku',
+                'manyToMany' => array(
+                    'Groups' => array(
+                        'joinTable'    => array(
+                            'joinColumns'        => array(
+                                'user_id' => array(
+                                    'referencedColumnName' => 'id',
+                                ),
+                            ),
+                            'name'               => 'users_groups',
+                            'inverseJoinColumns' => array(
+                                'group_id' => array(
+                                    'referencedColumnName' => 'id',
+                                ),
+                            ),
+                        ),
+                        'targetEntity' => 'Group',
+                    ),
+                ),
+            ),
+            'Address'  => array(
+                'table'  => 'address',
+                'fields' => array(
+                    'sku' => array(
+                        'column'   => 'sku',
+                        'length'   => 255,
+                        'type'     => 'string',
+                        'nullable' => false
+                    ),
+                ),
+            ),
         );
     }
 }

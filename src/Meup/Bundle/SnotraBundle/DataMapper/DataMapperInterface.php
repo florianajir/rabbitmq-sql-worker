@@ -109,5 +109,25 @@ interface DataMapperInterface
      *
      * @return bool
      */
-    public function relationExpectCollection($relation);
+    public function isCollection($relation);
+
+    /**
+     * Get a column => fixed_value mapping for a field
+     *
+     * @param string $entity
+     * @param string $field
+     *
+     * @return array
+     */
+    public function getFixedFieldMapping($entity, $field);
+
+    /**
+     * Get the fixed field value
+     *
+     * @param string $entity
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getFixedValue($entity, $field);
 }

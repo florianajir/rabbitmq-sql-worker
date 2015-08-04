@@ -53,8 +53,14 @@ class DataTransformer implements DataTransformerInterface
         $tableName = $this->mapper->getTableName($type);
         if ($tableName) {
             $prepared[$tableName] = $this->prepareData($type, $data);
-            if ($this->validator) {
-                $this->checkNullable($type, $prepared[$tableName]);
+            foreach ($this->mapper->getFieldsName($type) as $field) {
+                if ($this->validator) {
+                    $this->checkNullable($type, $field, $prepared[$tableName]);
+                }
+                $fixedValue = $this->mapper->getFixedFieldMapping($type, $field);
+                if (!empty($fixedValue)) {
+                    $prepared[$tableName] = array_merge($prepared[$tableName], $fixedValue);
+                }
             }
         }
 
@@ -139,7 +145,7 @@ class DataTransformer implements DataTransformerInterface
     {
         $relationInfos = $this->mapper->getRelationInfos($type, $field, $relation);
         if ($relationInfos) {
-            $collection = $this->mapper->relationExpectCollection($relation);
+            $collection = $this->mapper->isCollection($relation);
             $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
             $linkedTableName = $this->mapper->getTableName($targetEntity);
             $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
@@ -159,22 +165,17 @@ class DataTransformer implements DataTransformerInterface
 
     /**
      * @param string $type
+     * @param string $field
      * @param array  $data
      *
      * @throws InvalidArgumentException
      */
-    protected function checkNullable($type, array $data)
+    protected function checkNullable($type, $field, array $data)
     {
-        $fields = $this->mapper->getFieldsName($type);
-        foreach ($fields as $field) {
-            if (!$this->mapper->isFieldNullable($type, $field)
-                && (
-                    !isset($data[$this->mapper->getFieldColumn($type, $field)])
-                    || is_null($data[$this->mapper->getFieldColumn($type, $field)])
-                )
-            ) {
-                throw new InvalidArgumentException($type . '.' . $field . ' is not nullable.');
-            }
+        if (!$this->mapper->isFieldNullable($type, $field)
+            && !isset($data[$this->mapper->getFieldColumn($type, $field)])
+        ) {
+            throw new InvalidArgumentException($type . '.' . $field . ' is not nullable.');
         }
     }
 }

@@ -33,6 +33,9 @@ fields:
         nullable: false
     name:
         column: name
+    enabled:
+        column: enabled
+        fixed: 1
 ```
 
 #### column
@@ -58,6 +61,10 @@ Optional validation property to define the max length of a field. if length exce
 #### nullable
 
 Optional boolean validation to define if a field is required or not. (Default: true)
+
+#### value
+
+Option to define a fixed value for the field. If defined, the value will replace the received data. (Default: null)
 
 ## Association Mapping
 

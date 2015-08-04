@@ -30,28 +30,26 @@ parameters:
                     column: sku
                     nullable: false
                 level:
-                    column: level
+                    column: lvl
                     type: int
                 position:
-                    column: position
+                    column: order
                     type: int
                 max_item_per_order:
                     column: max_item_per_order
                     type: int
                 status:
-                    column: status
+                    column: enabled
                     type: int
-                created_at:
-                    column: created_at
-                    type: datetime
-                updated_at:
-                    column: updated_at
-                    type: datetime
+                published:
+                    column: published
+                    type: int
+                    value: 1
         category_lang:
             table: category_lang
             fields:
                 label:
-                    column: label
+                    column: name
                 title_page:
                     column: title_page
                 description_page:
