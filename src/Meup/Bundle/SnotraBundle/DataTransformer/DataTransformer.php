@@ -167,7 +167,7 @@ class DataTransformer implements DataTransformerInterface
     {
         $fields = $this->mapper->getFieldsName($type);
         foreach ($fields as $field) {
-            if (!$this->mapper->getFieldNullable($type, $field)
+            if (!$this->mapper->isFieldNullable($type, $field)
                 && (
                     !isset($data[$this->mapper->getFieldColumn($type, $field)])
                     || is_null($data[$this->mapper->getFieldColumn($type, $field)])

@@ -140,7 +140,7 @@ class DataMapper implements DataMapperInterface
      *
      * @return bool
      */
-    public function getFieldNullable($entity, $field)
+    public function isFieldNullable($entity, $field)
     {
         $nullable = true;
         $mapping = $this->getFieldMapping($entity, $field);

@@ -72,8 +72,8 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
     public function testGetFieldNullable()
     {
         $Mapper = new DataMapper($this->mapping);
-        $this->assertFalse($Mapper->getFieldNullable('User', 'sku'));
-        $this->assertTrue($Mapper->getFieldNullable('User', 'parent_id'));
+        $this->assertFalse($Mapper->isFieldNullable('User', 'sku'));
+        $this->assertTrue($Mapper->isFieldNullable('User', 'parent_id'));
     }
 
     /**

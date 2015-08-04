@@ -45,7 +45,7 @@ interface DataMapperInterface
      *
      * @return bool
      */
-    public function getFieldNullable($entity, $field);
+    public function isFieldNullable($entity, $field);
 
     /**
      * @param string $entity
