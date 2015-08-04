@@ -75,7 +75,8 @@ class SqlConsumer implements ConsumerInterface
     /**
      * @param AMQPMessage $message
      *
-     * @return boolean Execution status (true if everything's of, false if message should be re-queued)
+     * @return bool Execution status (true if everything's of, false if message should be re-queued)
+     * @throws Exception on applicative error
      */
     public function execute(AMQPMessage $message)
     {
