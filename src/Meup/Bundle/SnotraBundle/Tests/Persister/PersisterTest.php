@@ -1,7 +1,7 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Tests\Persister;
 
-use Meup\Bundle\SnotraBundle\Factory\GenericEntityFactory;
+use Meup\Bundle\SnotraBundle\Factory\EntityFactory;
 use Meup\Bundle\SnotraBundle\Factory\RelationFactory;
 use Meup\Bundle\SnotraBundle\Persister\Persister;
 use PHPUnit_Framework_TestCase;
@@ -47,7 +47,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
             ->method('delete')
             ->will($this->returnValue('1'))
         ;
-        $entityFactory = new GenericEntityFactory('Meup\Bundle\SnotraBundle\Model\GenericEntity');
+        $entityFactory = new EntityFactory('Meup\Bundle\SnotraBundle\Model\Entity');
         $relationFactory = new RelationFactory(
             'Meup\Bundle\SnotraBundle\Model\OneToOneRelation',
             'Meup\Bundle\SnotraBundle\Model\OneToManyRelation',

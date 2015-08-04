@@ -5,14 +5,14 @@ use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 
 /**
- * Class GenericEntity
+ * Class Entity
  * Data container model for any data message type
  *
  * @package  Snotra
  * @author   florianajir <florian@1001pharmacies.com>
  * @link     https://github.com/1001Pharmacies/snotra
  */
-class GenericEntity implements GenericEntityInterface
+class Entity implements EntityInterface
 {
     /**
      * Table name
@@ -87,22 +87,29 @@ class GenericEntity implements GenericEntityInterface
         $this->oneToMany = array();
         $this->manyToMany = array();
         if (array_key_exists(DataTransformer::RELATED_KEY, $data)) {
-            $related = $data[DataTransformer::RELATED_KEY];
-            if (isset($related[DataMapper::RELATION_ONE_TO_ONE])) {
-                $this->oneToOne = $related[DataMapper::RELATION_ONE_TO_ONE];
-            }
-            if (isset($related[DataMapper::RELATION_MANY_TO_ONE])) {
-                $this->manyToOne = $related[DataMapper::RELATION_MANY_TO_ONE];
-            }
-            if (isset($related[DataMapper::RELATION_ONE_TO_MANY])) {
-                $this->oneToMany = $related[DataMapper::RELATION_ONE_TO_MANY];
-            }
-            if (isset($related[DataMapper::RELATION_MANY_TO_MANY])) {
-                $this->manyToMany = $related[DataMapper::RELATION_MANY_TO_MANY];
-            }
+            $this->initializeRelated($data[DataTransformer::RELATED_KEY]);
             unset($data[DataTransformer::RELATED_KEY]);
         }
         $this->data = $data;
+    }
+
+    /**
+     * @param array $related
+     */
+    private function initializeRelated($related)
+    {
+        if (isset($related[DataMapper::RELATION_ONE_TO_ONE])) {
+            $this->oneToOne = $related[DataMapper::RELATION_ONE_TO_ONE];
+        }
+        if (isset($related[DataMapper::RELATION_MANY_TO_ONE])) {
+            $this->manyToOne = $related[DataMapper::RELATION_MANY_TO_ONE];
+        }
+        if (isset($related[DataMapper::RELATION_ONE_TO_MANY])) {
+            $this->oneToMany = $related[DataMapper::RELATION_ONE_TO_MANY];
+        }
+        if (isset($related[DataMapper::RELATION_MANY_TO_MANY])) {
+            $this->manyToMany = $related[DataMapper::RELATION_MANY_TO_MANY];
+        }
     }
 
     /**

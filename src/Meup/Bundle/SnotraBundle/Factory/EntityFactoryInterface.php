@@ -1,20 +1,20 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Factory;
 
-use Meup\Bundle\SnotraBundle\Model\GenericEntityInterface;
+use Meup\Bundle\SnotraBundle\Model\EntityInterface;
 
 /**
- * Interface GenericEntityFactory
+ * Interface EntityFactory
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-interface GenericEntityFactoryInterface
+interface EntityFactoryInterface
 {
     /**
      * @param string $table
      * @param array  $data
      *
-     * @return GenericEntityInterface
+     * @return EntityInterface
      */
     public function create($table, array $data);
 }

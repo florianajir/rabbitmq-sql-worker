@@ -3,9 +3,9 @@ namespace Meup\Bundle\SnotraBundle\Persister;
 
 use Exception;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\Factory\GenericEntityFactoryInterface;
+use Meup\Bundle\SnotraBundle\Factory\EntityFactoryInterface;
 use Meup\Bundle\SnotraBundle\Factory\RelationFactoryInterface;
-use Meup\Bundle\SnotraBundle\Model\GenericEntityInterface;
+use Meup\Bundle\SnotraBundle\Model\EntityInterface;
 use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
 
 /**
@@ -21,9 +21,9 @@ class Persister implements PersisterInterface
     protected $provider;
 
     /**
-     * @var GenericEntityFactoryInterface
+     * @var EntityFactoryInterface
      */
-    protected $genericEntityFactory;
+    protected $entityFactory;
 
     /**
      * @var RelationFactoryInterface
@@ -31,17 +31,17 @@ class Persister implements PersisterInterface
     protected $relationFactory;
 
     /**
-     * @param ProviderInterface             $provider
-     * @param GenericEntityFactoryInterface $genericEntityFactory
-     * @param RelationFactoryInterface      $relationFactory
+     * @param ProviderInterface        $provider
+     * @param EntityFactoryInterface   $entityFactory
+     * @param RelationFactoryInterface $relationFactory
      */
     public function __construct(
         ProviderInterface $provider,
-        GenericEntityFactoryInterface $genericEntityFactory,
+        EntityFactoryInterface $entityFactory,
         RelationFactoryInterface $relationFactory
     ) {
         $this->provider = $provider;
-        $this->genericEntityFactory = $genericEntityFactory;
+        $this->entityFactory = $entityFactory;
         $this->relationFactory = $relationFactory;
     }
 
@@ -55,7 +55,7 @@ class Persister implements PersisterInterface
     public function persist(array $data)
     {
         foreach ($data as $table => $infos) {
-            $entity = $this->genericEntityFactory->create($table, $infos);
+            $entity = $this->entityFactory->create($table, $infos);
             $this->persistRecursive($entity);
         }
     }
@@ -63,13 +63,13 @@ class Persister implements PersisterInterface
     /**
      * Persist data recursively
      *
-     * @param GenericEntityInterface $entity
+     * @param EntityInterface $entity
      *
      * @return array
      *
      * @throws Exception
      */
-    protected function persistRecursive(GenericEntityInterface $entity)
+    protected function persistRecursive(EntityInterface $entity)
     {
         //Persist oneToOne relations
         $entity->addDataSet($this->persistOneToOneRelations($entity));
@@ -92,19 +92,19 @@ class Persister implements PersisterInterface
     /**
      * Persist oneToOne relations
      *
-     * @param GenericEntityInterface $entity
+     * @param EntityInterface $entity
      *
      * @return array associative array( 'foreign_key' => 'value' )
      *
      * @throws Exception
      */
-    protected function persistOneToOneRelations(GenericEntityInterface $entity)
+    protected function persistOneToOneRelations(EntityInterface $entity)
     {
         $joinData = array();
         $relations = $entity->getOneToOneRelations();
         foreach ($relations as $relation) {
             $oneToOne = $this->relationFactory->create(DataMapper::RELATION_ONE_TO_ONE, $relation);
-            $entity = $this->genericEntityFactory->create($oneToOne->getTable(), $oneToOne->getEntity());
+            $entity = $this->entityFactory->create($oneToOne->getTable(), $oneToOne->getEntity());
             $id = $this->persistRecursive($entity);
             $joinVal = $entity->getProperty($oneToOne->getJoinColumnReferencedColumnName());
             $joinData[$oneToOne->getJoinColumnName()] = !is_null($joinVal)
@@ -123,19 +123,19 @@ class Persister implements PersisterInterface
     /**
      * Persist manyToOne relations
      *
-     * @param GenericEntityInterface $entity
+     * @param EntityInterface $entity
      *
      * @return array associative array( 'foreign_key' => 'value' )
      *
      * @throws Exception
      */
-    protected function persistManyToOneRelations(GenericEntityInterface $entity)
+    protected function persistManyToOneRelations(EntityInterface $entity)
     {
         $joinData = array();
         $relations = $entity->getManyToOneRelations();
         foreach ($relations as $relation) {
             $manyToOne = $this->relationFactory->create(DataMapper::RELATION_MANY_TO_ONE, $relation);
-            $entity = $this->genericEntityFactory->create($manyToOne->getTable(), $manyToOne->getEntity());
+            $entity = $this->entityFactory->create($manyToOne->getTable(), $manyToOne->getEntity());
             $id = $this->persistRecursive($entity);
             $joinVal = $entity->getProperty($manyToOne->getJoinColumnReferencedColumnName());
             $joinData[$manyToOne->getJoinColumnName()] = !is_null($joinVal)
@@ -152,11 +152,11 @@ class Persister implements PersisterInterface
     }
 
     /**
-     * @param GenericEntityInterface $entity
+     * @param EntityInterface $entity
      *
      * @return int
      */
-    protected function insertOrUpdateIfExists(GenericEntityInterface $entity)
+    protected function insertOrUpdateIfExists(EntityInterface $entity)
     {
         return $this->provider->insertOrUpdateIfExists(
             $entity->getTable(),
@@ -166,11 +166,11 @@ class Persister implements PersisterInterface
     }
 
     /**
-     * @param GenericEntityInterface $entity
+     * @param EntityInterface $entity
      *
      * @throws Exception
      */
-    protected function persistOneToManyRelations(GenericEntityInterface $entity)
+    protected function persistOneToManyRelations(EntityInterface $entity)
     {
         $relations = $entity->getOneToManyRelations();
         foreach ($relations as $relation) {
@@ -190,7 +190,7 @@ class Persister implements PersisterInterface
             }
 
             foreach ($oneToMany->getEntities() as $childData) {
-                $child = $this->genericEntityFactory->create(
+                $child = $this->entityFactory->create(
                     $oneToMany->getTable(),
                     $childData[$oneToMany->getTable()]
                 );
@@ -214,11 +214,11 @@ class Persister implements PersisterInterface
     }
 
     /**
-     * @param GenericEntityInterface $entity
+     * @param EntityInterface $entity
      *
      * @throws Exception
      */
-    protected function persistManyToManyRelations(GenericEntityInterface $entity)
+    protected function persistManyToManyRelations(EntityInterface $entity)
     {
         $relations = $entity->getManyToManyRelations();
         foreach ($relations as $relation) {
@@ -242,7 +242,7 @@ class Persister implements PersisterInterface
             //delete joins before loop
             $this->provider->delete($manyToMany->getJoinTableName(), $joinData);
             foreach ($manyToMany->getEntities() as $childData) {
-                $child = $this->genericEntityFactory->create(
+                $child = $this->entityFactory->create(
                     $manyToMany->getTable(),
                     $childData[$manyToMany->getTable()]
                 );

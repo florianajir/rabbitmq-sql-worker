@@ -5,13 +5,13 @@ use InvalidArgumentException;
 use ReflectionClass;
 
 /**
- * Class GenericEntityFactory
+ * Class EntityFactory
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-class GenericEntityFactory implements GenericEntityFactoryInterface
+class EntityFactory implements EntityFactoryInterface
 {
-    const MODEL_INTERFACE = 'Meup\Bundle\SnotraBundle\Model\GenericEntityInterface';
+    const MODEL_INTERFACE = 'Meup\Bundle\SnotraBundle\Model\EntityInterface';
 
     /**
      * @var ReflectionClass
@@ -24,7 +24,7 @@ class GenericEntityFactory implements GenericEntityFactoryInterface
     protected $relationFactory;
 
     /**
-     * @param string                   $classname
+     * @param string $classname
      *
      * @throws InvalidArgumentException
      */

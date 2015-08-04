@@ -2,11 +2,11 @@
 namespace Meup\Bundle\SnotraBundle\Model;
 
 /**
- * Interface GenericEntityInterface
+ * Interface EntityInterface
  *
  * @author florianajir <florian@1001pharmacies.com>
  */
-interface GenericEntityInterface
+interface EntityInterface
 {
     /**
      * @param array $data
