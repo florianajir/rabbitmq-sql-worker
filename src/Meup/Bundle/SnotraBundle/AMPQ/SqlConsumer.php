@@ -135,7 +135,7 @@ class SqlConsumer implements ConsumerInterface
                         'exception' => $e
                     )
                 );
-            die;
+            throw $e;
         }
 
         return true;
