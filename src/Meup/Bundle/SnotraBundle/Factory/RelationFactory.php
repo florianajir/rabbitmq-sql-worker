@@ -37,10 +37,10 @@ class RelationFactory implements RelationFactoryInterface
     protected $manyToManyClass;
 
     /**
-     * @param string                        $oneToOneClassName
-     * @param string                        $oneToManyClassName
-     * @param string                        $manyToOneClassName
-     * @param string                        $manyToManyClassName
+     * @param string $oneToOneClassName
+     * @param string $oneToManyClassName
+     * @param string $manyToOneClassName
+     * @param string $manyToManyClassName
      */
     public function __construct(
         $oneToOneClassName,

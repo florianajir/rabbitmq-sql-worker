@@ -1,13 +1,4 @@
 <?php
-/**
- * PHP version 5
- *
- * @category Testing
- * @package  Snotra
- * @author   florianajir <florian@1001pharmacies.com>
- * @license  BSD Licence
- * @link     https://github.com/1001Pharmacies/snotra
- */
 namespace Meup\Bundle\SnotraBundle\Model;
 
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
@@ -17,10 +8,8 @@ use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
  * Class GenericEntity
  * Data container model for any data message type
  *
- * @category Testing
  * @package  Snotra
  * @author   florianajir <florian@1001pharmacies.com>
- * @license  BSD Licence
  * @link     https://github.com/1001Pharmacies/snotra
  */
 class GenericEntity implements GenericEntityInterface
