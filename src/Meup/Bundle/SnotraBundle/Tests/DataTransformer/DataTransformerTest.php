@@ -1,9 +1,9 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Tests\DataTransformer;
 
+use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 use Meup\Bundle\SnotraBundle\DataValidator\DataValidator;
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -40,8 +40,8 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
-        $Mapper = new DataMapper($this->mapping);
-        $DataTransformer = new DataTransformer($Mapper);
+        $mapper = new DataMapper($this->mapping);
+        $dataTransformer = new DataTransformer($mapper);
         $data = array(
             'identifier' => '1',
             'label'      => 'label_de_test',
@@ -59,7 +59,7 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                 '_identifier' => 'id'
             )
         );
-        $this->assertEquals($expected, $DataTransformer->prepare('user', $data));
+        $this->assertEquals($expected, $dataTransformer->prepare('user', $data));
     }
 
     /**
@@ -67,9 +67,9 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareMissingNotNullableProperty()
     {
-        $Mapper = new DataMapper($this->mapping);
-        $Validator = new DataValidator();
-        $DataTransformer = new DataTransformer($Mapper, $Validator);
+        $mapper = new DataMapper($this->mapping);
+        $validator = new DataValidator();
+        $dataTransformer = new DataTransformer($mapper, $validator);
         $data = array(
             'label'     => 'label_de_test',
             'amount'    => '10.01',
@@ -77,7 +77,7 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
             'subscribe' => '2015-01-02T09:00:00+0200'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.identifier is not nullable.');
-        $DataTransformer->prepare('user', $data);
+        $dataTransformer->prepare('user', $data);
     }
 
     /**
@@ -85,28 +85,28 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareWrongType()
     {
-        $Mapper = new DataMapper($this->mapping);
-        $Validator = new DataValidator();
-        $DataTransformer = new DataTransformer($Mapper, $Validator);
+        $mapper = new DataMapper($this->mapping);
+        $validator = new DataValidator();
+        $dataTransformer = new DataTransformer($mapper, $validator);
 
         $data = array(
             'identifier' => '1',
             'amount'     => '10,01'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.amount type not valid.');
-        $DataTransformer->prepare('user', $data);
+        $dataTransformer->prepare('user', $data);
         $data = array(
             'identifier' => '1',
             'birthday'   => '11/10/1989'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.birthday type not valid.');
-        $DataTransformer->prepare('user', $data);
+        $dataTransformer->prepare('user', $data);
         $data = array(
             'identifier' => '1',
             'subscribe'  => '2015-01-02'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.subscribe type not valid.');
-        $DataTransformer->prepare('user', $data);
+        $dataTransformer->prepare('user', $data);
     }
 
     /**
@@ -114,15 +114,15 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareRelationnal()
     {
-        $Mapper = new DataMapper($this->relationnalMapping);
-        $DataTransformer = new DataTransformer($Mapper);
+        $mapper = new DataMapper($this->relationnalMapping);
+        $dataTransformer = new DataTransformer($mapper);
         $data = array(
             'identifier' => '1',
             'label'      => 'label_de_test',
-            'Address' => array(
-                'identifier' => '2',
+            'Address'    => array(
+                'identifier'  => '2',
                 'postal_code' => '34000',
-                'city' => 'Montpellier'
+                'city'        => 'Montpellier'
             )
         );
         $expected = array(
@@ -143,7 +143,7 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                             '_data'     => array(
                                 'address' => array(
                                     '_identifier' => 'sku',
-                                    'sku'          => '2',
+                                    'sku'         => '2',
                                     'postal_code' => '34000',
                                     'city'        => 'Montpellier'
                                 )
@@ -153,7 +153,7 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $result = $DataTransformer->prepare('User', $data);
+        $result = $dataTransformer->prepare('User', $data);
         $this->assertEquals($expected, $result);
     }
 
@@ -199,7 +199,7 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->relationnalMapping = array(
-            'User' => array(
+            'User'    => array(
                 'table'      => 'users',
                 'identifier' => 'sku',
                 'fields'     => array(
@@ -214,31 +214,30 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                     array(
                         'Address' =>
                             array(
-                                'joinColumn'   =>
-                                    array(
+                                'joinColumn'   => array(
                                         'referencedColumnName' => 'id',
                                         'name'                 => 'address_id',
-                                    ),
+                                ),
                                 'targetEntity' => 'Address',
                             ),
                     )
             ),
             'Address' => array(
-                'table' => 'address',
+                'table'      => 'address',
                 'identifier' => 'sku',
-                'fields' => array(
-                    'identifier' => array(
+                'fields'     => array(
+                    'identifier'  => array(
                         'column' => 'sku',
-                        'type' => 'string'
+                        'type'   => 'string'
                     ),
                     'postal_code' => array(
-                        'column'=> 'postal_code',
-                        'type' => 'string',
-                        'length'=> '5'
+                        'column' => 'postal_code',
+                        'type'   => 'string',
+                        'length' => '5'
                     ),
-                    'city' => array(
-                        'column'=> 'city',
-                        'type' => 'string',
+                    'city'        => array(
+                        'column' => 'city',
+                        'type'   => 'string',
                     ),
                 )
             )
