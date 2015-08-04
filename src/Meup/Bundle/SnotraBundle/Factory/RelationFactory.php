@@ -48,22 +48,25 @@ class RelationFactory implements RelationFactoryInterface
         $manyToOneClassName,
         $manyToManyClassName
     ) {
-        $this->oneToOneClass = new ReflectionClass($oneToOneClassName);
-        if (!$this->oneToOneClass->implementsInterface(self::RELATION_FACTORY)) {
+        $this->oneToOneClass = $this->createRelation($oneToOneClassName);
+        $this->oneToManyClass = $this->createRelation($oneToManyClassName);
+        $this->manyToOneClass = $this->createRelation($manyToOneClassName);
+        $this->manyToManyClass = $this->createRelation($manyToManyClassName);
+    }
+
+    /**
+     * @param string $relationClassName
+     *
+     * @return ReflectionClass
+     */
+    private function createRelation($relationClassName)
+    {
+        $relation = new ReflectionClass($relationClassName);
+        if (!$relation->implementsInterface(self::RELATION_FACTORY)) {
             throw new InvalidArgumentException();
         }
-        $this->oneToManyClass = new ReflectionClass($oneToManyClassName);
-        if (!$this->oneToManyClass->implementsInterface(self::RELATION_FACTORY)) {
-            throw new InvalidArgumentException();
-        }
-        $this->manyToOneClass = new ReflectionClass($manyToOneClassName);
-        if (!$this->manyToOneClass->implementsInterface(self::RELATION_FACTORY)) {
-            throw new InvalidArgumentException();
-        }
-        $this->manyToManyClass = new ReflectionClass($manyToManyClassName);
-        if (!$this->manyToManyClass->implementsInterface(self::RELATION_FACTORY)) {
-            throw new InvalidArgumentException();
-        }
+
+        return $relation;
     }
 
     /**
