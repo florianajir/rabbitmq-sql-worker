@@ -25,7 +25,7 @@ class SqlProvider implements ProviderInterface
     public function __construct(Connection $conn, $env)
     {
         $this->conn = $conn;
-        if ($env === 'dev') {
+        if ($env !== 'prod') {
             $this->conn->getConfiguration()->setSQLLogger(new EchoSQLLogger());
         }
     }
@@ -88,9 +88,26 @@ class SqlProvider implements ProviderInterface
      */
     public function update($table, array $data, array $identifier)
     {
+        $data = $this->quoteIdentifiers($data);
         $this->conn->update($table, $data, $identifier);
 
         return $this->conn->lastInsertId();
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    private function quoteIdentifiers($data)
+    {
+        $prepared = array();
+        foreach ($data as $id => $value) {
+            $quoted = $this->conn->quoteIdentifier($id);
+            $prepared[$quoted] = $value;
+        }
+
+        return $prepared;
     }
 
     /**
@@ -101,6 +118,7 @@ class SqlProvider implements ProviderInterface
      */
     public function insert($table, array $data)
     {
+        $data = $this->quoteIdentifiers($data);
         $this->conn->insert($table, $data);
 
         return $this->conn->lastInsertId();
