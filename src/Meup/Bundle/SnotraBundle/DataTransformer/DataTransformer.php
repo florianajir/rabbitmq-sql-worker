@@ -57,8 +57,7 @@ class DataTransformer implements DataTransformerInterface
                 if ($this->validator) {
                     $this->checkNullable($type, $field, $prepared[$tableName]);
                 }
-                $fixedValue = $this->mapper->getFixedFieldMapping($type, $field);
-                if (!empty($fixedValue)) {
+                if ($fixedValue = $this->mapper->getFixedFieldMapping($type, $field)) {
                     $prepared[$tableName] = array_merge($prepared[$tableName], $fixedValue);
                 }
             }
