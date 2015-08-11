@@ -50,17 +50,9 @@ class DataTransformer implements DataTransformerInterface
     public function prepare($type, array $data)
     {
         $prepared = array();
-        $tableName = $this->mapper->getTableName($type);
-        if ($tableName) {
-            $prepared[$tableName] = $this->prepareData($type, $data);
-            foreach ($this->mapper->getFieldsName($type) as $field) {
-                if ($this->validator) {
-                    $this->checkNullable($type, $field, $prepared[$tableName]);
-                }
-                if ($fixedValue = $this->mapper->getFixedFieldMapping($type, $field)) {
-                    $prepared[$tableName] = array_merge($prepared[$tableName], $fixedValue);
-                }
-            }
+        if ($tableName = $this->mapper->getTableName($type)) {
+            $data = $this->prepareData($type, $data);
+            $prepared[$tableName] = $this->checkFieldsMapping($type, $data);
         }
 
         return $prepared;
@@ -160,6 +152,28 @@ class DataTransformer implements DataTransformerInterface
         }
 
         return $prepared;
+    }
+
+    /**
+     * Last step of prepare which loop over entity mapping fields
+     *
+     * @param string $type entity name
+     * @param array  $data entity data
+     *
+     * @return array
+     */
+    protected function checkFieldsMapping($type, array $data)
+    {
+        foreach ($this->mapper->getFieldsName($type) as $field) {
+            if ($this->validator) {
+                $this->checkNullable($type, $field, $data);
+            }
+            if ($fixedValue = $this->mapper->getFixedFieldMapping($type, $field)) {
+                $data = array_merge($data, $fixedValue);
+            }
+        }
+
+        return $data;
     }
 
     /**
