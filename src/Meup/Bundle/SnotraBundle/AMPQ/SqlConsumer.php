@@ -58,7 +58,7 @@ class SqlConsumer implements ConsumerInterface
         DataTransformerInterface $transformer,
         PersisterInterface $persister,
         SerializerInterface $serializer,
-        LoggerInterface $logger,
+        LoggerInterface $logger = null,
         array $ignoredTypes = array(),
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
@@ -89,16 +89,18 @@ class SqlConsumer implements ConsumerInterface
                 $this->format
             );
 
-        // log message
-        $this
-            ->logger
-            ->info(
-                'Message received from SQL Consumer',
-                array(
-                    'type' => $message->getType(),
-                    'data' => $message->getData()
-                )
-            );
+        if ($this->logger) {
+            // log message
+            $this
+                ->logger
+                ->info(
+                    'Message received from SQL Consumer',
+                    array(
+                        'type' => $message->getType(),
+                        'data' => $message->getData()
+                    )
+                );
+        }
 
         // return true consume message
         if (in_array(strtolower($message->getType()), $this->ignoredTypes)) {
@@ -115,27 +117,31 @@ class SqlConsumer implements ConsumerInterface
             );
             $this->persister->persist($data);
         } catch (InvalidArgumentException $e) {
-            $this
-                ->logger
-                ->warning(
-                    'Message not valid',
-                    array(
-                        'type'      => $message->getType(),
-                        'data'      => $message->getData(),
-                        'exception' => $e
-                    )
-                );
+            if ($this->logger) {
+                $this
+                    ->logger
+                    ->warning(
+                        'Message not valid',
+                        array(
+                            'type'      => $message->getType(),
+                            'data'      => $message->getData(),
+                            'exception' => $e
+                        )
+                    );
+            }
         } catch (Exception $e) {
-            $this
-                ->logger
-                ->error(
-                    'Exception in SQL Consumer',
-                    array(
-                        'type'      => $message->getType(),
-                        'data'      => $message->getData(),
-                        'exception' => $e
-                    )
-                );
+            if ($this->logger) {
+                $this
+                    ->logger
+                    ->error(
+                        'Exception in SQL Consumer',
+                        array(
+                            'type'      => $message->getType(),
+                            'data'      => $message->getData(),
+                            'exception' => $e
+                        )
+                    );
+            }
             throw $e;
         }
 
