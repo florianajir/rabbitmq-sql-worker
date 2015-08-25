@@ -1,13 +1,11 @@
 <?php
-
 namespace Meup\Bundle\SnotraBundle\AMPQ;
 
 use JMS\Serializer\Serializer;
-use PhpAmqpLib\Message\AMQPMessage;
-use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\IndexerInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactoryInterface;
 use Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface;
+use Meup\Bundle\SnotraBundle\ElasticSearch\IndexerInterface;
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
+use PhpAmqpLib\Message\AMQPMessage;
 
 /**
  *
@@ -35,10 +33,10 @@ class ElasticSearchConsumer implements ConsumerInterface
 
     /**
      * @param IndexDictionaryInterface $indices
-     * @param IndexerInterface $indexer
-     * @param Serializer $serializer
-     *
-     * @return void
+     * @param IndexerInterface         $indexer
+     * @param Serializer               $serializer
+     * @param string                   $msgClass
+     * @param string                   $format
      */
     public function __construct(
         IndexDictionaryInterface $indices,
@@ -46,12 +44,13 @@ class ElasticSearchConsumer implements ConsumerInterface
         Serializer $serializer,
         $msgClass = self::DEFAULT_MESSAGE_CLASS,
         $format = self::JSON_FORMAT
-    ) {
-        $this->indices    = $indices;
-        $this->indexer    = $indexer;
+    )
+    {
+        $this->indices = $indices;
+        $this->indexer = $indexer;
         $this->serializer = $serializer;
-        $this->msgClass   = $msgClass;
-        $this->format     = $format;
+        $this->msgClass = $msgClass;
+        $this->format = $format;
 
         /* @toDo check if $this->msgClass implements AMPQMessageInterface */
     }
@@ -59,7 +58,7 @@ class ElasticSearchConsumer implements ConsumerInterface
     /**
      * @param AMQPMessage $message
      *
-     * @return void
+     * @return boolean Execution status (true if everything's of, false if message should be re-queued)
      */
     public function execute(AMQPMessage $message)
     {
@@ -72,25 +71,20 @@ class ElasticSearchConsumer implements ConsumerInterface
                 $this->format
             )
         ;
-        if(strtolower($message->getType()) == "locale") {//for no search index Locale
-            return true;
-        } else {
+
+        if (strtolower($message->getType()) !== "locale") { //for no search index Locale
             $index = strtolower($message->getIndex());
-            if($this->indices[$index]) {
+            if ($this->indices[$index]) {
                 $this
                     ->indexer
                     ->execute($this->indices[$index], $message);
             } else {
+                //TODO Exception (Unfound ES) + log instead of print_r
                 print_r($this->indices);
             }
         }
-        /* index the object in each defined ElasticSearch indinces */
-        /*foreach ($this->indices as $index) {
-            $this
-                ->indexer
-                ->execute($index, $message)
-            ;
-        }
-        */
+
+        return true;
     }
+
 }

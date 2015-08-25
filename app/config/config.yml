@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: bundles.yml }
     - { resource: security.yml }
+    - { resource: mapping.yml }
 
 framework:
     #esi:             ~
@@ -50,3 +51,11 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8

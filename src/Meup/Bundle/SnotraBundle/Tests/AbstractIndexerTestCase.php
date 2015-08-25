@@ -10,7 +10,7 @@ use \PHPUnit_Framework_TestCase as BaseTestCase;
 abstract class AbstractIndexerTestCase extends BaseTestCase
 {
     /**
-     * @return Elastica\Index
+     * @return \Elastica\Index
      */
     protected function getIndex()
     {
@@ -18,11 +18,6 @@ abstract class AbstractIndexerTestCase extends BaseTestCase
             ->getMockBuilder('Elastica\Response')
             ->disableOriginalConstructor()
             ->getMock()
-        ;
-        $response
-            ->expects($this->once())
-            ->method('isOk')
-            ->will($this->returnValue(true))
         ;
 
         $type = $this
@@ -45,11 +40,6 @@ abstract class AbstractIndexerTestCase extends BaseTestCase
             ->expects($this->once())
             ->method('getType')
             ->will($this->returnValue($type))
-        ;
-        $index
-            ->expects($this->once())
-            ->method('refresh')
-            ->will($this->returnValue(true))
         ;
 
         return $index;

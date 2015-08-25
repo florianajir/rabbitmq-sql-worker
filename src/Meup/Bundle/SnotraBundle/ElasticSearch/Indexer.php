@@ -3,9 +3,7 @@
 namespace Meup\Bundle\SnotraBundle\ElasticSearch;
 
 use Elastica\Index;
-use Elastica\Exception\NotFoundException;
 use Meup\DataStructure\Message\AMPQMessageInterface;
-use Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactoryInterface;
 
 /**
  *
@@ -25,8 +23,6 @@ class Indexer implements IndexerInterface
     /**
      * @param DocumentFactoryInterface $documentFactory
      * @param boolean $autoRefresh
-     *
-     * @return void
      */
     public function __construct(DocumentFactoryInterface $documentFactory, $autoRefresh = true)
     {

@@ -10,6 +10,19 @@ parameters:
     meup_snotra.elastica_document.factory.class:            Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory
     meup_snotra.elastica_document.class:                    Meup\Bundle\SnotraBundle\ElasticSearch\Document
     meup_snotra.elastica_indexer.class:                     Meup\Bundle\SnotraBundle\ElasticSearch\Indexer
+    meup_snotra.sql_consumer.class:                         Meup\Bundle\SnotraBundle\AMPQ\SqlConsumer
+    meup_snotra.sql_provider.class:                         Meup\Bundle\SnotraBundle\Provider\SqlProvider
+    meup_snotra.data_transformer.class:                     Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer
+    meup_snotra.data_validator.class:                       Meup\Bundle\SnotraBundle\DataValidator\DataValidator
+    meup_snotra.data_mapper.class:                          Meup\Bundle\SnotraBundle\DataMapper\DataMapper
+    meup_snotra.persister.class:                            Meup\Bundle\SnotraBundle\Persister\Persister
+    meup_snotra.entity.class:                               Meup\Bundle\SnotraBundle\Model\Entity
+    meup_snotra.entity_factory.class:                       Meup\Bundle\SnotraBundle\Factory\EntityFactory
+    meup_snotra.one_to_one_relation.class:                  Meup\Bundle\SnotraBundle\Model\OneToOneRelation
+    meup_snotra.one_to_many_relation.class:                 Meup\Bundle\SnotraBundle\Model\OneToManyRelation
+    meup_snotra.many_to_one_relation.class:                 Meup\Bundle\SnotraBundle\Model\ManyToOneRelation
+    meup_snotra.many_to_many_relation.class:                Meup\Bundle\SnotraBundle\Model\ManyToManyRelation
+    meup_snotra.relation_factory.class:                     Meup\Bundle\SnotraBundle\Factory\RelationFactory
 
 services:
 
@@ -51,3 +64,52 @@ services:
             - @meup_snotra.elastica_index.dictionary
             - @meup_snotra.elastica_indexer
             - @jms_serializer
+
+    meup_snotra.sql_consumer:
+        class: %meup_snotra.sql_consumer.class%
+        arguments:
+            - @meup_snotra.data_transformer
+            - @meup_snotra.persister
+            - @jms_serializer
+            - @logger
+            - %ignored_message_types%
+
+    meup_snotra.sql_provider:
+        class: %meup_snotra.sql_provider.class%
+        arguments:
+            - @database_connection
+            - %kernel.environment%
+
+    meup_snotra.data_transformer:
+        class: %meup_snotra.data_transformer.class%
+        arguments:
+            - @meup_snotra.data_mapper
+            - @meup_snotra.data_validator
+
+    meup_snotra.data_validator:
+        class: %meup_snotra.data_validator.class%
+
+    meup_snotra.data_mapper:
+        class: %meup_snotra.data_mapper.class%
+        arguments:
+            - %mapping%
+
+    meup_snotra.persister:
+        class: %meup_snotra.persister.class%
+        arguments:
+            - @meup_snotra.sql_provider
+            - @meup_snotra.entity_factory
+            - @meup_snotra.relation_factory
+
+    meup_snotra.entity_factory:
+        class: %meup_snotra.entity_factory.class%
+        arguments:
+            - %meup_snotra.entity.class%
+
+    meup_snotra.relation_factory:
+        class: %meup_snotra.relation_factory.class%
+        arguments:
+            - %meup_snotra.one_to_one_relation.class%
+            - %meup_snotra.one_to_many_relation.class%
+            - %meup_snotra.many_to_one_relation.class%
+            - %meup_snotra.many_to_many_relation.class%
