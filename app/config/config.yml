@@ -60,3 +60,4 @@ doctrine:
         password: %database_password%
         charset:  UTF8
         host:     %database_host%
+        port:     %database_port%
