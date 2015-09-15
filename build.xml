@@ -150,12 +150,12 @@
 
     <target name="phpmd"
             description="Look for several potential problems">
-        <phpmd dir="./src"/>
+        <phpmd file="./src"/>
     </target>
 
     <target name="ci:phpmd"
             description="Look for several potential problems">
-        <phpmd dir="./src">
+        <phpmd file="./src">
             <formatter type="xml" outfile="${builddir}/reports/pmd.xml"/>
         </phpmd>
     </target>
@@ -167,6 +167,7 @@
             <fileset dir=".">
                 <exclude name="vendor/"/>
                 <include name="src/**/*.php"/>
+                <exclude name="app/cache/"/>
             </fileset>
         </phpcpd>
     </target>
@@ -178,6 +179,7 @@
             <fileset dir=".">
                 <exclude name="vendor/"/>
                 <include name="**/*.php"/>
+                <exclude name="app/cache/"/>
             </fileset>
             <formatter type="pmd" outfile="${builddir}/reports/cpd.xml"/>
         </phpcpd>
