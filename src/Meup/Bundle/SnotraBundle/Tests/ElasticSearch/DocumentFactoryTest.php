@@ -31,6 +31,6 @@ class DocumentFactoryTest extends BaseTestCase
     {
         $this->setExpectedException('\InvalidArgumentException');
 
-        $factory = new DocumentFactory('\stdClass');
+        new DocumentFactory('\stdClass');
     }
 }

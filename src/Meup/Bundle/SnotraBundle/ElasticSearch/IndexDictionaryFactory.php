@@ -1,9 +1,11 @@
 <?php
-
 namespace Meup\Bundle\SnotraBundle\ElasticSearch;
 
+use InvalidArgumentException;
+use ReflectionClass;
+
 /**
- * 
+ *
  */
 class IndexDictionaryFactory implements IndexDictionaryFactoryInterface
 {
@@ -20,20 +22,19 @@ class IndexDictionaryFactory implements IndexDictionaryFactoryInterface
     private $index;
 
     /**
-     * @param string $class
      * @param string $indexClassName
+     * @param string $class
      *
      * @throws InvalidArgumentException
-     * @return void
      */
-    public function __construct($class = self::DEFAULT_CLASS, $indexClassName)
+    public function __construct($indexClassName, $class = self::DEFAULT_CLASS)
     {
         $interface   = 'Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface';
-        $this->class = new \ReflectionClass($class);
+        $this->class = new ReflectionClass($class);
         $this->index = $indexClassName;
 
         if (!$this->class->implementsInterface($interface)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     "'%s' should impelments %s",
                     $this->class->getName(),

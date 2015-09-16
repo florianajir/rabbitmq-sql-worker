@@ -64,136 +64,105 @@ class PersisterTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->data = array (
-            'user' =>
-                array (
-                    '_identifier' => 'sku',
-                    'id' => '1',
-                    'sku' => 'sku_user',
-                    'name' => 'toto',
-                    '_related' =>
-                        array (
-                            'manyToOne' =>
-                                array (
-                                    'Address' =>
-                                        array (
-                                            '_relation' =>
-                                                array (
-                                                    'targetEntity' => 'Address',
-                                                    'joinColumn' =>
-                                                        array (
-                                                            'name' => 'address_id',
-                                                            'referencedColumnName' => 'id',
-                                                        ),
-                                                    'table' => 'address',
-                                                ),
-                                            '_data' =>
-                                                array (
-                                                    'address' =>
-                                                        array (
-                                                            '_identifier' => 'sku',
-                                                            'sku' => '1',
-                                                            'postal_code' => '34000',
-                                                            'city' => 'Montpellier',
-                                                        ),
-                                                ),
-                                        ),
+        $this->data = array(
+            'user' => array(
+                'id' => '1',
+                'sku' => 'sku_user',
+                'name' => 'toto',
+                '_related' => array(
+                    'manyToOne' => array(
+                        'Address' => array(
+                            '_relation' => array(
+                                'targetEntity' => 'Address',
+                                'joinColumn' => array(
+                                    'name' => 'address_id',
+                                    'referencedColumnName' => 'id',
                                 ),
-                            'oneToOne' =>
-                                array (
-                                    'Customer' =>
-                                        array (
-                                            '_relation' =>
-                                                array (
-                                                    'targetEntity' => 'Customer',
-                                                    'joinColumn' =>
-                                                        array (
-                                                            'name' => 'customer_id',
-                                                            'referencedColumnName' => 'id',
-                                                        ),
-                                                    'table' => 'customer',
-                                                ),
-                                            '_data' =>
-                                                array (
-                                                    'customer' =>
-                                                        array (
-                                                            '_identifier' => 'sku',
-                                                            'sku' => '1',
-                                                            'email' => 'foo@bar.com',
-                                                            'last_purchased' => '2015-06-26T22:22:00+0200',
-                                                        ),
-                                                ),
-                                        ),
+                                'table' => 'address',
+                            ),
+                            '_data' => array(
+                                'address' => array(
+                                    '_identifier' => 'sku',
+                                    'sku' => '1',
+                                    'postal_code' => '34000',
+                                    'city' => 'Montpellier',
                                 ),
-                            'manyToMany' =>
-                                array (
-                                    'Group' =>
-                                        array (
-                                            '_relation' =>
-                                                array (
-                                                    'targetEntity' => 'Group',
-                                                    'joinTable' =>
-                                                        array (
-                                                            'name' => 'users_groups',
-                                                            'joinColumn' =>
-                                                                array (
-                                                                    'name' => 'user_id',
-                                                                    'referencedColumnName' => 'id',
-                                                                ),
-                                                            'inverseJoinColumn' =>
-                                                                array (
-                                                                    'name' => 'group_id',
-                                                                    'referencedColumnName' => 'id',
-                                                                ),
-                                                        ),
-                                                    'table' => 'groups',
-                                                ),
-                                            '_data' =>
-                                                array (
-                                                    0 =>
-                                                        array (
-                                                            'groups' =>
-                                                                array (
-                                                                    '_identifier' => 'sku',
-                                                                    'sku' => '0123456789azerty',
-                                                                    'created_at' => '2015-06-01T22:22:00+0200',
-                                                                ),
-                                                        ),
-                                                ),
-                                        ),
-                                ),
-                            'oneToMany' =>
-                                array (
-                                    'User' =>
-                                        array (
-                                            '_relation' =>
-                                                array (
-                                                    'targetEntity' => 'User',
-                                                    'joinColumn' =>
-                                                        array (
-                                                            'name' => 'parent_id',
-                                                            'referencedColumnName' => 'id',
-                                                        ),
-                                                    'table' => 'user',
-                                                ),
-                                            '_data' =>
-                                                array (
-                                                    0 =>
-                                                        array (
-                                                            'user' =>
-                                                                array (
-                                                                    '_identifier' => 'sku',
-                                                                    'id' => '2',
-                                                                    'sku' => 'azertyuiopqsdfgh',
-                                                                    'name' => 'riri',
-                                                                    'created_at' => '2015-06-01T22:22:00+0200',
-                                                                ),
-                                                        ),
-                                                ),
-                                        ),
-                                ),
+                            ),
                         ),
+                    ),
+                    'oneToOne' => array(
+                        'Customer' => array(
+                            '_relation' => array(
+                                'targetEntity' => 'Customer',
+                                'joinColumn' => array(
+                                    'name' => 'customer_id',
+                                    'referencedColumnName' => 'id',
+                                ),
+                                'table' => 'customer',
+                            ),
+                            '_data' => array(
+                                'customer' => array(
+                                    '_identifier' => 'sku',
+                                    'sku' => '1',
+                                    'email' => 'foo@bar.com',
+                                    'last_purchased' => '2015-06-26T22:22:00+0200',
+                                ),
+                            ),
+                        ),
+                    ),
+                    'manyToMany' => array(
+                        'Group' => array(
+                            '_relation' => array(
+                                'targetEntity' => 'Group',
+                                'joinTable' => array(
+                                    'name' => 'users_groups',
+                                    'joinColumn' => array(
+                                        'name' => 'user_id',
+                                        'referencedColumnName' => 'id',
+                                    ),
+                                    'inverseJoinColumn' => array(
+                                        'name' => 'group_id',
+                                        'referencedColumnName' => 'id',
+                                    ),
+                                ),
+                                'table' => 'groups',
+                            ),
+                            '_data' => array(
+                                0 => array(
+                                    'groups' => array(
+                                        '_identifier' => 'sku',
+                                        'sku' => '0123456789azerty',
+                                        'created_at' => '2015-06-01T22:22:00+0200',
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    'oneToMany' => array(
+                        'User' => array(
+                            '_relation' => array(
+                                'targetEntity' => 'User',
+                                'joinColumn' => array(
+                                    'name' => 'parent_id',
+                                    'referencedColumnName' => 'id',
+                                ),
+                                'table' => 'user',
+                            ),
+                            '_data' => array(
+                                0 => array(
+                                    'user' => array(
+                                        '_identifier' => 'sku',
+                                        'id' => '2',
+                                        'sku' => 'azertyuiopqsdfgh',
+                                        'name' => 'riri',
+                                        'created_at' => '2015-06-01T22:22:00+0200',
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
+            ),
         );
     }
 }

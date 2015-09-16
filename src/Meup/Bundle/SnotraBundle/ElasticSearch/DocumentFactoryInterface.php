@@ -11,7 +11,7 @@ interface DocumentFactoryInterface
      * @param mixed $id
      * @param mixed $object
      *
-     * @return 
+     * @return object
      */
     public function create($id, $object);
 }

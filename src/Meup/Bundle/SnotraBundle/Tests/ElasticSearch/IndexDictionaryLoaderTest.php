@@ -16,7 +16,7 @@ class IndexDictionaryLoaderTest extends BaseTestCase
      */
     public function testLoad()
     {
-        $factory = new IndexDictionaryFactory(IndexDictionaryFactory::DEFAULT_CLASS, null);
+        $factory = new IndexDictionaryFactory(null, IndexDictionaryFactory::DEFAULT_CLASS);
         $client  = $this->getMock('Elastica\Client', array('getIndex'));
         $client
             ->expects($this->any())

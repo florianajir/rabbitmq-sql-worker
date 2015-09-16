@@ -42,10 +42,12 @@ class ManyToManyRelation extends AbstractRelation implements RelationInterface
         $this->joinTableName = $joinTable[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
         $joinColumn = $joinTable[DataMapper::RELATION_KEY_JOIN_COLUMN];
         $this->joinColumnName = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
-        $this->joinColumnReferencedColumnName = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
+        $this->joinColumnReferencedColumnName =
+            $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
         $inverseJoinColumn = $joinTable[DataMapper::RELATION_KEY_INVERSE_JOIN_COLUMN];
         $this->inverseJoinColumnName = $inverseJoinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
-        $this->inverseJoinColumnReferencedColumnName = $inverseJoinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
+        $this->inverseJoinColumnReferencedColumnName =
+            $inverseJoinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
         $this->entities = $data[DataTransformer::RELATED_DATA_KEY];
     }
 

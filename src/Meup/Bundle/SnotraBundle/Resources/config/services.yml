@@ -34,8 +34,8 @@ services:
     meup_snotra.elastica_index.dictionary_factory:
         class: %meup_snotra.elastica_index.dictionary_factory.class%
         arguments:
-            - %meup_snotra.elastica_index.dictionary.class%
             - %meup_snotra.elastica_index.class%
+            - %meup_snotra.elastica_index.dictionary.class%
 
     meup_snotra.elastica_index.dictionary_loader:
         class: %meup_snotra.elastica_index.dictionary_loader.class%
