@@ -22,7 +22,7 @@ class IndexerTest extends AbstractIndexerTestCase
             ->setData(array(uniqid()))
         ;
 
-        $result = $indexer->execute($this->getIndex(), $message);
+        $indexer->execute($this->getIndex(), $message);
         //FIXME Response returned instead of boolean return type of interface
 //        $this->assertTrue($result);
     }

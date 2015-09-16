@@ -46,5 +46,4 @@ abstract class AbstractRelation implements RelationInterface
     {
         return $this->joinColumnReferencedColumnName;
     }
-
 }

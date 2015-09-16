@@ -44,7 +44,7 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
 
             // Define mapping
             $mapping = new Mapping();
-            foreach($config['params'] as $name => $value) {
+            foreach ($config['params'] as $name => $value) {
                 $mapping->setParam($name, $value);
             }
             $mapping

@@ -17,7 +17,7 @@ class IndexDictionaryFactoryTest extends BaseTestCase
     {
         $this->setExpectedException('\InvalidArgumentException');
 
-        $factory = new IndexDictionaryFactory('\stdClass', '\stdClass');
+        new IndexDictionaryFactory('\stdClass', '\stdClass');
     }
 
     /**
@@ -25,7 +25,7 @@ class IndexDictionaryFactoryTest extends BaseTestCase
      */
     public function testCreate()
     {
-        $factory = new IndexDictionaryFactory(IndexDictionaryFactory::DEFAULT_CLASS, '\stdClass');
+        $factory = new IndexDictionaryFactory('\stdClass', IndexDictionaryFactory::DEFAULT_CLASS);
 
         $this->assertInstanceOf(IndexDictionaryFactory::DEFAULT_CLASS, $factory->create());
     }

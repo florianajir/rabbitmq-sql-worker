@@ -31,7 +31,7 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
      * @param Index $index
      * @param OutputInterface $output
      * @param boolean $force
-     * 
+     *
      * @return void
      */
     private function create(Index $index, OutputInterface $output, $force = false)
@@ -57,7 +57,7 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
      * @param Index $index
      * @param InputInterface $input
      * @param OutputInterface $output
-     * 
+     *
      * @return void
      */
     private function show(Index $index, InputInterface $input, OutputInterface $output)
@@ -94,14 +94,12 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         ;
         $index_name = $input->getArgument('index');
         $action     = $input->getArgument('action');
-        $index      = $indices->offsetExists($index_name) 
-                    ? $indices
-                        ->offsetGet($index_name)
-                    : $this
-                        ->getContainer()
-                        ->get('meup_snotra.elastica_client')
-                        ->getIndex($index_name)
-        ;
+        $index = $indices->offsetExists($index_name) ?
+            $indices->offsetGet($index_name) :
+            $this
+                ->getContainer()
+                ->get('meup_snotra.elastica_client')
+                ->getIndex($index_name);
 
         switch ($action) {
             case 'create':
