@@ -16,6 +16,8 @@ class DataTransformer implements DataTransformerInterface
     const RELATED_RELATION_KEY = '_relation';
     const RELATED_DATA_KEY = '_data';
     const IDENTIFIER_KEY = '_identifier';
+    const DISCRIMINATOR_KEY = '_discriminator';
+    const TABLE_KEY = '_table';
 
     /**
      * @var DataMapperInterface
@@ -52,7 +54,7 @@ class DataTransformer implements DataTransformerInterface
         $prepared = array();
         if ($tableName = $this->mapper->getTableName($type)) {
             $data = $this->prepareData($type, $data);
-            $prepared[$tableName] = $this->checkFieldsMapping($type, $data);
+            $prepared[$type] = $this->checkFieldsMapping($type, $data);
         }
 
         return $prepared;
@@ -71,6 +73,12 @@ class DataTransformer implements DataTransformerInterface
             $fieldMapping = $this->mapper->getFieldMapping($type, $field);
             $relation = $this->mapper->getRelation($type, $field);
             $prepared[self::IDENTIFIER_KEY] = $this->mapper->getIdentifier($type);
+            if ($tableName = $this->mapper->getTableName($type)) {
+                $prepared[self::TABLE_KEY] = $tableName;
+            }
+            if ($discr = $this->mapper->getDiscriminator($type)) {
+                $prepared[self::DISCRIMINATOR_KEY] = $discr;
+            }
             if (!empty($fieldMapping)) {
                 $this->prepareField($prepared, $type, $field, $value);
             } elseif ($relation) {
@@ -138,8 +146,7 @@ class DataTransformer implements DataTransformerInterface
         if ($relationInfos) {
             $collection = $this->mapper->isCollection($relation);
             $targetEntity = $this->mapper->getTargetEntity($type, $field, $relation);
-            $linkedTableName = $this->mapper->getTableName($targetEntity);
-            $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_RELATION_KEY] = $relationInfos;
+            $prepared[self::RELATED_KEY][$relation][$targetEntity][self::RELATED_RELATION_KEY] = $relationInfos;
             $relatedData = array();
             if ($collection) {
                 foreach ($data as $element) {
@@ -148,7 +155,7 @@ class DataTransformer implements DataTransformerInterface
             } else {
                 $relatedData = $this->prepare($targetEntity, $data);
             }
-            $prepared[self::RELATED_KEY][$relation][$linkedTableName][self::RELATED_DATA_KEY] = $relatedData;
+            $prepared[self::RELATED_KEY][$relation][$targetEntity][self::RELATED_DATA_KEY] = $relatedData;
         }
 
         return $prepared;

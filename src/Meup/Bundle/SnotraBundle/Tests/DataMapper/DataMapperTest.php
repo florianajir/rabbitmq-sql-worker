@@ -216,6 +216,19 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testGetDiscriminator()
+    {
+        $mapper = new DataMapper($this->mapping);
+        $expected = 'dtype';
+        $this->assertEquals(
+            $expected,
+            $mapper->getDiscriminator('Supplier')
+        );
+    }
+
+    /**
      * Sets up the fixture
      */
     protected function setUp()
@@ -241,6 +254,17 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
                         'type' => 'string',
                         'nullable' => false,
                     ),
+                ),
+            ),
+            'Supplier' => array(
+                'discriminator' => 'dtype',
+                'fields' => array(
+                    'sku' => array(
+                        'column' => 'identifier',
+                        'length' => 23,
+                        'type' => 'string',
+                        'nullable' => false,
+                    )
                 ),
             ),
             'User' => array(

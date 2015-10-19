@@ -4,6 +4,7 @@ namespace Meup\Bundle\SnotraBundle\Tests\Persister;
 use Meup\Bundle\SnotraBundle\Factory\EntityFactory;
 use Meup\Bundle\SnotraBundle\Factory\RelationFactory;
 use Meup\Bundle\SnotraBundle\Persister\Persister;
+use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -26,6 +27,24 @@ class PersisterTest extends PHPUnit_Framework_TestCase
      */
     public function testPersister()
     {
+        $provider = $this->getProvider();
+        $entityFactory = new EntityFactory('Meup\Bundle\SnotraBundle\Model\Entity');
+        $relationFactory = new RelationFactory(
+            'Meup\Bundle\SnotraBundle\Model\OneToOneRelation',
+            'Meup\Bundle\SnotraBundle\Model\OneToManyRelation',
+            'Meup\Bundle\SnotraBundle\Model\ManyToOneRelation',
+            'Meup\Bundle\SnotraBundle\Model\ManyToManyRelation'
+        );
+
+        $persister = new Persister($provider, $entityFactory, $relationFactory);
+        $persister->persist($this->data);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ProviderInterface
+     */
+    private function getProvider()
+    {
         $provider = $this->getMock('Meup\Bundle\SnotraBundle\Provider\ProviderInterface');
         $provider
             ->expects($this->any())
@@ -47,16 +66,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
             ->method('delete')
             ->will($this->returnValue('1'))
         ;
-        $entityFactory = new EntityFactory('Meup\Bundle\SnotraBundle\Model\Entity');
-        $relationFactory = new RelationFactory(
-            'Meup\Bundle\SnotraBundle\Model\OneToOneRelation',
-            'Meup\Bundle\SnotraBundle\Model\OneToManyRelation',
-            'Meup\Bundle\SnotraBundle\Model\ManyToOneRelation',
-            'Meup\Bundle\SnotraBundle\Model\ManyToManyRelation'
-        );
 
-        $persister = new Persister($provider, $entityFactory, $relationFactory);
-        $persister->persist($this->data);
+        return $provider;
     }
 
     /**
@@ -69,6 +80,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                 'id' => '1',
                 'sku' => 'sku_user',
                 'name' => 'toto',
+                '_table' => 'user',
                 '_related' => array(
                     'manyToOne' => array(
                         'Address' => array(
@@ -81,7 +93,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                                 'table' => 'address',
                             ),
                             '_data' => array(
-                                'address' => array(
+                                'Address' => array(
+                                    '_table' => 'address',
                                     '_identifier' => 'sku',
                                     'sku' => '1',
                                     'postal_code' => '34000',
@@ -101,7 +114,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                                 'table' => 'customer',
                             ),
                             '_data' => array(
-                                'customer' => array(
+                                'Customer' => array(
+                                    '_table' => 'customer',
                                     '_identifier' => 'sku',
                                     'sku' => '1',
                                     'email' => 'foo@bar.com',
@@ -129,7 +143,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                             ),
                             '_data' => array(
                                 0 => array(
-                                    'groups' => array(
+                                    'Group' => array(
+                                        '_table' => 'groups',
                                         '_identifier' => 'sku',
                                         'sku' => '0123456789azerty',
                                         'created_at' => '2015-06-01T22:22:00+0200',
@@ -150,7 +165,8 @@ class PersisterTest extends PHPUnit_Framework_TestCase
                             ),
                             '_data' => array(
                                 0 => array(
-                                    'user' => array(
+                                    'User' => array(
+                                        '_table' => 'user',
                                         '_identifier' => 'sku',
                                         'id' => '2',
                                         'sku' => 'azertyuiopqsdfgh',

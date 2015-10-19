@@ -54,8 +54,8 @@ class Persister implements PersisterInterface
      */
     public function persist(array $data)
     {
-        foreach ($data as $table => $infos) {
-            $entity = $this->entityFactory->create($table, $infos);
+        foreach ($data as $infos) {
+            $entity = $this->entityFactory->create($infos);
             $this->persistRecursive($entity);
         }
     }
@@ -98,7 +98,7 @@ class Persister implements PersisterInterface
         $relations = $entity->getOneToOneRelations();
         foreach ($relations as $relation) {
             $oneToOne = $this->relationFactory->create(DataMapper::RELATION_ONE_TO_ONE, $relation);
-            $entity = $this->entityFactory->create($oneToOne->getTable(), $oneToOne->getEntity());
+            $entity = $this->entityFactory->create($oneToOne->getEntity());
             $id = $this->persistRecursive($entity);
             $joinVal = $entity->getProperty($oneToOne->getJoinColumnReferencedColumnName());
             $joinData[$oneToOne->getJoinColumnName()] = !is_null($joinVal)
@@ -129,7 +129,7 @@ class Persister implements PersisterInterface
         $relations = $entity->getManyToOneRelations();
         foreach ($relations as $relation) {
             $manyToOne = $this->relationFactory->create(DataMapper::RELATION_MANY_TO_ONE, $relation);
-            $entity = $this->entityFactory->create($manyToOne->getTable(), $manyToOne->getEntity());
+            $entity = $this->entityFactory->create($manyToOne->getEntity());
             $id = $this->persistRecursive($entity);
             $joinVal = $entity->getProperty($manyToOne->getJoinColumnReferencedColumnName());
             $joinData[$manyToOne->getJoinColumnName()] = !is_null($joinVal)
@@ -184,10 +184,7 @@ class Persister implements PersisterInterface
             }
 
             foreach ($oneToMany->getEntities() as $childData) {
-                $child = $this->entityFactory->create(
-                    $oneToMany->getTable(),
-                    $childData[$oneToMany->getTable()]
-                );
+                $child = $this->entityFactory->create($childData[$oneToMany->getEntityName()]);
                 $joinData = array($oneToMany->getJoinColumnName() => $foreignValue);
                 foreach ($oneToMany->getReferences() as $field => $reference) {
                     $referenceValue = $this->provider->getColumnValueWhere(
@@ -236,10 +233,7 @@ class Persister implements PersisterInterface
             //delete joins before loop
             $this->provider->delete($manyToMany->getJoinTableName(), $joinData);
             foreach ($manyToMany->getEntities() as $childData) {
-                $child = $this->entityFactory->create(
-                    $manyToMany->getTable(),
-                    $childData[$manyToMany->getTable()]
-                );
+                $child = $this->entityFactory->create($childData[$manyToMany->getEntityName()]);
                 $this->persistRecursive($child);
                 $newJoinDataValue = $child->getProperty($manyToMany->getInverseJoinColumnReferencedColumnName());
                 $joinIdent = $child->getIdentifier();

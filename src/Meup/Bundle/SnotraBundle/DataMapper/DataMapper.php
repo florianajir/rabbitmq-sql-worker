@@ -17,6 +17,7 @@ class DataMapper implements DataMapperInterface
     const MAPPING_KEY_FIELDS = 'fields';
     const MAPPING_KEY_TYPE = 'type';
     const MAPPING_KEY_NULLABLE = 'nullable';
+    const MAPPING_KEY_DISCRIMINATOR = 'discriminator';
 
     const RELATION_ONE_TO_ONE = 'oneToOne';
     const RELATION_ONE_TO_MANY = 'oneToMany';
@@ -229,6 +230,21 @@ class DataMapper implements DataMapperInterface
         }
 
         return $tableName;
+    }
+
+    /**
+     * @param string $entity
+     *
+     * @return string|null
+     */
+    public function getDiscriminator($entity)
+    {
+        $discr = null;
+        if (isset($this->mapping[$entity][self::MAPPING_KEY_DISCRIMINATOR])) {
+            $discr = $this->mapping[$entity][self::MAPPING_KEY_DISCRIMINATOR];
+        }
+
+        return $discr;
     }
 
     /**

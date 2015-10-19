@@ -10,7 +10,34 @@ The entities to persist are defined by their input names under the parameters:ma
 
 ### table
 
-**Required**. The database table name where will have to save entity.
+**Required if no discriminator property**. The database table name where will have to save entity.
+
+### discriminator
+
+**Required if no table property**. The discriminator property (sometimes named dtype) is an optionnal mapping property which can be use instead of table property. 
+His role is to indicate in which table persist the entity depending upon column value.
+
+Example:
+
+```yaml
+# app/mapping.yml
+parameters:
+    mapping:
+        supplier:
+            discriminator: dtype
+```
+
+If snotra receive this message:
+
+```json
+{
+  "sku":"1234567",
+  "name": "naturamind",
+  "dtype":"brand"
+}
+```
+
+It will trigger an insert/update sql operation in the table named `brand`
 
 ### identifier
 

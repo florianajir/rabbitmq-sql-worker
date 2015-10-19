@@ -21,13 +21,13 @@ class OneToOneRelation extends AbstractRelation implements RelationInterface
      */
     public function __construct(array $data)
     {
+        parent::__construct($data);
         $relation = $data[DataTransformer::RELATED_RELATION_KEY];
-        $this->table = $relation[DataMapper::MAPPING_KEY_TABLE];
         $joinColumn = $relation[DataMapper::RELATION_KEY_JOIN_COLUMN];
         $this->joinColumnName = $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
         $this->joinColumnReferencedColumnName =
             $joinColumn[DataMapper::RELATION_KEY_JOIN_COLUMN_REFERENCED_COLUMN_NAME];
-        $this->entity = $data[DataTransformer::RELATED_DATA_KEY][$this->table];
+        $this->entity = $data[DataTransformer::RELATED_DATA_KEY][$this->entityName];
     }
 
     /**
