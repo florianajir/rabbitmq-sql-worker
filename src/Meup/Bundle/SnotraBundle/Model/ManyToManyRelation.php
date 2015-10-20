@@ -36,8 +36,8 @@ class ManyToManyRelation extends AbstractRelation implements RelationInterface
      */
     public function __construct(array $data)
     {
+        parent::__construct($data);
         $relation = $data[DataTransformer::RELATED_RELATION_KEY];
-        $this->table = $relation[DataMapper::MAPPING_KEY_TABLE];
         $joinTable = $relation[DataMapper::RELATION_KEY_JOIN_TABLE];
         $this->joinTableName = $joinTable[DataMapper::RELATION_KEY_JOIN_COLUMN_NAME];
         $joinColumn = $joinTable[DataMapper::RELATION_KEY_JOIN_COLUMN];

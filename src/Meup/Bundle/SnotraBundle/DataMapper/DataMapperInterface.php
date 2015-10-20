@@ -96,6 +96,13 @@ interface DataMapperInterface
     public function getTableName($entity);
 
     /**
+     * @param string $entity
+     *
+     * @return string|null
+     */
+    public function getDiscriminator($entity);
+
+    /**
      * @param string $container
      * @param string $entity
      * @param string $relation

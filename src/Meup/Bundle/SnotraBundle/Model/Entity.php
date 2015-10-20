@@ -1,6 +1,7 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Model;
 
+use InvalidArgumentException;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 
@@ -66,12 +67,10 @@ class Entity implements EntityInterface
     /**
      * Constructor, set the attributes from array
      *
-     * @param string $table table name
-     * @param array  $data  entity prepared data from DataTransformer
+     * @param array $data entity prepared data from DataTransformer
      */
-    public function __construct($table, array $data)
+    public function __construct(array $data)
     {
-        $this->table = $table;
         $this->identifier = null;
         if (array_key_exists(DataTransformer::IDENTIFIER_KEY, $data)) {
             $identifierKey = $data[DataTransformer::IDENTIFIER_KEY];
@@ -81,6 +80,21 @@ class Entity implements EntityInterface
                 );
             }
             unset($data[DataTransformer::IDENTIFIER_KEY]);
+        }
+        if (array_key_exists(DataTransformer::TABLE_KEY, $data)) {
+            $this->table = $data[DataTransformer::TABLE_KEY];
+            unset($data[DataTransformer::TABLE_KEY]);
+        }
+        if (array_key_exists(DataTransformer::DISCRIMINATOR_KEY, $data)) {
+            $discr = $data[DataTransformer::DISCRIMINATOR_KEY];
+            if (array_key_exists($discr, $data)) {
+                $this->table = $data[$discr];
+                unset($data[$discr]);
+            }
+            unset($data[DataTransformer::DISCRIMINATOR_KEY]);
+        }
+        if (!isset($this->table)) {
+            throw new InvalidArgumentException("Missing table or discriminator property in mapping");
         }
         $this->oneToOne = array();
         $this->manyToOne = array();

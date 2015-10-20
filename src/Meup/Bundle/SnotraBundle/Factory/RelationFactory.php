@@ -3,8 +3,10 @@ namespace Meup\Bundle\SnotraBundle\Factory;
 
 use InvalidArgumentException;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
+use Meup\Bundle\SnotraBundle\Model\ManyToManyRelation;
+use Meup\Bundle\SnotraBundle\Model\ManyToOneRelation;
+use Meup\Bundle\SnotraBundle\Model\OneToManyRelation;
 use Meup\Bundle\SnotraBundle\Model\OneToOneRelation;
-use Meup\Bundle\SnotraBundle\Model\RelationInterface;
 use ReflectionClass;
 
 /**
@@ -73,7 +75,7 @@ class RelationFactory implements RelationFactoryInterface
      * @param string $relation
      * @param array  $data
      *
-     * @return RelationInterface
+     * @return ManyToManyRelation|ManyToOneRelation|OneToManyRelation|OneToOneRelation
      *
      * @throws InvalidArgumentException
      */
@@ -104,36 +106,36 @@ class RelationFactory implements RelationFactoryInterface
      */
     protected function createOneToOne($data)
     {
-        return $this->oneToOneClass->newInstanceArgs(array($data));
+        return $this->oneToOneClass->newInstance($data);
     }
 
     /**
      * @param array $data
      *
-     * @return RelationInterface
+     * @return OneToManyRelation
      */
     protected function createOneToMany($data)
     {
-        return $this->oneToManyClass->newInstanceArgs(array($data));
+        return $this->oneToManyClass->newInstance($data);
     }
 
     /**
      * @param array $data
      *
-     * @return RelationInterface
+     * @return ManyToOneRelation
      */
     protected function createManyToOne($data)
     {
-        return $this->manyToOneClass->newInstanceArgs(array($data));
+        return $this->manyToOneClass->newInstance($data);
     }
 
     /**
      * @param array $data
      *
-     * @return RelationInterface
+     * @return ManyToManyRelation
      */
     protected function createManyToMany($data)
     {
-        return $this->manyToManyClass->newInstanceArgs(array($data));
+        return $this->manyToManyClass->newInstance($data);
     }
 }

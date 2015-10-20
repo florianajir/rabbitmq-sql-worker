@@ -50,13 +50,14 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
             'subscribe'  => '2015-01-02T09:00:00+0200'
         );
         $expected = array(
-            'users' => array(
+            'user' => array(
                 'id'          => '1',
                 'name'        => 'label_de_test',
                 'amount'      => '10.01',
                 'birthdate'   => '1989-11-10',
                 'created_at'  => '2015-01-02T09:00:00+0200',
-                '_identifier' => 'id'
+                '_identifier' => 'id',
+                '_table'      => 'users'
             )
         );
         $this->assertEquals($expected, $dataTransformer->prepare('user', $data));
@@ -126,12 +127,13 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
             )
         );
         $expected = array(
-            'users' => array(
+            'User' => array(
                 'sku'         => '1',
                 '_identifier' => 'sku',
+                '_table'      => 'users',
                 '_related'    => array(
                     'manyToOne' => array(
-                        'address' => array(
+                        'Address' => array(
                             '_relation' => array(
                                 'targetEntity' => 'Address',
                                 'joinColumn'   => array(
@@ -141,8 +143,9 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                                 'table'        => 'address'
                             ),
                             '_data'     => array(
-                                'address' => array(
+                                'Address' => array(
                                     '_identifier' => 'sku',
+                                    '_table'      => 'address',
                                     'sku'         => '2',
                                     'postal_code' => '34000',
                                     'city'        => 'Montpellier'
@@ -215,8 +218,8 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                         'Address' =>
                             array(
                                 'joinColumn'   => array(
-                                        'referencedColumnName' => 'id',
-                                        'name'                 => 'address_id',
+                                    'referencedColumnName' => 'id',
+                                    'name'                 => 'address_id',
                                 ),
                                 'targetEntity' => 'Address',
                             ),

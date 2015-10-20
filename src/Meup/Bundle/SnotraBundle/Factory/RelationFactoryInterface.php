@@ -1,6 +1,10 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Factory;
 
+use Meup\Bundle\SnotraBundle\Model\ManyToManyRelation;
+use Meup\Bundle\SnotraBundle\Model\ManyToOneRelation;
+use Meup\Bundle\SnotraBundle\Model\OneToManyRelation;
+use Meup\Bundle\SnotraBundle\Model\OneToOneRelation;
 use Meup\Bundle\SnotraBundle\Model\RelationInterface;
 
 /**
@@ -14,7 +18,7 @@ interface RelationFactoryInterface
      * @param string $relation
      * @param array $data
      *
-     * @return RelationInterface
+     * @return RelationInterface|ManyToManyRelation|ManyToOneRelation|OneToManyRelation|OneToOneRelation
      */
     public function create($relation, $data);
 }

@@ -11,10 +11,9 @@ use Meup\Bundle\SnotraBundle\Model\EntityInterface;
 interface EntityFactoryInterface
 {
     /**
-     * @param string $table
-     * @param array  $data
+     * @param array $data
      *
      * @return EntityInterface
      */
-    public function create($table, array $data);
+    public function create(array $data);
 }

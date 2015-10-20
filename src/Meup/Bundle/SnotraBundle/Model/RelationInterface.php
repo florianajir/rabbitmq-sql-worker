@@ -22,4 +22,9 @@ interface RelationInterface
      * @return string
      */
     public function getJoinColumnReferencedColumnName();
+
+    /**
+     * @return string
+     */
+    public function getEntityName();
 }

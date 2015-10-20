@@ -24,8 +24,8 @@ class EntityTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIdentifier()
     {
-        $entity = new Entity('user', $this->data);
-        $identifier = $entity->getIdentifier($this->data);
+        $entity = new Entity($this->data);
+        $identifier = $entity->getIdentifier();
         $this->assertEquals(array('sku' => 'sku_user'), $identifier);
     }
 
@@ -34,7 +34,7 @@ class EntityTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProperty()
     {
-        $entity = new Entity('user', $this->data);
+        $entity = new Entity($this->data);
         $sku = $entity->getProperty('sku');
         $this->assertEquals('sku_user', $sku);
     }
@@ -44,7 +44,25 @@ class EntityTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTable()
     {
-        $entity = new Entity('user', $this->data);
+        $entity = new Entity($this->data);
+        $table = $entity->getTable();
+        $this->assertEquals('user', $table);
+    }
+
+    /**
+     *
+     */
+    public function testGetTableWithDiscriminator()
+    {
+        $this->data = array(
+            '_identifier'    => 'sku',
+            '_discriminator' => 'dtype',
+            'id'             => '1',
+            'sku'            => 'sku_user',
+            'name'           => 'toto',
+            'dtype'          => 'user',
+        );
+        $entity = new Entity($this->data);
         $table = $entity->getTable();
         $this->assertEquals('user', $table);
     }
@@ -56,6 +74,7 @@ class EntityTest extends PHPUnit_Framework_TestCase
     {
         $this->data = array(
             '_identifier' => 'sku',
+            '_table'      => 'user',
             'id'          => '1',
             'sku'         => 'sku_user',
             'name'        => 'toto',

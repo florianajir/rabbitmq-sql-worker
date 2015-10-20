@@ -39,8 +39,8 @@ class EntityFactory implements EntityFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create($table, array $data)
+    public function create(array $data)
     {
-        return $this->class->newInstanceArgs(array($table, $data));
+        return $this->class->newInstance($data);
     }
 }
