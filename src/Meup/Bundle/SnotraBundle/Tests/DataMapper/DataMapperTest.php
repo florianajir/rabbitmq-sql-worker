@@ -229,6 +229,47 @@ class DataMapperTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testFieldLengthNotNumeric()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $mapper = new DataMapper(array(
+            'Test' => array(
+                'table' => 'test',
+                'fields' => array(
+                    'sku' => array(
+                        'column' => 'identifier',
+                        'length' => 'error'
+                    )
+                ),
+            )
+        ));
+        $mapper->getFieldMaxLength('Test', 'sku');
+    }
+
+    /**
+     *
+     */
+    public function testGetFixedFieldMapping()
+    {
+        $mapper = new DataMapper(array(
+            'Test' => array(
+                'table' => 'test',
+                'fields' => array(
+                    'sku' => array(
+                        'column' => 'identifier',
+                        'value' => '1234567'
+                    )
+                ),
+            )
+        ));
+        $fixedMapping = $mapper->getFixedFieldMapping('Test', 'sku');
+        $this->assertArrayHasKey('identifier', $fixedMapping);
+        $this->assertEquals('1234567', $fixedMapping['identifier']);
+    }
+
+    /**
      * Sets up the fixture
      */
     protected function setUp()
