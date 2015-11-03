@@ -85,14 +85,6 @@ class Entity implements EntityInterface
             $this->table = $data[DataTransformer::TABLE_KEY];
             unset($data[DataTransformer::TABLE_KEY]);
         }
-        if (array_key_exists(DataTransformer::DISCRIMINATOR_KEY, $data)) {
-            $discr = $data[DataTransformer::DISCRIMINATOR_KEY];
-            if (array_key_exists($discr, $data)) {
-                $this->table = $data[$discr];
-                unset($data[$discr]);
-            }
-            unset($data[DataTransformer::DISCRIMINATOR_KEY]);
-        }
         if (!isset($this->table)) {
             throw new InvalidArgumentException("Missing table or discriminator property in mapping");
         }

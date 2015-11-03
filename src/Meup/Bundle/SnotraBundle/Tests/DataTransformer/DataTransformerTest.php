@@ -4,6 +4,7 @@ namespace Meup\Bundle\SnotraBundle\Tests\DataTransformer;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 use Meup\Bundle\SnotraBundle\DataValidator\DataValidator;
+use Meup\Bundle\SnotraBundle\Model\Entity;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -158,6 +159,65 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
         );
         $result = $dataTransformer->prepare('User', $data);
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     *
+     */
+    public function testPrepareWithDiscriminator()
+    {
+        $mapper = new DataMapper(array(
+            'supplier' => array(
+                'discriminator' => 'dtype',
+                'fields'        => array(
+                    'sku' => array(
+                        'column' => 'sku',
+                        'type'   => 'string',
+                    )
+                )
+            )
+        ));
+        $dataTransformer = new DataTransformer($mapper);
+        $data = array(
+            'sku'   => '1234567',
+            'dtype' => 'brand'
+        );
+        $expected = array(
+            'supplier' => array(
+                'sku'  => '1234567',
+                '_table' => 'brand'
+            )
+        );
+        $result = $dataTransformer->prepare('supplier', $data);
+        $this->assertEquals($expected, $result);
+
+        $entity = new Entity($result['supplier']);
+        $this->assertEquals('brand', $entity->getTable());
+    }
+
+    /**
+     *
+     */
+    public function testValidateLengthExceed()
+    {
+        $mapper = new DataMapper(array(
+            'user' => array(
+                'table' => 'user',
+                'fields' => array(
+                    'sku' => array(
+                        'column' => 'sku',
+                        'type'   => 'string',
+                        'length'   => '7'
+                    )
+                )
+            )
+        ));
+        $dataTransformer = new DataTransformer($mapper, new DataValidator());
+        $data = array(
+            'sku'   => '12345678'
+        );
+        $this->setExpectedException('InvalidArgumentException');
+        $dataTransformer->prepare('user', $data);
     }
 
     /**
