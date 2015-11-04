@@ -2,12 +2,11 @@
 
 namespace Meup\Bundle\SnotraBundle\Command;
 
+use Elastica\Index;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Elastica\Index;
 
 /**
  *
@@ -29,12 +28,9 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
 
     /**
      * @param Index $index
-     * @param OutputInterface $output
-     * @param boolean $force
-     *
-     * @return void
+     * @param bool  $force
      */
-    private function create(Index $index, OutputInterface $output, $force = false)
+    private function create(Index $index, $force = false)
     {
         if (!$index->exists() || $force) {
             $index
@@ -55,12 +51,9 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
 
     /**
      * @param Index $index
-     * @param InputInterface $input
      * @param OutputInterface $output
-     *
-     * @return void
      */
-    private function show(Index $index, InputInterface $input, OutputInterface $output)
+    private function show(Index $index, OutputInterface $output)
     {
         foreach ($index->getStats()->getData()['indices'][$index->getName()] as $name => $stats) {
             $output->writeln('<fg=yellow>'.$index->getName().' : '.$name.'</fg=yellow>');
@@ -94,9 +87,9 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         ;
         $index_name = $input->getArgument('index');
         $action     = $input->getArgument('action');
-        $index = $indices->offsetExists($index_name) ?
-            $indices->offsetGet($index_name) :
-            $this
+        $index = $indices->offsetExists($index_name)
+            ? $indices->offsetGet($index_name)
+            : $this
                 ->getContainer()
                 ->get('meup_snotra.elastica_client')
                 ->getIndex($index_name);
@@ -104,7 +97,7 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
         switch ($action) {
             case 'create':
                 if ($index) {
-                    $this->create($index, $output, true);
+                    $this->create($index, true);
                 } else {
                     // do nothing, throw an exception
                     // specify an index
@@ -113,10 +106,10 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
             case 'show':
             default:
                 if ($index) {
-                    $this->show($index, $input, $output);
+                    $this->show($index, $output);
                 } else {
                     foreach ($indices as $index) {
-                        $this->show($index, $input, $output);
+                        $this->show($index, $output);
                     }
                 }
                 break;
@@ -129,8 +122,7 @@ class ElasticSearchIndexCommand extends ContainerAwareCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $action = $input->getArgument('action');
-
-        if ($action!='show' && !$input->getArgument('index')) {
+        if ($action != 'show' && !$input->getArgument('index')) {
             $input->setArgument(
                 'index',
                 $this
