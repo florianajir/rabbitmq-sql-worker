@@ -285,7 +285,6 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-
         $expected = array(
             'selection' => array(
                 'sku'         => '1234567',
@@ -303,10 +302,10 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                                 'references'   => array(
                                     'lang_id' => array(
                                         'table'                => 'lang',
-                                        'referencedColumnName' => 'id'
-                                    ),
-                                    'where'   => array(
-                                        'iso_code' => 'fr'
+                                        'referencedColumnName' => 'id',
+                                        'where'                => array(
+                                            'iso_code' => 'fr'
+                                        )
                                     )
                                 ),
                                 'table'        => 'selection_lang'
@@ -484,10 +483,10 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                         'references'   => array(
                             'lang_id' => array(
                                 'table'                => 'lang',
-                                'referencedColumnName' => 'id'
-                            ),
-                            'where'   => array(
-                                'iso_code' => 'fr'
+                                'referencedColumnName' => 'id',
+                                'where'                => array(
+                                    'iso_code' => 'fr'
+                                )
                             )
                         )
                     )

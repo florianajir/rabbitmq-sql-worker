@@ -1,5 +1,5 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\DataValidatorTest;
+namespace Meup\Bundle\SnotraBundle\Tests\DataValidator;
 
 use DateTime;
 use PHPUnit_Framework_TestCase;
@@ -130,6 +130,26 @@ class DataValidatorTest extends PHPUnit_Framework_TestCase
         $valid = $Validator->validateType('azerty', DataValidator::DATA_TYPE_STRING);
         $this->assertTrue($valid);
         $valid = $Validator->validateType('12345,6789', DataValidator::DATA_TYPE_STRING);
+        $this->assertTrue($valid);
+    }
+
+    /**
+     *
+     */
+    public function testValidateNullValues()
+    {
+        $Validator = new DataValidator();
+        $valid = $Validator->validateType(null, DataValidator::DATA_TYPE_STRING);
+        $this->assertTrue($valid);
+        $valid = $Validator->validateType(null, DataValidator::DATA_TYPE_DATE);
+        $this->assertTrue($valid);
+        $valid = $Validator->validateType(null, DataValidator::DATA_TYPE_DATETIME);
+        $this->assertTrue($valid);
+        $valid = $Validator->validateType(null, DataValidator::DATA_TYPE_DECIMAL);
+        $this->assertTrue($valid);
+        $valid = $Validator->validateType(null, DataValidator::DATA_TYPE_INTEGER);
+        $this->assertTrue($valid);
+        $valid = $Validator->validateType(null, null);
         $this->assertTrue($valid);
     }
 }
