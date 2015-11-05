@@ -122,13 +122,13 @@ class RelationFactoryTest extends \PHPUnit_Framework_TestCase
                 DataMapper::RELATION_ONE_TO_MANY,
                 array(
                     '_relation' => array(
+                        'removeReferenced' => 'true',
                         'table'            => 'selection_lang',
                         'targetEntity'     => 'selection_lang',
                         'joinColumn'       => array(
                             'referencedColumnName' => 'id',
                             'name'                 => 'selection_id',
                         ),
-                        'removeReferenced' => true,
                         'references'       => array(
                             'lang_id' => array(
                                 'table'                => 'lang',
