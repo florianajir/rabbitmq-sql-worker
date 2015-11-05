@@ -50,6 +50,17 @@ class EntityTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testInstanciateWithoutTableData()
+    {
+        $data = $this->data;
+        unset($data['_table']);
+        $this->setExpectedException('InvalidArgumentException');
+        new Entity($data);
+    }
+
+    /**
      * Sets up the fixture
      */
     protected function setUp()
