@@ -1,6 +1,7 @@
 <?php
 namespace Meup\Bundle\SnotraBundle\Tests\Provider;
 
+use Doctrine\DBAL\Logging\EchoSQLLogger;
 use Meup\Bundle\SnotraBundle\Provider\SqlProvider;
 
 /**
@@ -9,6 +10,24 @@ use Meup\Bundle\SnotraBundle\Provider\SqlProvider;
  */
 class SqlProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     *
+     */
+    public function testInstanciateWithDebugLogger()
+    {
+        $configMock = $this->getConfigurationMock();
+        $configMock->expects($this->once())
+            ->method('setSQLLogger')
+            ->with(new EchoSQLLogger())
+        ;
+        $conn = $this->getConnectionMock();
+        $conn->expects($this->once())
+            ->method('getConfiguration')
+            ->with()
+            ->will($this->returnValue($configMock));
+        new SqlProvider($conn, 'test');
+    }
+
     /**
      *
      */
@@ -37,6 +56,18 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         return $conn;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Doctrine\DBAL\Configuration
+     */
+    private function getConfigurationMock()
+    {
+        $config = $this->getMockBuilder('\Doctrine\DBAL\Configuration')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $config;
     }
 
     /**
@@ -134,6 +165,70 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
         $sqlProvider = new SqlProvider($conn, 'prod');
         $result = $sqlProvider->insert($table, $data);
         $this->assertEquals($lastInsertId, $result);
+    }
+
+    /**
+     *
+     */
+    public function testInsertOrUpdateWithoutIdentifier()
+    {
+        $data = array(
+            'id'   => '1',
+            'name' => 'test'
+        );
+        $table = 'test';
+        $conn = $this->getConnectionMock();
+        $conn->expects($this->exactly(count($data)))
+            ->method('quoteIdentifier')
+            ->with($this->anything())
+            ->will(
+                $this->returnCallback(
+                    'Meup\Bundle\SnotraBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
+                )
+            );
+        $conn->expects($this->once())
+            ->method('lastInsertId')
+            ->will($this->returnValue($data['id']));
+        $sqlProvider = new SqlProvider($conn, 'prod');
+        $result = $sqlProvider->insertOrUpdateIfExists($table, $data);
+        $this->assertEquals($data['id'], $result);
+    }
+
+    /**
+     *
+     */
+    public function testInsertOrUpdateWithIdentifier()
+    {
+        $exists = '1';
+        $data = array(
+            'id'   => '1',
+            'name' => 'test'
+        );
+        $table = 'test';
+        $identifier = array('id' => 1);
+        $conn = $this->getConnectionMock();
+        $sth = $this->getStatementMock();
+        $sth->expects($this->once())
+            ->method('fetchColumn')
+            ->will($this->returnValue($exists));
+        $conn->expects($this->once())
+            ->method('executeQuery')
+            ->with("SELECT count(*) FROM `{$table}` WHERE `id` = '1'")
+            ->will($this->returnValue($sth));
+        $conn->expects($this->exactly(count($data)))
+            ->method('quoteIdentifier')
+            ->with($this->anything())
+            ->will(
+                $this->returnCallback(
+                    'Meup\Bundle\SnotraBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
+                )
+            );
+        $conn->expects($this->once())
+            ->method('lastInsertId')
+            ->will($this->returnValue($data['id']));
+        $sqlProvider = new SqlProvider($conn, 'prod');
+        $result = $sqlProvider->insertOrUpdateIfExists($table, $data, $identifier);
+        $this->assertEquals($data['id'], $result);
     }
 
     /**
