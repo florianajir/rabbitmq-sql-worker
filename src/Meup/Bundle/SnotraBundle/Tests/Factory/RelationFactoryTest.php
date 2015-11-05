@@ -188,9 +188,24 @@ class RelationFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      *
      */
-    public function testCreateAssumingException()
+    public function testConstructAssumingException()
     {
         $this->setExpectedException('InvalidArgumentException');
         new RelationFactory('stdClass', 'stdClass', 'stdClass', 'stdClass');
+    }
+
+    /**
+     *
+     */
+    public function testCreateInvalidRelationParameter()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $factory = new RelationFactory(
+            $this->oneToOneRelationClass,
+            $this->manyToOneRelationClass,
+            $this->oneToManyRelationClass,
+            $this->manyToManyRelationClass
+        );
+        $factory->create('invalid', array());
     }
 }
