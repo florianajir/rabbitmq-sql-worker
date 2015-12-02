@@ -16,7 +16,6 @@
         "sensio/distribution-bundle":           "~3.0",
         "sensio/framework-extra-bundle":        "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "jms/serializer-bundle":                "0.13.*",
         "oldsound/rabbitmq-bundle":             "1.2.*",
         "ruflin/Elastica":                      "1.3.*",
         "jms/serializer-bundle":                "0.13.*",
