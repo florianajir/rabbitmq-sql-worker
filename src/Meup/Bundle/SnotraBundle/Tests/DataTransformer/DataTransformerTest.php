@@ -4,6 +4,7 @@ namespace Meup\Bundle\SnotraBundle\Tests\DataTransformer;
 use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
 use Meup\Bundle\SnotraBundle\DataValidator\DataValidator;
+use Meup\Bundle\SnotraBundle\Model\Entity;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -27,6 +28,13 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $relationnalMapping;
+
+    /**
+     * The relationnal collection mapping fixture
+     *
+     * @var array
+     */
+    protected $relationnalCollectionMapping;
 
     /**
      * The message data
@@ -84,6 +92,30 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
     /**
      *
      */
+    public function testPrepareMissingNullableProperty()
+    {
+        $mapper = new DataMapper($this->mapping);
+        $validator = new DataValidator();
+        $dataTransformer = new DataTransformer($mapper, $validator);
+        $data = array(
+            'identifier' => '1234567',
+        );
+        $result = $dataTransformer->prepare('user', $data);
+        $this->assertEquals(
+            array(
+                'user' => array(
+                    '_identifier' => "id",
+                    '_table'      => "users",
+                    'id'          => "1234567"
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
+     *
+     */
     public function testPrepareWrongType()
     {
         $mapper = new DataMapper($this->mapping);
@@ -107,6 +139,25 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
             'subscribe'  => '2015-01-02'
         );
         $this->setExpectedException('InvalidArgumentException', 'user.subscribe type not valid.');
+        $dataTransformer->prepare('user', $data);
+    }
+
+    /**
+     *
+     */
+    public function testPrepareLengthExceed()
+    {
+        $mapper = new DataMapper($this->mapping);
+        $validator = new DataValidator();
+        $dataTransformer = new DataTransformer($mapper, $validator);
+
+        $data = array(
+            'identifier' => '123456789'
+        );
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'user.identifier value length exceed database max length.'
+        );
         $dataTransformer->prepare('user', $data);
     }
 
@@ -161,9 +212,165 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testPrepareWithDiscriminator()
+    {
+        $mapper = new DataMapper(array(
+            'supplier' => array(
+                'discriminator' => 'dtype',
+                'fields'        => array(
+                    'sku' => array(
+                        'column' => 'sku',
+                        'type'   => 'string',
+                    )
+                )
+            )
+        ));
+        $dataTransformer = new DataTransformer($mapper);
+        $data = array(
+            'sku'   => '1234567',
+            'dtype' => 'brand'
+        );
+        $expected = array(
+            'supplier' => array(
+                'sku'    => '1234567',
+                '_table' => 'brand'
+            )
+        );
+        $result = $dataTransformer->prepare('supplier', $data);
+        $this->assertEquals($expected, $result);
+
+        $entity = new Entity($result['supplier']);
+        $this->assertEquals('brand', $entity->getTable());
+    }
+
+    /**
+     *
+     */
+    public function testValidateLengthExceed()
+    {
+        $mapper = new DataMapper(array(
+            'user' => array(
+                'table'  => 'user',
+                'fields' => array(
+                    'sku' => array(
+                        'column' => 'sku',
+                        'type'   => 'string',
+                        'length' => '7'
+                    )
+                )
+            )
+        ));
+        $dataTransformer = new DataTransformer($mapper, new DataValidator());
+        $data = array(
+            'sku' => '12345678'
+        );
+        $this->setExpectedException('InvalidArgumentException');
+        $dataTransformer->prepare('user', $data);
+    }
+
+    /**
+     *
+     */
+    public function testPrepareRelationnalCollection()
+    {
+        $mapper = new DataMapper($this->relationnalCollectionMapping);
+        $dataTransformer = new DataTransformer($mapper);
+        $data = array(
+            'sku' => '1234567',
+            'fr'  => array(
+                array(
+                    'name' => 'test'
+                )
+            )
+        );
+        $expected = array(
+            'selection' => array(
+                'sku'         => '1234567',
+                '_identifier' => 'sku',
+                '_table'      => 'selection',
+                '_related'    => array(
+                    'oneToMany' => array(
+                        'selection_lang' => array(
+                            '_relation' => array(
+                                'targetEntity' => 'selection_lang',
+                                'joinColumn'   => array(
+                                    'referencedColumnName' => 'id',
+                                    'name'                 => 'selection_id',
+                                ),
+                                'references'   => array(
+                                    'lang_id' => array(
+                                        'table'                => 'lang',
+                                        'referencedColumnName' => 'id',
+                                        'where'                => array(
+                                            'iso_code' => 'fr'
+                                        )
+                                    )
+                                ),
+                                'table'        => 'selection_lang'
+                            ),
+                            '_data'     => array(
+                                array(
+                                    'selection_lang' => array(
+                                        '_table'      => 'selection_lang',
+                                        '_identifier' => 'name',
+                                        'name'        => 'test',
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        $result = $dataTransformer->prepare('selection', $data);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     *
+     */
+    public function testPrepareWithFixedFieldMapping()
+    {
+        $mapper = new DataMapper(array(
+            'supplier' => array(
+                'fields' => array(
+                    'sku'  => array(
+                        'column' => 'sku',
+                    ),
+                    'type' => array(
+                        'column' => 'type',
+                        'value'  => 'brand'
+                    )
+                )
+            )
+        ));
+        $dataTransformer = new DataTransformer($mapper);
+        $data = array(
+            'sku' => '1234567'
+        );
+        $expected = array(
+            'supplier' => array(
+                'sku'  => '1234567',
+                'type' => 'brand'
+            )
+        );
+        $result = $dataTransformer->prepare('supplier', $data);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Sets up the fixture
      */
     protected function setUp()
+    {
+        $this->setUpMapping();
+        $this->setUpRelationnalMapping();
+        $this->setUpRelationnalCollectionMapping();
+    }
+
+    private function setUpMapping()
     {
         $this->mapping = array(
             'user' => array(
@@ -200,7 +407,10 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
+    }
 
+    private function setUpRelationnalMapping()
+    {
         $this->relationnalMapping = array(
             'User'    => array(
                 'table'      => 'users',
@@ -242,6 +452,53 @@ class DataTransformerTest extends PHPUnit_Framework_TestCase
                         'column' => 'city',
                         'type'   => 'string',
                     ),
+                )
+            )
+        );
+    }
+
+    /**
+     *
+     */
+    private function setUpRelationnalCollectionMapping()
+    {
+        $this->relationnalCollectionMapping = array(
+            'selection'      => array(
+                'table'      => 'selection',
+                'identifier' => 'sku',
+                'fields'     => array(
+                    'sku' => array(
+                        'column'   => 'sku',
+                        'length'   => '7',
+                        'nullable' => 'false'
+                    )
+                ),
+                'oneToMany'  => array(
+                    'fr' => array(
+                        'targetEntity' => 'selection_lang',
+                        'joinColumn'   => array(
+                            'referencedColumnName' => 'id',
+                            'name'                 => 'selection_id',
+                        ),
+                        'references'   => array(
+                            'lang_id' => array(
+                                'table'                => 'lang',
+                                'referencedColumnName' => 'id',
+                                'where'                => array(
+                                    'iso_code' => 'fr'
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            'selection_lang' => array(
+                'table'      => 'selection_lang',
+                'identifier' => 'name',
+                'fields'     => array(
+                    'name' => array(
+                        'column' => 'name'
+                    )
                 )
             )
         );

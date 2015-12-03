@@ -10,11 +10,11 @@ The entities to persist are defined by their input names under the parameters:ma
 
 ### table
 
-**Required if no discriminator property**. The database table name where will have to save entity.
+**Required if no `discriminator` property**. The database table name where will have to save entity.
 
 ### discriminator
 
-**Required if no table property**. The discriminator property (sometimes named dtype) is an optionnal mapping property which can be use instead of table property. 
+**Required if no `table` property**. The discriminator property (sometimes named dtype) is an optionnal mapping property which can be use instead of table property. 
 His role is to indicate in which table persist the entity depending upon column value.
 
 Example:
@@ -37,7 +37,7 @@ If snotra receive this message:
 }
 ```
 
-It will trigger an insert/update sql operation in the table named `brand`
+This will trigger an insert/update sql operation in the table named `brand`
 
 ### identifier
 

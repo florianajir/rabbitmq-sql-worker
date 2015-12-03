@@ -52,19 +52,12 @@ class EntityTest extends PHPUnit_Framework_TestCase
     /**
      *
      */
-    public function testGetTableWithDiscriminator()
+    public function testInstanciateWithoutTableData()
     {
-        $this->data = array(
-            '_identifier'    => 'sku',
-            '_discriminator' => 'dtype',
-            'id'             => '1',
-            'sku'            => 'sku_user',
-            'name'           => 'toto',
-            'dtype'          => 'user',
-        );
-        $entity = new Entity($this->data);
-        $table = $entity->getTable();
-        $this->assertEquals('user', $table);
+        $data = $this->data;
+        unset($data['_table']);
+        $this->setExpectedException('InvalidArgumentException');
+        new Entity($data);
     }
 
     /**

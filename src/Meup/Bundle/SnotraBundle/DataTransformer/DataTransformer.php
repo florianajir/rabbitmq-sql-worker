@@ -52,10 +52,8 @@ class DataTransformer implements DataTransformerInterface
     public function prepare($type, array $data)
     {
         $prepared = array();
-        if ($tableName = $this->mapper->getTableName($type)) {
-            $data = $this->prepareData($type, $data);
-            $prepared[$type] = $this->checkFieldsMapping($type, $data);
-        }
+        $data = $this->prepareData($type, $data);
+        $prepared[$type] = $this->checkFieldsMapping($type, $data);
 
         return $prepared;
     }
@@ -69,19 +67,22 @@ class DataTransformer implements DataTransformerInterface
     protected function prepareData($type, array $data)
     {
         $prepared = array();
+        if ($identifier = $this->mapper->getIdentifier($type)) {
+            $prepared[self::IDENTIFIER_KEY] = $identifier;
+        }
+        if ($tableName = $this->mapper->getTableName($type)) {
+            $prepared[self::TABLE_KEY] = $tableName;
+        }
+        if ($discr = $this->mapper->getDiscriminator($type)) {
+            if (array_key_exists($discr, $data)) {
+                $prepared[self::TABLE_KEY] = $data[$discr];
+            }
+        }
         foreach ($data as $field => $value) {
             $fieldMapping = $this->mapper->getFieldMapping($type, $field);
-            $relation = $this->mapper->getRelation($type, $field);
-            $prepared[self::IDENTIFIER_KEY] = $this->mapper->getIdentifier($type);
-            if ($tableName = $this->mapper->getTableName($type)) {
-                $prepared[self::TABLE_KEY] = $tableName;
-            }
-            if ($discr = $this->mapper->getDiscriminator($type)) {
-                $prepared[self::DISCRIMINATOR_KEY] = $discr;
-            }
             if (!empty($fieldMapping)) {
                 $this->prepareField($prepared, $type, $field, $value);
-            } elseif ($relation) {
+            } elseif ($relation = $this->mapper->getRelation($type, $field)) {
                 $this->prepareRelated($prepared, $type, $field, $value, $relation);
             }
         }

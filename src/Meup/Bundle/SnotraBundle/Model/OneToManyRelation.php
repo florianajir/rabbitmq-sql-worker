@@ -40,8 +40,8 @@ class OneToManyRelation extends AbstractRelation implements RelationInterface
         $this->entities = $data[DataTransformer::RELATED_DATA_KEY];
         $this->references = isset($relation[DataMapper::REFERENCES_KEY]) ?
             $relation[DataMapper::REFERENCES_KEY] : array();
-        $this->removeReferenced = isset($relation[DataMapper::REMOVE_REFERENCED_KEY]) &&
-            $relation[DataMapper::REMOVE_REFERENCED_KEY] == 'true';
+        $this->removeReferenced = isset($relation[DataMapper::REMOVE_REFERENCED_KEY])
+            && $relation[DataMapper::REMOVE_REFERENCED_KEY] == 'true';
     }
 
     /**
