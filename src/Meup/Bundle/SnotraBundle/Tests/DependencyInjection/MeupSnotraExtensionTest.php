@@ -59,6 +59,6 @@ class MeupSnotraExtensionTest extends BaseTestCase
      */
     public function testLoad()
     {
-        $this->extension->load(array(), $container = $this->getContainer());
+        $this->extension->load(array(), $this->getContainer());
     }
 }

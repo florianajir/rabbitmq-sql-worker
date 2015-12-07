@@ -12,6 +12,10 @@ use Elastica\Type;
 
 class ElasticSearchTypeCommand extends ContainerAwareCommand
 {
+
+    /**
+     * {@inheritDoc}
+     */
     protected function configure()
     {
         $this
@@ -24,11 +28,20 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * @param Type $type
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     private function show(Type $type, InputInterface $input, OutputInterface $output)
     {
     }
 
-    private function create(Type $type, InputInterface $input, OutputInterface $output, $force = true)
+    /**
+     * @param Type $type
+     * @param bool $force
+     */
+    private function create(Type $type, $force = true)
     {
         if (!$type->exists() || $force) {
             $types = $this
@@ -55,6 +68,9 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $type = $this
@@ -66,7 +82,7 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
 
         switch ($input->getArgument('action')) {
             case 'create':
-                $this->create($type, $input, $output);
+                $this->create($type);
                 break;
             case 'show':
                 $this->show($type, $input, $output);
