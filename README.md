@@ -36,5 +36,4 @@ Just git clone the project ;)
 
 ## Documentation
 
-- [SQL Mapping](app/Resources/doc/mapping.md)
-- [WIKI](https://github.com/1001Pharmacies/snotra/wiki)
+Read the [Snotra project wiki](https://github.com/1001Pharmacies/snotra/wiki) to get more documentation about workers and configuration.
