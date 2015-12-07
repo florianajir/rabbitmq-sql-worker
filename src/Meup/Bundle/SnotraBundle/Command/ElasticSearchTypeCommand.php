@@ -4,7 +4,6 @@ namespace Meup\Bundle\SnotraBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Elastica\Type\Mapping;
@@ -23,18 +22,8 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
             ->setDescription('')
             ->addArgument('index', InputArgument::REQUIRED, '')
             ->addArgument('type', InputArgument::REQUIRED, '')
-            ->addArgument('action', InputArgument::OPTIONAL, '', 'show')
-            //->addOption('yell', null, InputOption::VALUE_NONE, 'Si définie, la tâche criera en majuscules')
+            ->addArgument('action', InputArgument::OPTIONAL, '', 'create')
         ;
-    }
-
-    /**
-     * @param Type $type
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    private function show(Type $type, InputInterface $input, OutputInterface $output)
-    {
     }
 
     /**
@@ -83,9 +72,6 @@ class ElasticSearchTypeCommand extends ContainerAwareCommand
         switch ($input->getArgument('action')) {
             case 'create':
                 $this->create($type);
-                break;
-            case 'show':
-                $this->show($type, $input, $output);
                 break;
             default:
                 $action = $input->getArgument('action');
