@@ -1,8 +1,8 @@
-# Mapping reference
+# SQL Persistence worker mapping reference
 
-To use an SQL persistence, you have to setup a mapping file.
+To use an SQL worker, in first time you have to setup the database mapping.
 
-The mapping configuration is defined in the `app/config/mapping.yml` file. To begin you can copy and rename `mapping.yml.dist` example file.
+The mapping configuration is defined in the `app/config/mapping.yml` file.
 
 ## Entity
 
