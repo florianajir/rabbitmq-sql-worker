@@ -9,13 +9,12 @@
         "doctrine/doctrine-bundle":             "~1.2",
         "symfony/monolog-bundle":               "~2.4",
         "sensio/distribution-bundle":           "~3.0",
-        "sensio/framework-extra-bundle":        "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
         "oldsound/rabbitmq-bundle":             "1.2.*",
         "ruflin/Elastica":                      "1.3.*",
         "jms/serializer-bundle":                ">=0.13",
         "1001pharmacies/dictionary":            "0.3",
-        "1001pharmacies/gnaa":                  ">=0.8"
+        "1001pharmacies/gnaa":                  "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle":              "~2.3",
