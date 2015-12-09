@@ -1,21 +1,19 @@
 Snotra
 ======
 
-Worker who publishes the content from a RabbitMQ queue to a set of database.
+Snotra is symfony powered project which provide an AMPQ worker to consume/persist entities from RabbitMQ messages to an SQL database or an Elasticsearch index.
 
-Snotra can be configured to use a set of Elastic Search index as well as MySQL database.
-
-This worker will read AMQP messages containing item data and insert or update in Elastic Search indexes or SQL database.
+The SQL worker provide as well insert as update operations from a configured identifier.
 
 ## Workers usage
 
-Persist data in SQL database (doctrine DBAL):
+SQL database persistence using doctrine DBAL:
 
 ```bash
 php app/console rabbitmq:consumer -w sql
 ```
 
-Persist data in ElasticSearch index:
+ElasticSearch index persistence:
 
 ```bash
 php app/console rabbitmq:consumer -w elasticsearch
@@ -25,10 +23,12 @@ php app/console rabbitmq:consumer -w elasticsearch
 
 RabbitMQ incoming messages will be consume from this format :
 
+```json
 {
     "type": "article",
     "data": "\"description\": \"json escaped content\""
 }
+```
 
 ## Installation
 
