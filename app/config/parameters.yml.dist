@@ -18,8 +18,6 @@ parameters:
 
     elasticsearch_host:     localhost
     elasticsearch_port:     9200
-    elasticsearch_indexes:  [fr, en]
-
     elasticsearch_indexes:
         - fr
         - en
