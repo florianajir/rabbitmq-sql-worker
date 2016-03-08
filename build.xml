@@ -1,0 +1,227 @@
+<?xml version="1.0" ?>
+<project name="florianajir/rabbitmq-sql-bundle" basedir="./" default="help">
+  <property name="builddir" value="build"/>
+  <target name="help">
+    <echo>help Shows this help</echo>
+    <echo>tests Run tests for development</echo>
+    <echo>ci Run tests for continous integration</echo>
+    <echo>lint Linter</echo>
+    <echo>phpunit Executes phpunit tests</echo>
+    <echo>coverage Show phpunit coverage</echo>
+    <echo>phpcs Detects standard violations on the code</echo>
+    <echo>phpmd Look for several potential problems</echo>
+    <echo>phpcpd Detects duplicate code portions</echo>
+    <echo>phpmetrics PhpMetrics provides various metrics about PHP projects</echo>
+    <echo>phploc Measure the size and analyze the structure</echo>
+    <echo>install-requirements Install requirements for build</echo>
+  </target>
+
+  <target name="tests" description="Run tests for development">
+    <phingcall target="lint"/>
+    <phingcall target="phpunit"/>
+    <phingcall target="phpcs"/>
+    <phingcall target="phpmd"/>
+    <phingcall target="phpcpd"/>
+    <phingcall target="phpmetrics"/>
+    <phingcall target="phploc"/>
+  </target>
+
+  <target name="ci"
+          depends="ci:cleanup,ci:composer"
+          description="Run tests for continous integration">
+    <phingcall target="ci:lint"/>
+    <phingcall target="ci:phpunit"/>
+    <phingcall target="ci:phpcs"/>
+    <phingcall target="ci:phpmd"/>
+    <phingcall target="ci:phpcpd"/>
+    <phingcall target="ci:pdepend"/>
+    <phingcall target="ci:phpmetrics"/>
+    <phingcall target="ci:phploc"/>
+  </target>
+
+  <target name="ci:cleanup" description="Clean ci build files">
+    <delete dir="${builddir}"/>
+    <mkdir dir="${builddir}"/>
+    <mkdir dir="${builddir}/reports"/>
+    <mkdir dir="${builddir}/reports/coverage"/>
+  </target>
+
+  <target name="ci:composer" description="Install composer dependencies">
+    <exec command="composer install" logoutput="true"/>
+  </target>
+
+  <target name="install-requirements" description="Install requirements for build">
+    <exec command="composer global require 'phpunit/phpunit=4.*'"/>
+    <exec command="composer global require 'squizlabs/php_codesniffer=1.*'"/>
+    <exec command="composer global require 'sebastian/phpcpd=2.*'"/>
+    <exec command="composer global require 'phpmd/phpmd=@stable'"/>
+    <exec command="composer global require 'pdepend/pdepend=2.*'"/>
+    <exec command="composer global require 'halleck45/phpmetrics=^1.3'"/>
+    <exec command="composer global require 'phploc/phploc=*'"/>
+    <echo message="Don't forget to add composer bin folder to your $PATH environement variable"/>
+  </target>
+
+  <target name="lint" description="Execute linter for development">
+    <phplint interpreter="php"
+             deprecatedAsError="true"
+             level="debug">
+      <fileset dir=".">
+        <include name="**/*.php"/>
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+    </phplint>
+  </target>
+
+  <target name="ci:lint" description="Execute linter for continous integration">
+    <phplint interpreter="php"
+             haltonfailure="true"
+             tofile="${builddir}/reports/phplint.txt"
+             deprecatedAsError="true"
+             level="debug">
+      <fileset dir=".">
+        <include name="**/*.php"/>
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+    </phplint>
+  </target>
+
+  <target name="phpunit" description="Execute unit tests for development">
+    <exec executable="phpunit" logoutput="true"/>
+  </target>
+
+  <target name="ci:phpunit" description="Execute unit tests for continous integration">
+    <exec executable="phpunit" logoutput="true">
+      <arg value="-c"/>
+      <arg path="phpunit.xml.dist"/>
+      <arg value="--log-junit"/>
+      <arg path="${builddir}/reports/phpunit.xml"/>
+      <arg value="--coverage-clover"/>
+      <arg path="${builddir}/reports/coverage.xml"/>
+      <arg value="--coverage-html"/>
+      <arg path="${builddir}/reports/coverage/"/>
+    </exec>
+  </target>
+
+  <target name="coverage" description="Show phpunit coverage">
+    <exec executable="bin/phpunit" logoutput="true">
+      <arg value="--coverage-text"/>
+    </exec>
+  </target>
+
+  <target name="phpcs" description="Detects standard violations on the code">
+    <phpcodesniffer standard="PSR2">
+      <fileset dir="./">
+        <include name="**/*.php"/>
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+    </phpcodesniffer>
+  </target>
+
+  <target name="ci:phpcs" description="Detects standard violations on the code and generate report">
+    <phpcodesniffer standard="PSR2">
+      <fileset dir="./">
+        <include name="**/*.php"/>
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+      <formatter type="checkstyle"
+                 outfile="${builddir}/reports/checkstyle.xml"/>
+    </phpcodesniffer>
+  </target>
+
+  <target name="phpmd" description="Look for several potential problems">
+    <phpmd>
+      <fileset dir=".">
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+    </phpmd>
+  </target>
+
+  <target name="ci:phpmd" description="Look for several potential problems">
+    <phpmd>
+      <fileset dir=".">
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+      <formatter type="xml" outfile="${builddir}/reports/pmd.xml"/>
+    </phpmd>
+  </target>
+
+  <target name="phpcpd" description="Detects duplicated code">
+    <phpcpd>
+      <fileset dir=".">
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+        <include name="**/*.php"/>
+      </fileset>
+    </phpcpd>
+  </target>
+
+  <target name="ci:phpcpd" description="Detects duplicated code and generate report">
+    <phpcpd>
+      <fileset dir=".">
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+        <include name="**/*.php"/>
+      </fileset>
+      <formatter type="pmd" outfile="${builddir}/reports/cpd.xml"/>
+    </phpcpd>
+  </target>
+
+  <target name="ci:pdepend"
+          description="Shows the quality design in the terms of extensibility, reusability and maintainability">
+    <phpdepend>
+      <fileset dir="./">
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+        <include name="**/*.php"/>
+      </fileset>
+      <logger type="jdepend-xml" outfile="${builddir}/reports/pdepend.xml"/>
+    </phpdepend>
+  </target>
+
+  <target name="phpmetrics" description="Generate project global quality report with PHPMetrics">
+    <exec executable="phpmetrics" logoutput="true">
+      <arg value="--report-cli"/>
+      <arg value="./"/>
+    </exec>
+  </target>
+
+  <target name="ci:phpmetrics" description="Generate project global quality report with PHPMetrics">
+    <exec executable="phpmetrics" logoutput="true">
+      <arg value="--report-xml=${builddir}/reports/phpmetrics.xml"/>
+      <arg value="--report-html=${builddir}/reports/phpmetrics.html"/>
+      <arg value="./"/>
+    </exec>
+  </target>
+
+  <target name="phploc" description="Measure the size and analyze the structuret">
+    <phploc countTests="true">
+      <fileset dir=".">
+        <include name="**/*.php"/>
+        <include name="*.php"/>
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+    </phploc>
+  </target>
+
+  <target name="ci:phploc" description="Measure the size and analyze the structure with report">
+    <phploc
+        countTests="true"
+        reportType="csv"
+        reportDirectory="${builddir}/reports"
+        reportName="phploc">
+      <fileset dir=".">
+        <include name="**/*.php"/>
+        <include name="*.php"/>
+        <exclude name="vendor/"/>
+        <exclude name=".*/"/>
+      </fileset>
+    </phploc>
+  </target>
+</project>

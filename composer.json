@@ -22,7 +22,6 @@
     "jms/serializer": "^1.1"
   },
   "require-dev": {
-    "symfony/phpunit-bridge": "~2.7|~3.0",
     "phpunit/phpunit": "4.*",
     "squizlabs/php_codesniffer": "2.*",
     "sebastian/phpcpd": "2.*",
