@@ -1,13 +1,13 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\Model;
+namespace Ajir\RabbitMqSqlBundle\Tests\Model;
 
-use Meup\Bundle\SnotraBundle\Model\OneToManyRelation;
+use Ajir\RabbitMqSqlBundle\Model\OneToManyRelation;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Class OneToManyRelationTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class OneToManyRelationTest extends PHPUnit_Framework_TestCase
 {

@@ -1,17 +1,14 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Model;
+namespace Ajir\RabbitMqSqlBundle\Model;
 
 use InvalidArgumentException;
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformer;
 
 /**
- * Class Entity
  * Data container model for any data message type
  *
- * @package  Snotra
- * @author   florianajir <florian@1001pharmacies.com>
- * @link     https://github.com/1001Pharmacies/snotra
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class Entity implements EntityInterface
 {

@@ -1,6 +1,0 @@
-imports:
-    - { resource: parameters.yml }
-    - { resource: rabbitmq.yml }
-    - { resource: doctrine.yml }
-    - { resource: elasticsearch.yml }
-    - { resource: mapping.yml }

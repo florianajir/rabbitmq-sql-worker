@@ -1,10 +1,10 @@
 <?php
 
-namespace Meup\DataStructure\Message\Tests;
+namespace Ajir\RabbitMqSqlBundle\DataStructure\Message\Tests;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
 use JMS\Serializer\SerializerBuilder;
-use Meup\DataStructure\Message\AMQPMessage;
+use Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessage;
 
 /**
  *

@@ -1,17 +1,17 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Persister;
+namespace Ajir\RabbitMqSqlBundle\Persister;
 
 use Exception;
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\Factory\EntityFactoryInterface;
-use Meup\Bundle\SnotraBundle\Factory\RelationFactoryInterface;
-use Meup\Bundle\SnotraBundle\Model\EntityInterface;
-use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\Factory\EntityFactoryInterface;
+use Ajir\RabbitMqSqlBundle\Factory\RelationFactoryInterface;
+use Ajir\RabbitMqSqlBundle\Model\EntityInterface;
+use Ajir\RabbitMqSqlBundle\Provider\ProviderInterface;
 
 /**
  * Class Persister
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class Persister implements PersisterInterface
 {

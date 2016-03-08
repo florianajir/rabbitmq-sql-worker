@@ -1,10 +1,10 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\DataTransformer;
+namespace Ajir\RabbitMqSqlBundle\DataTransformer;
 
 /**
  * Interface DataTransformerInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface DataTransformerInterface
 {

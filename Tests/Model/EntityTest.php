@@ -1,13 +1,13 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\Model;
+namespace Ajir\RabbitMqSqlBundle\Tests\Model;
 
-use Meup\Bundle\SnotraBundle\Model\Entity;
+use Ajir\RabbitMqSqlBundle\Model\Entity;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Class EntityTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class EntityTest extends PHPUnit_Framework_TestCase
 {

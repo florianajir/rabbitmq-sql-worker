@@ -1,12 +1,12 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\Provider;
+namespace Ajir\RabbitMqSqlBundle\Tests\Provider;
 
 use Doctrine\DBAL\Logging\EchoSQLLogger;
-use Meup\Bundle\SnotraBundle\Provider\SqlProvider;
+use Ajir\RabbitMqSqlBundle\Provider\SqlProvider;
 
 /**
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class SqlProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -122,7 +122,7 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->anything())
             ->will(
                 $this->returnCallback(
-                    'Meup\Bundle\SnotraBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
+                    'Ajir\RabbitMqSqlBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
                 )
             );
         $conn->expects($this->once())
@@ -156,7 +156,7 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->anything())
             ->will(
                 $this->returnCallback(
-                    'Meup\Bundle\SnotraBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
+                    'Ajir\RabbitMqSqlBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
                 )
             );
         $conn->expects($this->once())
@@ -183,7 +183,7 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->anything())
             ->will(
                 $this->returnCallback(
-                    'Meup\Bundle\SnotraBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
+                    'Ajir\RabbitMqSqlBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
                 )
             );
         $conn->expects($this->once())
@@ -220,7 +220,7 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->anything())
             ->will(
                 $this->returnCallback(
-                    'Meup\Bundle\SnotraBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
+                    'Ajir\RabbitMqSqlBundle\Tests\Provider\SqlProviderTest::quoteIdentifierCallback'
                 )
             );
         $conn->expects($this->once())

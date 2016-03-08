@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\DataStructure\Message;
+namespace Ajir\RabbitMqSqlBundle\DataStructure\Message;
 
 interface AMQPMessageInterface
 {
@@ -27,10 +27,10 @@ interface AMQPMessageInterface
      * @return mixed
      */
     public function getIndex();
-    
+
     /**
      * @param string $type
-     * 
+     *
      * @return self
      */
     public function setType($type);
@@ -42,7 +42,7 @@ interface AMQPMessageInterface
 
     /**
      * @param mixed $data
-     * 
+     *
      * @return self
      */
     public function setData($data);

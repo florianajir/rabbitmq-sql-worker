@@ -1,13 +1,13 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\DataMapper;
+namespace Ajir\RabbitMqSqlBundle\Tests\DataMapper;
 
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Class DataMapperTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class DataMapperTest extends PHPUnit_Framework_TestCase
 {

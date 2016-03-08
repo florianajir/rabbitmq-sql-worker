@@ -1,5 +1,5 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Provider;
+namespace Ajir\RabbitMqSqlBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
@@ -9,7 +9,7 @@ use Doctrine\DBAL\Logging\EchoSQLLogger;
 /**
  * Class SqlProvider
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class SqlProvider implements ProviderInterface
 {

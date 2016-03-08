@@ -1,16 +1,16 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\Persister;
+namespace Ajir\RabbitMqSqlBundle\Tests\Persister;
 
-use Meup\Bundle\SnotraBundle\Factory\EntityFactory;
-use Meup\Bundle\SnotraBundle\Factory\RelationFactory;
-use Meup\Bundle\SnotraBundle\Persister\Persister;
-use Meup\Bundle\SnotraBundle\Provider\ProviderInterface;
+use Ajir\RabbitMqSqlBundle\Factory\EntityFactory;
+use Ajir\RabbitMqSqlBundle\Factory\RelationFactory;
+use Ajir\RabbitMqSqlBundle\Persister\Persister;
+use Ajir\RabbitMqSqlBundle\Provider\ProviderInterface;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Class DataMapperTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class PersisterTest extends PHPUnit_Framework_TestCase
 {
@@ -28,12 +28,12 @@ class PersisterTest extends PHPUnit_Framework_TestCase
     public function testPersister()
     {
         $provider = $this->getProvider();
-        $entityFactory = new EntityFactory('Meup\Bundle\SnotraBundle\Model\Entity');
+        $entityFactory = new EntityFactory('Ajir\RabbitMqSqlBundle\Model\Entity');
         $relationFactory = new RelationFactory(
-            'Meup\Bundle\SnotraBundle\Model\OneToOneRelation',
-            'Meup\Bundle\SnotraBundle\Model\OneToManyRelation',
-            'Meup\Bundle\SnotraBundle\Model\ManyToOneRelation',
-            'Meup\Bundle\SnotraBundle\Model\ManyToManyRelation'
+            'Ajir\RabbitMqSqlBundle\Model\OneToOneRelation',
+            'Ajir\RabbitMqSqlBundle\Model\OneToManyRelation',
+            'Ajir\RabbitMqSqlBundle\Model\ManyToOneRelation',
+            'Ajir\RabbitMqSqlBundle\Model\ManyToManyRelation'
         );
 
         $persister = new Persister($provider, $entityFactory, $relationFactory);
@@ -45,7 +45,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
      */
     private function getProvider()
     {
-        $provider = $this->getMock('Meup\Bundle\SnotraBundle\Provider\ProviderInterface');
+        $provider = $this->getMock('Ajir\RabbitMqSqlBundle\Provider\ProviderInterface');
         $provider
             ->expects($this->any())
             ->method('getColumnValueWhere')

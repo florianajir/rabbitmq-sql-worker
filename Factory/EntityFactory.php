@@ -1,5 +1,5 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Factory;
+namespace Ajir\RabbitMqSqlBundle\Factory;
 
 use InvalidArgumentException;
 use ReflectionClass;
@@ -7,11 +7,11 @@ use ReflectionClass;
 /**
  * Class EntityFactory
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class EntityFactory implements EntityFactoryInterface
 {
-    const MODEL_INTERFACE = 'Meup\Bundle\SnotraBundle\Model\EntityInterface';
+    const MODEL_INTERFACE = 'Ajir\RabbitMqSqlBundle\Model\EntityInterface';
 
     /**
      * @var ReflectionClass

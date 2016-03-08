@@ -1,10 +1,10 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\DataValidator;
+namespace Ajir\RabbitMqSqlBundle\DataValidator;
 
 /**
  * Interface DataValidatorInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface DataValidatorInterface
 {

@@ -1,23 +1,15 @@
 <?php
-/**
- * This file is part of the Meup Snotra.
- *
- * (c) 1001pharmacies <http://github.com/1001pharmacies/snotra>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Meup\Bundle\SnotraBundle\Tests\Factory;
+namespace Ajir\RabbitMqSqlBundle\Tests\Factory;
 
-use Meup\Bundle\SnotraBundle\Factory\EntityFactory;
+use Ajir\RabbitMqSqlBundle\Factory\EntityFactory;
 
 /**
  *
  */
 class EntityFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    protected $class = 'Meup\Bundle\SnotraBundle\Model\Entity';
+    protected $class = 'Ajir\RabbitMqSqlBundle\Model\Entity';
 
     /**
      *
@@ -26,7 +18,7 @@ class EntityFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new EntityFactory($this->class);
 
-        $this->assertInstanceOf('Meup\Bundle\SnotraBundle\Factory\EntityFactoryInterface', $factory);
+        $this->assertInstanceOf('Ajir\RabbitMqSqlBundle\Factory\EntityFactoryInterface', $factory);
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests\DependencyInjection;
+namespace Ajir\RabbitMqSqlBundle\Tests\DependencyInjection;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
-use Meup\Bundle\SnotraBundle\DependencyInjection\Configuration;
+use Ajir\RabbitMqSqlBundle\DependencyInjection\Configuration;
 
 /**
  *

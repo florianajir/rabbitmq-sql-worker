@@ -1,10 +1,10 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Persister;
+namespace Ajir\RabbitMqSqlBundle\Persister;
 
 /**
  * Interface PersisterInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface PersisterInterface
 {

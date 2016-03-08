@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\DataStructure\Message;
+namespace Ajir\RabbitMqSqlBundle\DataStructure\Message;
 
 use JMS\Serializer\Annotation as JMS;
 

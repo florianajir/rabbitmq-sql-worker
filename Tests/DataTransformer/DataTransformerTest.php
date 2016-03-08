@@ -1,16 +1,16 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\DataTransformer;
+namespace Ajir\RabbitMqSqlBundle\Tests\DataTransformer;
 
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
-use Meup\Bundle\SnotraBundle\DataValidator\DataValidator;
-use Meup\Bundle\SnotraBundle\Model\Entity;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformer;
+use Ajir\RabbitMqSqlBundle\DataValidator\DataValidator;
+use Ajir\RabbitMqSqlBundle\Model\Entity;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Class DataTransformerTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class DataTransformerTest extends PHPUnit_Framework_TestCase
 {

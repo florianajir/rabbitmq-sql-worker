@@ -1,8 +1,4 @@
-# SQL Persistence worker mapping reference
-
-To use an SQL worker, in first time you have to setup the database mapping.
-
-The mapping configuration is defined in the `app/config/mapping.yml` file.
+# Mapping
 
 ## Entity
 
@@ -20,7 +16,6 @@ His role is to indicate in which table persist the entity depending upon column 
 Example:
 
 ```yaml
-# app/mapping.yml
 parameters:
     mapping:
         supplier:
@@ -93,10 +88,9 @@ Optional boolean validation to define if a field is required or not. (Default: t
 
 Option to define a fixed value for the field. If defined, the value will replace the received data. (Default: null)
 
-## Association Mapping
+## Entity Relationships/Associations
 
-This chapter explains mapping associations between objects.
-The associations can be one of this: oneToOne, oneToMany, manyToOne, manyToMany.
+Rabbitmq-sql supports associations like oneToOne, oneToMany, manyToOne and manyToMany.
 
 **An entity can be self-referenced.**
 

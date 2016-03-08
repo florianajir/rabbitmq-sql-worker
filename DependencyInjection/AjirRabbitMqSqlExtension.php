@@ -1,13 +1,13 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\DependencyInjection;
+namespace Ajir\RabbitMqSqlBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
-class MeupSnotraExtension extends Extension
+class AjirRabbitMqSqlExtension extends Extension
 {
     /**
      * {@inheritDoc}

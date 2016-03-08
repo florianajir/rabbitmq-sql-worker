@@ -1,10 +1,10 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\DataMapper;
+namespace Ajir\RabbitMqSqlBundle\DataMapper;
 
 /**
  * Interface DataMapperInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface DataMapperInterface
 {

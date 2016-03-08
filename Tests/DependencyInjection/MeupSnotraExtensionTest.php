@@ -1,18 +1,18 @@
 <?php
 
-namespace Meup\Bundle\SnotraBundle\Tests\DependencyInjection;
+namespace Ajir\RabbitMqSqlBundle\Tests\DependencyInjection;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
-use Meup\Bundle\SnotraBundle\DependencyInjection\MeupSnotraExtension;
+use Ajir\RabbitMqSqlBundle\DependencyInjection\AjirRabbitMqSqlExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  *
  */
-class MeupSnotraExtensionTest extends BaseTestCase
+class AjirRabbitMqSqlExtensionTest extends BaseTestCase
 {
     /**
-     * @var MeupSnotraExtension
+     * @var AjirRabbitMqSqlExtension
      */
     private $extension;
 
@@ -21,17 +21,17 @@ class MeupSnotraExtensionTest extends BaseTestCase
      */
     public function testConstruct()
     {
-        $ext = new MeupSnotraExtension();
+        $ext = new AjirRabbitMqSqlExtension();
 
-        $this->assertInstanceOf('Meup\Bundle\SnotraBundle\DependencyInjection\MeupSnotraExtension', $ext);
+        $this->assertInstanceOf('Ajir\RabbitMqSqlBundle\DependencyInjection\AjirRabbitMqSqlExtension', $ext);
     }
 
     /**
-     * @return MeupSnotraExtension
+     * @return AjirRabbitMqSqlExtension
      */
     protected function getExtension()
     {
-        return new MeupSnotraExtension();
+        return new AjirRabbitMqSqlExtension();
     }
 
     /**

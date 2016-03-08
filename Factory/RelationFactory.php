@@ -1,22 +1,22 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Factory;
+namespace Ajir\RabbitMqSqlBundle\Factory;
 
 use InvalidArgumentException;
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\Model\ManyToManyRelation;
-use Meup\Bundle\SnotraBundle\Model\ManyToOneRelation;
-use Meup\Bundle\SnotraBundle\Model\OneToManyRelation;
-use Meup\Bundle\SnotraBundle\Model\OneToOneRelation;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\Model\ManyToManyRelation;
+use Ajir\RabbitMqSqlBundle\Model\ManyToOneRelation;
+use Ajir\RabbitMqSqlBundle\Model\OneToManyRelation;
+use Ajir\RabbitMqSqlBundle\Model\OneToOneRelation;
 use ReflectionClass;
 
 /**
  * Class RelationFactory
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class RelationFactory implements RelationFactoryInterface
 {
-    const RELATION_FACTORY = 'Meup\Bundle\SnotraBundle\Model\RelationInterface';
+    const RELATION_FACTORY = 'Ajir\RabbitMqSqlBundle\Model\RelationInterface';
 
     /**
      * @var ReflectionClass

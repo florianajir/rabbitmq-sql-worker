@@ -1,15 +1,6 @@
-parameters:
-    meup_snotra.entity.class:                               Meup\Bundle\SnotraBundle\Model\Entity
-    meup_snotra.entity_factory.class:                       Meup\Bundle\SnotraBundle\Factory\EntityFactory
-    meup_snotra.one_to_one_relation.class:                  Meup\Bundle\SnotraBundle\Model\OneToOneRelation
-    meup_snotra.one_to_many_relation.class:                 Meup\Bundle\SnotraBundle\Model\OneToManyRelation
-    meup_snotra.many_to_one_relation.class:                 Meup\Bundle\SnotraBundle\Model\ManyToOneRelation
-    meup_snotra.many_to_many_relation.class:                Meup\Bundle\SnotraBundle\Model\ManyToManyRelation
-    meup_snotra.relation_factory.class:                     Meup\Bundle\SnotraBundle\Factory\RelationFactory
-
 services:
     meup_snotra.sql_consumer:
-        class: Meup\Bundle\SnotraBundle\AMQP\SqlConsumer
+        class: Ajir\RabbitMqSqlBundle\AMQP\SqlConsumer
         arguments:
             - @meup_snotra.data_transformer
             - @meup_snotra.persister
@@ -18,41 +9,41 @@ services:
             - %rabbitmq_ignored_types%
 
     meup_snotra.sql_provider:
-        class: Meup\Bundle\SnotraBundle\Provider\SqlProvider
+        class: Ajir\RabbitMqSqlBundle\Provider\SqlProvider
         arguments:
             - @database_connection
             - %kernel.environment%
 
     meup_snotra.data_transformer:
-        class: Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer
+        class: Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformer
         arguments:
             - @meup_snotra.data_mapper
             - @meup_snotra.data_validator
 
     meup_snotra.data_validator:
-        class: Meup\Bundle\SnotraBundle\DataValidator\DataValidator
+        class: Ajir\RabbitMqSqlBundle\DataValidator\DataValidator
 
     meup_snotra.data_mapper:
-        class: Meup\Bundle\SnotraBundle\DataMapper\DataMapper
+        class: Ajir\RabbitMqSqlBundle\DataMapper\DataMapper
         arguments:
-            - %mapping%
+            - %rabbitmq_sql.mapping%
 
     meup_snotra.persister:
-        class: Meup\Bundle\SnotraBundle\Persister\Persister
+        class: Ajir\RabbitMqSqlBundle\Persister\Persister
         arguments:
             - @meup_snotra.sql_provider
             - @meup_snotra.entity_factory
             - @meup_snotra.relation_factory
 
     meup_snotra.entity_factory:
-        class: %meup_snotra.entity_factory.class%
+        class: Ajir\RabbitMqSqlBundle\Factory\EntityFactory
         arguments:
-            - %meup_snotra.entity.class%
+            - Ajir\RabbitMqSqlBundle\Model\Entity
 
     meup_snotra.relation_factory:
-        class: %meup_snotra.relation_factory.class%
+        class: Ajir\RabbitMqSqlBundle\Factory\RelationFactory
         arguments:
-            - %meup_snotra.one_to_one_relation.class%
-            - %meup_snotra.one_to_many_relation.class%
-            - %meup_snotra.many_to_one_relation.class%
-            - %meup_snotra.many_to_many_relation.class%
+            - Ajir\RabbitMqSqlBundle\Model\OneToOneRelation
+            - Ajir\RabbitMqSqlBundle\Model\OneToManyRelation
+            - Ajir\RabbitMqSqlBundle\Model\ManyToOneRelation
+            - Ajir\RabbitMqSqlBundle\Model\ManyToManyRelation

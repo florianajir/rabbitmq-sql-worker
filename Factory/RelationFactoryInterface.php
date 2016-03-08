@@ -1,16 +1,16 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Factory;
+namespace Ajir\RabbitMqSqlBundle\Factory;
 
-use Meup\Bundle\SnotraBundle\Model\ManyToManyRelation;
-use Meup\Bundle\SnotraBundle\Model\ManyToOneRelation;
-use Meup\Bundle\SnotraBundle\Model\OneToManyRelation;
-use Meup\Bundle\SnotraBundle\Model\OneToOneRelation;
-use Meup\Bundle\SnotraBundle\Model\RelationInterface;
+use Ajir\RabbitMqSqlBundle\Model\ManyToManyRelation;
+use Ajir\RabbitMqSqlBundle\Model\ManyToOneRelation;
+use Ajir\RabbitMqSqlBundle\Model\OneToManyRelation;
+use Ajir\RabbitMqSqlBundle\Model\OneToOneRelation;
+use Ajir\RabbitMqSqlBundle\Model\RelationInterface;
 
 /**
  * Interface RelationFactoryInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface RelationFactoryInterface
 {

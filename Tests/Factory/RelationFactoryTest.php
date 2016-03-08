@@ -1,28 +1,20 @@
 <?php
-/**
- * This file is part of the Meup Snotra.
- *
- * (c) 1001pharmacies <http://github.com/1001pharmacies/snotra>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Meup\Bundle\SnotraBundle\Tests\Factory;
+namespace Ajir\RabbitMqSqlBundle\Tests\Factory;
 
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\Factory\RelationFactory;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\Factory\RelationFactory;
 
 /**
- *
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class RelationFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    protected $classImplement = 'Meup\Bundle\SnotraBundle\Model\RelationInterface';
-    protected $oneToOneRelationClass = 'Meup\Bundle\SnotraBundle\Model\OneToOneRelation';
-    protected $manyToOneRelationClass = 'Meup\Bundle\SnotraBundle\Model\ManyToOneRelation';
-    protected $oneToManyRelationClass = 'Meup\Bundle\SnotraBundle\Model\OneToManyRelation';
-    protected $manyToManyRelationClass = 'Meup\Bundle\SnotraBundle\Model\ManyToManyRelation';
+    protected $classImplement = 'Ajir\RabbitMqSqlBundle\Model\RelationInterface';
+    protected $oneToOneRelationClass = 'Ajir\RabbitMqSqlBundle\Model\OneToOneRelation';
+    protected $manyToOneRelationClass = 'Ajir\RabbitMqSqlBundle\Model\ManyToOneRelation';
+    protected $oneToManyRelationClass = 'Ajir\RabbitMqSqlBundle\Model\OneToManyRelation';
+    protected $manyToManyRelationClass = 'Ajir\RabbitMqSqlBundle\Model\ManyToManyRelation';
 
     /**
      *
@@ -36,7 +28,7 @@ class RelationFactoryTest extends \PHPUnit_Framework_TestCase
             $this->manyToManyRelationClass
         );
 
-        $this->assertInstanceOf('Meup\Bundle\SnotraBundle\Factory\RelationFactoryInterface', $factory);
+        $this->assertInstanceOf('Ajir\RabbitMqSqlBundle\Factory\RelationFactoryInterface', $factory);
     }
 
     /**

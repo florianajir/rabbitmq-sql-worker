@@ -1,18 +1,18 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\AMQP;
+namespace Ajir\RabbitMqSqlBundle\Tests\AMQP;
 
 use Exception;
 use InvalidArgumentException;
 use JMS\Serializer\SerializerBuilder;
-use Meup\Bundle\SnotraBundle\AMQP\SqlConsumer;
-use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
-use Meup\DataStructure\Message\AMQPMessage as GnaaMessage;
+use Ajir\RabbitMqSqlBundle\AMQP\SqlConsumer;
+use Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformerInterface;
+use Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessage as GnaaMessage;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
  * Class SqlConsumerTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class SqlConsumerTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +51,7 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
         if (is_null($returned)) {
             $returned = $this->returnValue(array());
         }
-        $transformer = $this->getMock('Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface');
+        $transformer = $this->getMock('Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformerInterface');
         $transformer
             ->expects($this->exactly($nbCallsPrepare))
             ->method('prepare')
@@ -61,11 +61,11 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Meup\Bundle\SnotraBundle\Persister\PersisterInterface
+     * @return \Ajir\RabbitMqSqlBundle\Persister\PersisterInterface
      */
     private function getPersisterMock()
     {
-        $persister = $this->getMock('Meup\Bundle\SnotraBundle\Persister\PersisterInterface');
+        $persister = $this->getMock('Ajir\RabbitMqSqlBundle\Persister\PersisterInterface');
 
         return $persister;
     }

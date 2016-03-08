@@ -1,6 +1,6 @@
 <?php
 
-namespace Meup\DataStructure\Message;
+namespace Ajir\RabbitMqSqlBundle\DataStructure\Message;
 
 /**
  *
@@ -10,7 +10,7 @@ class AMQPMessageFactory implements AMQPMessageFactoryInterface
     /**
      * The default AMQPMessage class.
      */
-    const DEFAULT_CLASS = 'Meup\DataStructure\Message\AMQPMessage';
+    const DEFAULT_CLASS = 'Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessage';
 
     /**
      * @var ReflectionClass
@@ -19,12 +19,12 @@ class AMQPMessageFactory implements AMQPMessageFactoryInterface
 
     /**
      * @throws InvalidArgumentException
-     * 
+     *
      * @param string $class
      */
     public function __construct($class = self::DEFAULT_CLASS)
     {
-        $interface   = 'Meup\DataStructure\Message\AMQPMessageInterface';
+        $interface   = 'Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessageInterface';
         $this->class = new \ReflectionClass($class);
 
         if (!$this->class->implementsInterface($interface)) {

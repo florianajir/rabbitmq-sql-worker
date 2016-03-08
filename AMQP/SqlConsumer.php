@@ -1,11 +1,11 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\AMQP;
+namespace Ajir\RabbitMqSqlBundle\AMQP;
 
 use Exception;
 use InvalidArgumentException;
 use JMS\Serializer\SerializerInterface;
-use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
-use Meup\Bundle\SnotraBundle\Persister\PersisterInterface;
+use Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformerInterface;
+use Ajir\RabbitMqSqlBundle\Persister\PersisterInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -13,11 +13,11 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SqlConsumer
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class SqlConsumer implements ConsumerInterface
 {
-    const DEFAULT_MESSAGE_CLASS = 'Meup\DataStructure\Message\AMQPMessage';
+    const DEFAULT_MESSAGE_CLASS = 'Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessage';
     const JSON_FORMAT = 'json';
 
     /**

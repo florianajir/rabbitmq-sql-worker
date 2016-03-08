@@ -1,10 +1,10 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Model;
+namespace Ajir\RabbitMqSqlBundle\Model;
 
 /**
  * Interface EntityInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface EntityInterface
 {

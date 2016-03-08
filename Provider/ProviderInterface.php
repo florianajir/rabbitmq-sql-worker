@@ -1,12 +1,12 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Provider;
+namespace Ajir\RabbitMqSqlBundle\Provider;
 
 use Doctrine\DBAL\DBALException;
 
 /**
  * Interface ProviderInterface
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface ProviderInterface
 {

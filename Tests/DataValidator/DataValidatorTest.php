@@ -1,14 +1,14 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\DataValidator;
+namespace Ajir\RabbitMqSqlBundle\Tests\DataValidator;
 
 use DateTime;
 use PHPUnit_Framework_TestCase;
-use Meup\Bundle\SnotraBundle\DataValidator\DataValidator;
+use Ajir\RabbitMqSqlBundle\DataValidator\DataValidator;
 
 /**
  * Class DataValidatorTest
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class DataValidatorTest extends PHPUnit_Framework_TestCase
 {

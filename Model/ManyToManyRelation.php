@@ -1,13 +1,13 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Model;
+namespace Ajir\RabbitMqSqlBundle\Model;
 
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapper;
-use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapper;
+use Ajir\RabbitMqSqlBundle\DataTransformer\DataTransformer;
 
 /**
  * Class ManyToManyRelation
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class ManyToManyRelation extends AbstractRelation implements RelationInterface
 {

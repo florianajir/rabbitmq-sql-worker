@@ -1,14 +1,14 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\DataTransformer;
+namespace Ajir\RabbitMqSqlBundle\DataTransformer;
 
 use InvalidArgumentException;
-use Meup\Bundle\SnotraBundle\DataMapper\DataMapperInterface;
-use Meup\Bundle\SnotraBundle\DataValidator\DataValidatorInterface;
+use Ajir\RabbitMqSqlBundle\DataMapper\DataMapperInterface;
+use Ajir\RabbitMqSqlBundle\DataValidator\DataValidatorInterface;
 
 /**
  * Class DataTransformer
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class DataTransformer implements DataTransformerInterface
 {

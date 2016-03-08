@@ -1,12 +1,12 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Factory;
+namespace Ajir\RabbitMqSqlBundle\Factory;
 
-use Meup\Bundle\SnotraBundle\Model\EntityInterface;
+use Ajir\RabbitMqSqlBundle\Model\EntityInterface;
 
 /**
  * Interface EntityFactory
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 interface EntityFactoryInterface
 {

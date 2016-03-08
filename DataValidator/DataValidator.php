@@ -1,12 +1,12 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\DataValidator;
+namespace Ajir\RabbitMqSqlBundle\DataValidator;
 
 use DateTime;
 
 /**
  * Class DataValidator
  *
- * @author florianajir <florian@1001pharmacies.com>
+ * @author Florian Ajir <florianajir@gmail.com>
  */
 class DataValidator implements DataValidatorInterface
 {
@@ -20,7 +20,7 @@ class DataValidator implements DataValidatorInterface
      * Check if value exceed max length defined in mapping
      *
      * @param string $value
-     * @param int    $maxlength
+     * @param int $maxlength
      *
      * @return bool
      */
@@ -32,7 +32,7 @@ class DataValidator implements DataValidatorInterface
     /**
      * Check if property type correspond to which declared in mapping
      *
-     * @param mixed  $value
+     * @param mixed $value
      * @param string $type
      *
      * @return bool true if valid value type or null value
@@ -70,13 +70,13 @@ class DataValidator implements DataValidatorInterface
     /**
      * test if parameter is containing a float
      *
-     * @param mixed $f
+     * @param mixed $value
      *
      * @return bool
      */
-    public function isFloat($f)
+    public function isFloat($value)
     {
-        return ($f == (string)(float)$f);
+        return ($value == (string)(float)$value);
     }
 
     /**
@@ -89,8 +89,8 @@ class DataValidator implements DataValidatorInterface
      */
     public function validateDate($date, $format)
     {
-        $d = DateTime::createFromFormat($format, $date);
+        $datetime = DateTime::createFromFormat($format, $date);
 
-        return $d && $d->format($format) == $date;
+        return $datetime && $datetime->format($format) == $date;
     }
 }

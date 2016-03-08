@@ -1,34 +1,24 @@
-## Usage
+# Examples
+
+## Configuration
+
+Follow the [rabbitmq-sql configuration documentation](configuration.md) 
+
+## Mapping
+
+Follow the [rabbitmq-sql mapping documentation](mapping.md) 
+
+## Start consumer
 
 ```bash
 php app/console rabbitmq:consumer -w sql
 ```
 
-## Configuration
+> :warning: *when you edit the configuration, be sure to restart consumer(s) to apply changes.*
 
-Configure `app/config/parameters.yml` and set database connection parameters:
+## Simple Example (without relationship)
 
-```yml
-#app/config/parameters.yml
-parameters:
-    # to use sql consumer, the following parameters are required
-    database_driver: pdo_mysql
-    database_host: 127.0.0.1
-    database_port: 3306
-    database_name: DbName
-    database_user: Username
-    database_password: Password
-``` 
-
-## Mapping
-
-The SQL mapping configuration file is located at this path : `mapping.yml`
-
-You can found more documentation in the [**mapping documentation**](mapping.md) 
-
-### Simple Example (without relationship)
-
-#### Mapping
+### Mapping
 
 Below is an example of a simple User object mapping:
 
@@ -50,22 +40,25 @@ parameters:
                     length: 255
                     nullable: true
 ```
-#### Message Data
+
+### Incoming message
+
+RabbitMQ incoming messages will be consume from this format :
 
 ```json
 {
-    "username": "Toto",
-    "mail": "email@example.com"
+    "type": "User",
+    "data": "{\"username\": \"Toto\", \"mail\": \"email@example.com\"}"
 }
 ```
 
-#### SQL Triggered
+### SQL Triggered
 
 ```sql
 INSERT INTO `members` (`name`, `email`) VALUES("Toto", "email@example.com");
 ```
 
-### Complex Example (with relationship)
+## Advanced Mapping Example (relationships)
 
 **Note:** with identifier mapping key set, the consumer will try to update existing records.
 
