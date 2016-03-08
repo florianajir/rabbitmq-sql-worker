@@ -1,7 +1,7 @@
 Snotra
 ======
 
-Snotra is a symfony powered application which provides an AMPQ worker to consume and persist entities from RabbitMQ messages.
+Snotra is a symfony powered application which provides an AMQP worker to consume and persist entities from RabbitMQ messages.
  
 Snotra is able to persist data in SQL database or Elasticsearch indexes.
 

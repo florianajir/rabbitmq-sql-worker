@@ -1,5 +1,5 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\AMPQ;
+namespace Meup\Bundle\SnotraBundle\AMQP;
 
 use Exception;
 use InvalidArgumentException;
@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
  */
 class SqlConsumer implements ConsumerInterface
 {
-    const DEFAULT_MESSAGE_CLASS = 'Meup\DataStructure\Message\AMPQMessage';
+    const DEFAULT_MESSAGE_CLASS = 'Meup\DataStructure\Message\AMQPMessage';
     const JSON_FORMAT = 'json';
 
     /**

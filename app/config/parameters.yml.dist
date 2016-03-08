@@ -1,26 +1,23 @@
 parameters:
     locale:                 en
     secret:                 ThisTokenIsNotSoSecretChangeIt
-    # ampq
+
+    # RabbitMQ amqp config
     rabbitmq_host:          localhost
     rabbitmq_port:          5672
-    rabbitmq_user:          guest
-    rabbitmq_password:      guest
+    rabbitmq_user:          admin
+    rabbitmq_password:      admin
     rabbitmq_vhost:         /
     rabbitmq_lazy:          false
-    rabbitmq_exchange:      meup_entity_edition
+    rabbitmq_exchange:      my_exchange_name
     rabbitmq_exchange_type: direct
-    rabbitmq_queue:         snotra_entity_edition
+    rabbitmq_queue:         my_queue_name
     rabbitmq_ignored_types: ['locale']
 
-    # sql database (optional)
+    # Database storage config
     database_driver:        pdo_mysql
     database_host:          127.0.0.1
     database_port:          ~
     database_name:          ~
     database_user:          root
     database_password:      ~
-
-    # es index (optional)
-    elasticsearch_host:     localhost
-    elasticsearch_port:     9200

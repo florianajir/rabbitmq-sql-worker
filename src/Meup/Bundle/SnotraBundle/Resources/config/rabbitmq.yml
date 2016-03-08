@@ -1,4 +1,4 @@
-# AMPQ
+# AMQP
 old_sound_rabbit_mq:
     connections:
         default:
@@ -9,14 +9,6 @@ old_sound_rabbit_mq:
             vhost:              %rabbitmq_vhost%
             lazy:               %rabbitmq_lazy%
     consumers:
-        elasticsearch:
-            connection:         default
-            exchange_options:   
-                name:           %rabbitmq_exchange%
-                type:           %rabbitmq_exchange_type%
-            queue_options:
-                name:           %rabbitmq_queue%
-            callback:           meup_snotra.elasticsearch_consumer
         sql:
             connection:         default
             exchange_options:

@@ -1,21 +1,4 @@
 parameters:
-
-    meup_snotra.elastica_client.class:                      Elastica\Client
-    meup_snotra.elastica_index.class:                       Elastica\Index
-    meup_snotra.elastica_index.dictionary_factory.class:    Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryFactory
-    meup_snotra.elastica_index.dictionary_loader.class:     Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryLoader
-    meup_snotra.elastica_index.dictionary.interface:        Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionaryInterface
-    meup_snotra.elastica_index.dictionary.class:            Meup\Bundle\SnotraBundle\ElasticSearch\IndexDictionary
-    meup_snotra.elasticsearch_consumer.class:               Meup\Bundle\SnotraBundle\AMPQ\ElasticSearchConsumer
-    meup_snotra.elastica_document.factory.class:            Meup\Bundle\SnotraBundle\ElasticSearch\DocumentFactory
-    meup_snotra.elastica_document.class:                    Meup\Bundle\SnotraBundle\ElasticSearch\Document
-    meup_snotra.elastica_indexer.class:                     Meup\Bundle\SnotraBundle\ElasticSearch\Indexer
-    meup_snotra.sql_consumer.class:                         Meup\Bundle\SnotraBundle\AMPQ\SqlConsumer
-    meup_snotra.sql_provider.class:                         Meup\Bundle\SnotraBundle\Provider\SqlProvider
-    meup_snotra.data_transformer.class:                     Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer
-    meup_snotra.data_validator.class:                       Meup\Bundle\SnotraBundle\DataValidator\DataValidator
-    meup_snotra.data_mapper.class:                          Meup\Bundle\SnotraBundle\DataMapper\DataMapper
-    meup_snotra.persister.class:                            Meup\Bundle\SnotraBundle\Persister\Persister
     meup_snotra.entity.class:                               Meup\Bundle\SnotraBundle\Model\Entity
     meup_snotra.entity_factory.class:                       Meup\Bundle\SnotraBundle\Factory\EntityFactory
     meup_snotra.one_to_one_relation.class:                  Meup\Bundle\SnotraBundle\Model\OneToOneRelation
@@ -25,48 +8,8 @@ parameters:
     meup_snotra.relation_factory.class:                     Meup\Bundle\SnotraBundle\Factory\RelationFactory
 
 services:
-
-    meup_snotra.elastica_client:
-        class: %meup_snotra.elastica_client.class%
-        arguments:
-            - {host: %elasticsearch_host%, port: %elasticsearch_port%}
-
-    meup_snotra.elastica_index.dictionary_factory:
-        class: %meup_snotra.elastica_index.dictionary_factory.class%
-        arguments:
-            - %meup_snotra.elastica_index.class%
-            - %meup_snotra.elastica_index.dictionary.class%
-
-    meup_snotra.elastica_index.dictionary_loader:
-        class: %meup_snotra.elastica_index.dictionary_loader.class%
-        arguments:
-            - @meup_snotra.elastica_client
-            - @meup_snotra.elastica_index.dictionary_factory
-
-    meup_snotra.elastica_index.dictionary:
-        class:              %meup_snotra.elastica_index.dictionary.interface%
-        factory_service:    meup_snotra.elastica_index.dictionary_loader
-        factory_method:     load
-        arguments:          [%elasticsearch_indexes%]
-
-    meup_snotra.elastica_document.factory:
-        class:      %meup_snotra.elastica_document.factory.class%
-        arguments:  [%meup_snotra.elastica_document.class%]
-
-    meup_snotra.elastica_indexer:
-        class: %meup_snotra.elastica_indexer.class%
-        arguments: 
-            - @meup_snotra.elastica_document.factory
-
-    meup_snotra.elasticsearch_consumer:
-        class: %meup_snotra.elasticsearch_consumer.class%
-        arguments:
-            - @meup_snotra.elastica_index.dictionary
-            - @meup_snotra.elastica_indexer
-            - @jms_serializer
-
     meup_snotra.sql_consumer:
-        class: %meup_snotra.sql_consumer.class%
+        class: Meup\Bundle\SnotraBundle\AMQP\SqlConsumer
         arguments:
             - @meup_snotra.data_transformer
             - @meup_snotra.persister
@@ -75,27 +18,27 @@ services:
             - %rabbitmq_ignored_types%
 
     meup_snotra.sql_provider:
-        class: %meup_snotra.sql_provider.class%
+        class: Meup\Bundle\SnotraBundle\Provider\SqlProvider
         arguments:
             - @database_connection
             - %kernel.environment%
 
     meup_snotra.data_transformer:
-        class: %meup_snotra.data_transformer.class%
+        class: Meup\Bundle\SnotraBundle\DataTransformer\DataTransformer
         arguments:
             - @meup_snotra.data_mapper
             - @meup_snotra.data_validator
 
     meup_snotra.data_validator:
-        class: %meup_snotra.data_validator.class%
+        class: Meup\Bundle\SnotraBundle\DataValidator\DataValidator
 
     meup_snotra.data_mapper:
-        class: %meup_snotra.data_mapper.class%
+        class: Meup\Bundle\SnotraBundle\DataMapper\DataMapper
         arguments:
             - %mapping%
 
     meup_snotra.persister:
-        class: %meup_snotra.persister.class%
+        class: Meup\Bundle\SnotraBundle\Persister\Persister
         arguments:
             - @meup_snotra.sql_provider
             - @meup_snotra.entity_factory

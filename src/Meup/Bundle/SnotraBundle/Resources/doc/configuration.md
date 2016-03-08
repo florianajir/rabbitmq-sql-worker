@@ -35,7 +35,7 @@ parameters:
     database_password:      my_password
 ```
 
-The **mapping file** need to be configured to fit ampq message to your database structure, this file is located at `app/config/mapping.yml`, you can found more information in [Mapping documentation](sql/mapping.md)
+The **mapping file** need to be configured to fit aMQP message to your database structure, this file is located at `app/config/mapping.yml`, you can found more information in [Mapping documentation](sql/mapping.md)
 
 ## Elastic-search
 

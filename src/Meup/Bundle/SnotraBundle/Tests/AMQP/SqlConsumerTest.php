@@ -1,12 +1,12 @@
 <?php
-namespace Meup\Bundle\SnotraBundle\Tests\AMPQ;
+namespace Meup\Bundle\SnotraBundle\Tests\AMQP;
 
 use Exception;
 use InvalidArgumentException;
 use JMS\Serializer\SerializerBuilder;
-use Meup\Bundle\SnotraBundle\AMPQ\SqlConsumer;
+use Meup\Bundle\SnotraBundle\AMQP\SqlConsumer;
 use Meup\Bundle\SnotraBundle\DataTransformer\DataTransformerInterface;
-use Meup\DataStructure\Message\AMPQMessage as GnaaMessage;
+use Meup\DataStructure\Message\AMQPMessage as GnaaMessage;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
