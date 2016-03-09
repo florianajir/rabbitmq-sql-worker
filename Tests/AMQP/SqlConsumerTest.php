@@ -35,7 +35,7 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
             ->setType(uniqid())
             ->setData($serializer->serialize(array(), 'json'));
         $msg = new AMQPMessage();
-        $msg->body = $serializer->serialize($data, 'json');
+        $msg->setBody($serializer->serialize($data, 'json'));
         $result = $consumer->execute($msg);
         $this->assertTrue($result);
     }
@@ -76,9 +76,8 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
     private function getLoggerMock()
     {
         $logger = $this
-            ->getMockBuilder('Monolog\Logger')
+            ->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array('info', 'warning', 'error'))
             ->getMock();
 
         return $logger;
@@ -155,8 +154,6 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         $consumer->execute($msg);
     }
-
-
 
     /**
      *

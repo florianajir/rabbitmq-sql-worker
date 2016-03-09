@@ -1,6 +1,6 @@
 <?php
 
-namespace Ajir\RabbitMqSqlBundle\DataStructure\Message\Tests;
+namespace Ajir\RabbitMqSqlBundle\Tests\DataStructure\Message;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
 use Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessageFactory;

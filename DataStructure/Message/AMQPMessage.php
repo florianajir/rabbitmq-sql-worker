@@ -4,34 +4,31 @@ namespace Ajir\RabbitMqSqlBundle\DataStructure\Message;
 
 use JMS\Serializer\Annotation as JMS;
 
-/**
- *
- */
 class AMQPMessage implements AMQPMessageInterface
 {
     /**
      * @var mixed
      * @JMS\Type("string")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @JMS\Type("string")
      */
-    private $index;
+    protected $index;
 
     /**
      * @var string
-     * @JMS\Type("string")
+     * @Type("string")
      */
-    private $type;
+    protected $type;
 
     /**
      * @var mixed
      * @JMS\Type("string")
      */
-    private $data;
+    protected $data;
 
     /**
      * {@inheritDoc}

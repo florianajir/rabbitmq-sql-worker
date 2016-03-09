@@ -13,12 +13,12 @@ class AMQPMessageFactory implements AMQPMessageFactoryInterface
     const DEFAULT_CLASS = 'Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessage';
 
     /**
-     * @var ReflectionClass
+     * @var \ReflectionClass
      */
     protected $class;
 
     /**
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @param string $class
      */

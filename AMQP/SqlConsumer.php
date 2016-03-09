@@ -46,6 +46,16 @@ class SqlConsumer implements ConsumerInterface
     private $ignoredTypes;
 
     /**
+     * @var string
+     */
+    private $msgClass;
+
+    /**
+     * @var string
+     */
+    private $format;
+
+    /**
      * @param DataTransformerInterface $transformer
      * @param PersisterInterface       $persister
      * @param SerializerInterface      $serializer

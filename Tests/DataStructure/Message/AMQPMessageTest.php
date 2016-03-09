@@ -1,6 +1,6 @@
 <?php
 
-namespace Ajir\RabbitMqSqlBundle\DataStructure\Message\Tests;
+namespace Ajir\RabbitMqSqlBundle\Tests\DataStructure\Message;
 
 use \PHPUnit_Framework_TestCase as BaseTestCase;
 use Ajir\RabbitMqSqlBundle\DataStructure\Message\AMQPMessage;
@@ -17,7 +17,7 @@ class AMQPMessageTest extends BaseTestCase
      */
     public function testId()
     {
-        $id      = rand(1, 999);
+        $id = rand(1, 999);
         $message = new AMQPMessage();
         $message->setId($id);
 
@@ -31,7 +31,7 @@ class AMQPMessageTest extends BaseTestCase
      */
     public function testIndex()
     {
-        $index    = uniqid();
+        $index = uniqid();
         $message = new AMQPMessage();
         $message->setIndex($index);
 
@@ -45,7 +45,7 @@ class AMQPMessageTest extends BaseTestCase
      */
     public function testType()
     {
-        $type    = uniqid();
+        $type = uniqid();
         $message = new AMQPMessage();
         $message->setType($type);
 
@@ -59,7 +59,7 @@ class AMQPMessageTest extends BaseTestCase
      */
     public function testData()
     {
-        $data    = uniqid();
+        $data = uniqid();
         $message = new AMQPMessage();
         $message->setData($data);
 
