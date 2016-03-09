@@ -31,7 +31,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Ajir\\RabbitMqSqlBundle\\": ""
+      "Ajir\\RabbitMqSqlBundle\\": "",
+      "JMS\\Serializer\\Annotation\\": ""
     }
   },
   "support": {
