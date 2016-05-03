@@ -1,10 +1,12 @@
 {
   "name": "florianajir/rabbitmq-sql-bundle",
   "type": "symfony-bundle",
-  "description": "RabbitMQ messages to Sql with doctrine and php-amqplib.",
+  "description": "RabbitMQ to sql consumer, using doctrine/dbal and php-amqplib/rabbitmq-bundle",
   "keywords": [
-    "RabbitMQ Sql",
-    "AMQP consumer"
+    "RabbitMQ",
+    "consumer",
+    "sql",
+    "RabbitMQ to Sql"
   ],
   "homepage": "https://github.com/florianajir/rabbitmq-sql-bundle",
   "license": "MIT",
@@ -31,8 +33,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ajir\\RabbitMqSqlBundle\\": "",
-      "JMS\\Serializer\\Annotation\\": ""
+      "Ajir\\RabbitMqSqlBundle\\": ""
     }
   },
   "support": {
