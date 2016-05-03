@@ -5,8 +5,9 @@ services:
             - '@meup_snotra.data_transformer'
             - '@meup_snotra.persister'
             - '@jms_serializer'
-            - '@logger'
             - '%rabbitmq_ignored_types%'
+        calls:
+            - [setLogger, ['@?logger']]
 
     meup_snotra.sql_provider:
         class: 'Ajir\RabbitMqSqlBundle\Provider\SqlProvider'
