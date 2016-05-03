@@ -60,7 +60,7 @@ class SqlConsumer implements ConsumerInterface
      * @param DataTransformerInterface $transformer
      * @param PersisterInterface $persister
      * @param SerializerInterface $serializer
-     * @param array $ignoredTypes
+     * @param string[] $ignoredTypes
      * @param string $msgClass
      * @param string $format
      */
