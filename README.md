@@ -12,7 +12,7 @@ php app/console rabbitmq:consumer -w sql
 
 ## Features
 
-* Yml mappings config (like doctrine)
+* mapping yml config (doctrine like)
 * Insert records
 * Update records 
 * Relational records : oneToOne, oneToMany, manyToOne, manyToMany
@@ -37,7 +37,7 @@ SQL requests output:
 
 ```sql
 INSERT INTO `members` (`name`, `email`) VALUES ("Rogger Rabbit", "subscriber@acme.corp");
-INSERT INTO `member_group` (member_id, group_id) VALUES (3, 2);
+INSERT INTO `member_group` (`member_id`, `group_id`) VALUES (3, 2);
 ```
 
 > Take more inspiration from [Examples documentation](Resources/doc/examples.md)
