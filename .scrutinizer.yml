@@ -1,0 +1,14 @@
+checks:
+    php: true
+filter: {  }
+coding_style:
+    php:
+        spaces:
+            around_operators:
+                concatenation: true
+            other:
+                after_type_cast: false
+build:
+    environment:
+        php:
+            version: 7.0
