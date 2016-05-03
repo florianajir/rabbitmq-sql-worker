@@ -2,19 +2,26 @@
 
 namespace Ajir\RabbitMqSqlBundle\DataStructure\Message;
 
-use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\Type;
 
+/**
+ * Default AMQPMessage object
+ *
+ * You can implement yours to fit to your message content structure (don't forget to implements AMQPMessageInterface)
+ *
+ * @author Florian Ajir <florianajir@gmail.com>
+ */
 class AMQPMessage implements AMQPMessageInterface
 {
     /**
-     * @var mixed
-     * @JMS\Type("string")
+     * @var string
+     * @Type("string")
      */
     protected $id;
 
     /**
      * @var string
-     * @JMS\Type("string")
+     * @Type("string")
      */
     protected $index;
 
@@ -25,8 +32,8 @@ class AMQPMessage implements AMQPMessageInterface
     protected $type;
 
     /**
-     * @var mixed
-     * @JMS\Type("string")
+     * @var string
+     * @Type("string")
      */
     protected $data;
 

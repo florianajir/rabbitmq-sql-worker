@@ -5,32 +5,29 @@ namespace Ajir\RabbitMqSqlBundle\DataStructure\Message;
 interface AMQPMessageInterface
 {
     /**
-     * @param mixed $id
-     *
+     * @return string
+     */
+    public function getId();
+
+    /**
+     * @param string $id
      * @return self
      */
     public function setId($id);
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getId();
+    public function getIndex();
 
     /**
-     * @param mixed $index
-     *
+     * @param string $index
      * @return self
      */
     public function setIndex($index);
 
     /**
-     * @return mixed
-     */
-    public function getIndex();
-
-    /**
      * @param string $type
-     *
      * @return self
      */
     public function setType($type);
@@ -41,14 +38,13 @@ interface AMQPMessageInterface
     public function getType();
 
     /**
-     * @param mixed $data
-     *
+     * @return string
+     */
+    public function getData();
+
+    /**
+     * @param string $data
      * @return self
      */
     public function setData($data);
-
-    /**
-     * @return mixed
-     */
-    public function getData();
 }
