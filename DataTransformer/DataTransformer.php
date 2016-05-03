@@ -112,7 +112,7 @@ class DataTransformer implements DataTransformerInterface
     /**
      * @param string $type
      * @param string $field
-     * @param mixed  $value
+     * @param string  $value
      *
      * @throws InvalidArgumentException
      */

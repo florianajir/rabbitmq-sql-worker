@@ -252,7 +252,7 @@ class DataMapper implements DataMapperInterface
      * @param string $entity
      * @param string $relation
      *
-     * @return array|null
+     * @return string|null
      */
     public function getJoinTable($container, $entity, $relation)
     {

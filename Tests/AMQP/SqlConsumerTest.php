@@ -69,7 +69,7 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface
+     * @return \Psr\Log\LoggerInterface
      */
     private function getLoggerMock()
     {
