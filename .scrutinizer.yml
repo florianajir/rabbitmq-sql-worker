@@ -5,7 +5,7 @@ build:
         php:
             version: 7.0
             ini:
-                'date.timezone': 'Paris/Europe'
+                'date.timezone': 'Europe/Paris'
     tests:
         override:
             -
