@@ -1,5 +1,9 @@
 # Rabbitmq-sql-bundle
 
+[![Build Status](https://travis-ci.org/florianajir/rabbitmq-sql-bundle.svg?branch=master)](https://travis-ci.org/florianajir/rabbitmq-sql-bundle) [![Code Coverage](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/?branch=master)
+
+[![Latest Stable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/v/stable)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![Total Downloads](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/downloads)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![Latest Unstable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/v/unstable)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![License](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/license)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle)
+
 ## About
 
 The RabbitMqSqlBundle is a symfony bundle to provide rabbitmq message persistence for your application using the php-amqplib/rabbitmq-bundle and doctrine/dbal libraries.
