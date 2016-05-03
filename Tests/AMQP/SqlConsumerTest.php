@@ -16,9 +16,6 @@ use PhpAmqpLib\Message\AMQPMessage;
  */
 class SqlConsumerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     *
-     */
     public function testExecuteWithoutError()
     {
         $transformer = $this->getTransformerMock();
@@ -29,7 +26,8 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('info')
         ;
-        $consumer = new SqlConsumer($transformer, $persister, $serializer, $logger);
+        $consumer = new SqlConsumer($transformer, $persister, $serializer);
+        $consumer->setLogger($logger);
         $data = new GnaaMessage();
         $data
             ->setType(uniqid())
@@ -98,10 +96,7 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithInvalidArgumentThrew()
     {
-        $transformer = $this->getTransformerMock(
-            1,
-            $this->throwException(new InvalidArgumentException)
-        );
+        $transformer = $this->getTransformerMock(1, $this->throwException(new InvalidArgumentException()));
         $persister = $this->getPersisterMock();
         $serializer = $this->getSerializer();
         $logger = $this->getLoggerMock();
@@ -113,15 +108,15 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('warning')
         ;
-        $consumer = new SqlConsumer($transformer, $persister, $serializer, $logger);
+        $consumer = new SqlConsumer($transformer, $persister, $serializer);
+        $consumer->setLogger($logger);
         $data = new GnaaMessage();
         $data
             ->setType(uniqid())
             ->setData($serializer->serialize(array(), 'json'));
-        $msg = new AMQPMessage();
-        $msg->body = $serializer->serialize($data, 'json');
+        $msg = new AMQPMessage($serializer->serialize($data, 'json'));
         $result = $consumer->execute($msg);
-        $this->assertTrue($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -129,10 +124,7 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithExceptionThrew()
     {
-        $transformer = $this->getTransformerMock(
-            1,
-            $this->throwException(new Exception())
-        );
+        $transformer = $this->getTransformerMock(1, $this->throwException(new Exception()));
         $persister = $this->getPersisterMock();
         $serializer = $this->getSerializer();
         $logger = $this->getLoggerMock();
@@ -144,7 +136,8 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('error')
         ;
-        $consumer = new SqlConsumer($transformer, $persister, $serializer, $logger);
+        $consumer = new SqlConsumer($transformer, $persister, $serializer);
+        $consumer->setLogger($logger);
         $data = new GnaaMessage();
         $data
             ->setType(uniqid())
@@ -169,13 +162,13 @@ class SqlConsumerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('info')
         ;
-        $consumer = new SqlConsumer($transformer, $persister, $serializer, $logger, array($type));
+        $consumer = new SqlConsumer($transformer, $persister, $serializer, array($type));
+        $consumer->setLogger($logger);
         $data = new GnaaMessage();
         $data
             ->setType($type)
             ->setData($serializer->serialize(array(), 'json'));
-        $msg = new AMQPMessage();
-        $msg->body = $serializer->serialize($data, 'json');
+        $msg = new AMQPMessage($serializer->serialize($data, 'json'));
         $result = $consumer->execute($msg);
         $this->assertTrue($result);
     }

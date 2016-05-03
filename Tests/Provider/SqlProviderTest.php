@@ -133,7 +133,7 @@ class SqlProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['id'], $result);
     }
 
-    public function quoteIdentifierCallback()
+    public static function quoteIdentifierCallback()
     {
         $args = func_get_args();
 
