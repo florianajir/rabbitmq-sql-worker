@@ -2,19 +2,45 @@
 
 ## About
 
-The RabbitMqSqlBundle incorporates messaging persistance in your application via RabbitMQ using the php-amqplib/RabbitMqBundle and Doctrine DBAL libraries.
+The RabbitMqSqlBundle is a symfony bundle to provide rabbitmq message persistence for your application using the php-amqplib/rabbitmq-bundle and doctrine/dbal libraries.
 
-The bundle implements a Doctrine SQL consumer providing amqp message persistance with entity relational support. All you have to do is configure your RabbitMQ and your database and launch your consumer as:
+You just need to configure the mapping in yml and execute a command, a simple and scalable rabbitmq to sql consumer to persist your entities:
 
 ```shellScript
 php app/console rabbitmq:consumer -w sql
 ```
 
+## Features
+
+* Yml mappings config (like doctrine)
+* Insert records
+* Update records 
+* Relational records : oneToOne, oneToMany, manyToOne, manyToMany
+* Update, Delete relations
+* Foreign keys support
+
 ## Examples
 
-The SQL worker provide as well insert as update operations from a configured identifier. It also support "doctrine-like" relationnal table joins.
+Following example shows you the consuming process to persist in database a simple subscriber from an asynchronous message data.
 
-> Take inspiration from [Examples documentation](Resources/doc/examples.md)
+RabbitMQ incoming message data:
+
+```json
+{
+  "name" : "Rogger Rabbit",
+  "email" : "subscriber@acme.corp",
+  "Groups": [ { "slug": "subscriber" } ]
+}
+```
+
+SQL requests output:
+
+```sql
+INSERT INTO `members` (`name`, `email`) VALUES ("Rogger Rabbit", "subscriber@acme.corp");
+INSERT INTO `member_group` (member_id, group_id) VALUES (3, 2);
+```
+
+> Take more inspiration from [Examples documentation](Resources/doc/examples.md)
 
 ## License
 
