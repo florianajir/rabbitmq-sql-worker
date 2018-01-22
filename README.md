@@ -1,8 +1,6 @@
-# Rabbitmq-sql-worker [![License](https://poser.pugx.org/florianajir/rabbitmq-sql-worker/license)](https://github.com/florianajir/rabbitmq-sql-worker/blob/master/Resources/meta/LICENSE)
+# Rabbitmq-sql-worker
 
 [![Build Status](https://travis-ci.org/florianajir/rabbitmq-sql-worker.svg?branch=master)](https://travis-ci.org/florianajir/rabbitmq-sql-worker) [![Code Coverage](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master)
-
-[![Latest Stable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-worker/v/stable)](https://packagist.org/packages/florianajir/rabbitmq-sql-worker) [![Latest Unstable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-worker/v/unstable)](https://packagist.org/packages/florianajir/rabbitmq-sql-worker)
 
 ## About
 
