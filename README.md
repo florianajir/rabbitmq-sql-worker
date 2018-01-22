@@ -1,12 +1,12 @@
-# Rabbitmq-sql-bundle [![License](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/license)](https://github.com/florianajir/rabbitmq-sql-bundle/blob/master/Resources/meta/LICENSE)
+# Rabbitmq-sql-worker [![License](https://poser.pugx.org/florianajir/rabbitmq-sql-worker/license)](https://github.com/florianajir/rabbitmq-sql-worker/blob/master/Resources/meta/LICENSE)
 
-[![Build Status](https://travis-ci.org/florianajir/rabbitmq-sql-bundle.svg?branch=master)](https://travis-ci.org/florianajir/rabbitmq-sql-bundle) [![Code Coverage](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-bundle/?branch=master)
+[![Build Status](https://travis-ci.org/florianajir/rabbitmq-sql-worker.svg?branch=master)](https://travis-ci.org/florianajir/rabbitmq-sql-worker) [![Code Coverage](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master)
 
-[![Latest Stable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/v/stable)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![Latest Unstable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-bundle/v/unstable)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle)
+[![Latest Stable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-worker/v/stable)](https://packagist.org/packages/florianajir/rabbitmq-sql-worker) [![Latest Unstable Version](https://poser.pugx.org/florianajir/rabbitmq-sql-worker/v/unstable)](https://packagist.org/packages/florianajir/rabbitmq-sql-worker)
 
 ## About
 
-The RabbitMqSqlBundle is a symfony bundle to provide rabbitmq message persistence for your application using the php-amqplib/rabbitmq-bundle and doctrine/dbal libraries.
+The RabbitMqSqlBundle is a symfony worker to provide rabbitmq message persistence for your application using the php-amqplib/rabbitmq-bundle and doctrine/dbal libraries.
 
 You just need to configure the mapping in yml and execute a command, a simple and scalable rabbitmq to sql consumer to persist your entities:
 
@@ -48,7 +48,7 @@ INSERT INTO `member_group` (`member_id`, `group_id`) VALUES (3, 2);
 
 ## License
 
-This bundle is under the MIT license. See the complete license in the bundle:
+This application is under the MIT license. See the complete license in this file :
 
     Resources/meta/LICENSE
 
@@ -56,13 +56,13 @@ This bundle is under the MIT license. See the complete license in the bundle:
 
 ### For Symfony Framework >= 2.3
 
-Require the bundle and its dependencies with composer:
+Require the worker and its dependencies with composer:
 
 ```bash
-$ composer require florianajir/rabbitmq-sql-bundle
+$ composer require florianajir/rabbitmq-sql-worker
 ```
 
-Register the bundle:
+Register this bundles:
 
 ```php
 // app/AppKernel.php
