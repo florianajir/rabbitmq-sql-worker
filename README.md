@@ -1,6 +1,8 @@
 # Rabbitmq-sql-worker
 
-[![Build Status](https://travis-ci.org/florianajir/rabbitmq-sql-worker.svg?branch=master)](https://travis-ci.org/florianajir/rabbitmq-sql-worker) [![Code Coverage](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master)
+[![Latest Stable Version](http://poser.pugx.org/florianajir/rabbitmq-sql-bundle/v)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![Total Downloads](http://poser.pugx.org/florianajir/rabbitmq-sql-bundle/downloads)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![Latest Unstable Version](http://poser.pugx.org/florianajir/rabbitmq-sql-bundle/v/unstable)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![License](http://poser.pugx.org/florianajir/rabbitmq-sql-bundle/license)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle) [![PHP Version Require](http://poser.pugx.org/florianajir/rabbitmq-sql-bundle/require/php)](https://packagist.org/packages/florianajir/rabbitmq-sql-bundle)
+
+[![Code Coverage](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/florianajir/rabbitmq-sql-worker/?branch=master)
 
 ## About
 
